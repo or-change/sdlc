@@ -1,0 +1,28 @@
+{
+  "name": "sdlc",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/or-change/sdlc.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/or-change/sdlc/issues"
+  },
+  "homepage": "https://github.com/or-change/sdlc#readme",
+  "dependencies": {
+    "@koa/router": "^8.0.0",
+    "@or-change/data-hub": "^0.1.4",
+    "@or-change/duck": "^0.1.1",
+    "koa": "^2.8.1",
+    "koa-body": "^4.1.1",
+    "koa-session": "^5.12.3",
+    "webpack-merge": "^4.2.2"
+  }
+}
