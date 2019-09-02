@@ -3,8 +3,15 @@
 const Duck = require('@or-change/duck');
 const meta = require('./package.json');
 
-const webpack = require('./src/webpack');
-const app = require('./src/application');
+const Webpack = require('./src/webpack');
+const Application = require('./src/application');
+const Model = {
+	Account: require('./src/models/Account'),
+	Project: require('./src/models/Project'),
+	Flow: require('./src/models/Flow'),
+	Trace: require('./src/models/Trace'),
+	Version: require('./src/models/Version')
+};
 
 module.exports = function SDLC(options) {
 	const sdlc = {};
@@ -17,25 +24,24 @@ module.exports = function SDLC(options) {
 		components: [
 			Duck.Web([
 				{
-					id: 'default',
-					Application: app
+					id: 'Default',
+					Application
 				}
 			]),
 			Duck.Datahub([
 				{
 					id: options.data.id,
 					alias: 'sdlc',
-					models: {
-
-					}
+					models: Object.assign({}, Model.Account, Model.Project,
+						Model.Flow, Model.Trace, Model.Version)
 				}
 			]),
 			Duck.Webpack({
-				sdlc: webpack
+				sdlc: Webpack
 			})
 		]
 	}, ({ Web, Webpack }) => {
-		sdlc.server = Web.Server('app', 'http', Web.Application.default()); //https
+		sdlc.server = Web.Server('app', 'http', Web.Application.Default()); //https
 		sdlc.webpack = Webpack('sdlc');
 	});
 
