@@ -1,4 +1,4 @@
 'use strict';
 
-module.exports = function (router, { product, datahubs }, { AccessControl, Session }) {
+module.exports = function (router, { product }, { AccessControl, Session }) {
 };

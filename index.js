@@ -4,7 +4,7 @@ const Duck = require('@or-change/duck');
 const meta = require('./package.json');
 
 const Webpack = require('./src/webpack');
-const Application = require('./src/application');
+const Application = require('./src/Application');
 const Model = {
 	Account: require('./src/models/Account'),
 	Project: require('./src/models/Project'),
@@ -12,6 +12,7 @@ const Model = {
 	Trace: require('./src/models/Trace'),
 	Version: require('./src/models/Version')
 };
+const Register = require('./src/Register');
 
 module.exports = function SDLC(options) {
 	const sdlc = {};
@@ -21,6 +22,9 @@ module.exports = function SDLC(options) {
 		name: 'sdlc',
 		version: meta.version,
 		description: meta.description,
+		injection: {
+			plugins: {}
+		},
 		components: [
 			Duck.Web([
 				{
@@ -38,7 +42,23 @@ module.exports = function SDLC(options) {
 			]),
 			Duck.Webpack({
 				sdlc: Webpack
-			})
+			}),
+			{
+				id: 'com.orchange.sdlc.register',
+				name: 'register',
+				install(injection) {
+					injection.Register = Register();
+
+					options.plugins.forEach(plugin => {
+						const {
+							id, name, description, install
+						} = plugin;
+
+						injection.plugins[id] = { name, description };
+						install(injection.Register);
+					});
+				}
+			}
 		]
 	}, ({ Web, Webpack }) => {
 		sdlc.server = Web.Server('app', 'http', Web.Application.Default()); //https

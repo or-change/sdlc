@@ -4,10 +4,27 @@ module.exports = {
 	Project(injection) {
 		return {
 			schemas: {
-				type: 'object'
+				type: 'object',
+				properties: {
+					id: { type: 'string' },
+					name: { type: 'string' },
+					owner: { type: 'string' },
+					createdAt: { type: 'date' }
+				}
 			},
 			methods: {
-				
+				async create() {
+
+				},
+				async update() {
+
+				},
+				async query() {
+
+				},
+				async delete() {
+
+				}
 			}
 		};
 	},
@@ -18,17 +35,34 @@ module.exports = {
 				items: { type: 'model', symbol: 'Project'}
 			},
 			methods: {
-				
+				async query() {
+
+				}
 			}
 		};
 	},
 	Member(injection) {
 		return {
 			schemas: {
-				type: 'object'
+				type: 'object',
+				properties: {
+					id: { type: 'string' },
+					projectId: { type: 'string' },
+					accountId: { type: 'string' },
+					joinedAt: { type: 'date' },
+					exitedAt: { type: 'date' }
+				}
 			},
 			methods: {
-				
+				async create() {
+
+				},
+				async update() {
+
+				},
+				async query() {
+
+				}
 			}
 		};
 	}

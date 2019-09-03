@@ -11,7 +11,7 @@ const Router = {
 	Flow: require('./router/Flow'),
 	Trace: require('./router/Trace')
 };
-const accessControl = require('./accessControl');
+const AccessControl = require('./AccessControl');
 
 module.exports = Duck.Web.Koa({
 	plugins: [
@@ -46,12 +46,15 @@ module.exports = Duck.Web.Koa({
 						}
 					]
 				},
-				// {
-				// 	prefix: '/plugin'
-				// }
+				{
+					prefix: '/plugin',
+					Router(router, { Register }) {
+						Register.routeList.forEach(install => install(router));
+					}
+				}
 			],
 		}),
-		Duck.Web.Koa.AccessControl(accessControl),
+		Duck.Web.Koa.AccessControl(AccessControl),
 		Duck.Web.Koa.Session()
 	],
 	factory(app, injection, { AppRouter, Session }) {

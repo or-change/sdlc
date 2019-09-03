@@ -4,10 +4,28 @@ module.exports = {
 	Account(injection) {
 		return {
 			schemas: {
-				type: 'object'
+				type: 'object',
+				properties: {
+					id: { type: 'string' },
+					name: { type: 'string' },
+					password: { type: 'string' },
+					administrator: { type: 'boolean'}
+				},
+				allowNull: []
 			},
 			methods: {
-				
+				async create() {
+
+				},
+				async update() {
+
+				},
+				async query() {
+
+				},
+				async delete() {
+
+				}
 			}
 		};
 	},
@@ -18,7 +36,9 @@ module.exports = {
 				items: { type: 'model', symbol: 'Account'}
 			},
 			methods: {
-				
+				async query() {
+
+				}
 			}
 		};
 	}
