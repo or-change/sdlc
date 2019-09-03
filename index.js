@@ -23,7 +23,7 @@ module.exports = function SDLC(options) {
 		version: meta.version,
 		description: meta.description,
 		injection: {
-			plugins: {}
+			pluginManager: Register(options.plugins)
 		},
 		components: [
 			Duck.Web([
@@ -42,24 +42,11 @@ module.exports = function SDLC(options) {
 			]),
 			Duck.Webpack({
 				sdlc: Webpack
-			}),
-			{
-				id: 'com.orchange.sdlc.register',
-				name: 'register',
-				install(injection) {
-					injection.Register = Register();
-
-					options.plugins.forEach(plugin => {
-						const {
-							id, name, description, install
-						} = plugin;
-
-						injection.plugins[id] = { name, description };
-						install(injection.Register);
-					});
-				}
-			}
-		]
+			})
+		],
+		installed(injection) {
+			injection.Model = null;
+		}
 	}, ({ Web, Webpack }) => {
 		sdlc.server = Web.Server('app', 'http', Web.Application.Default()); //https
 		sdlc.webpack = Webpack('sdlc');

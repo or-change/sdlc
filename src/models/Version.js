@@ -9,6 +9,7 @@ module.exports = {
 					id: { type: 'string' },
 					semver: { type: 'string' },
 					projectId: { type: 'string' },
+					abstract: { type: 'string' },
 					createdAt: { type: 'string' }
 				}
 			},

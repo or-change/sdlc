@@ -11,6 +11,7 @@ module.exports = {
 					flowId: { type: 'string' },
 					stageId: { type: 'number' },
 					versionId: { type: 'string' },
+					abstract: { type: 'string' },
 					createdAt: { type: 'date' }
 				}
 			},

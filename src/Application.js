@@ -8,8 +8,10 @@ const Router = {
 	Account: require('./router/Account'),
 	Project: require('./router/Project'),
 	Version: require('./router/Version'),
+	Member: require('./router/Member'),
 	Flow: require('./router/Flow'),
-	Trace: require('./router/Trace')
+	Trace: require('./router/Trace'),
+	Admin: require('./router/Admin')
 };
 const AccessControl = require('./AccessControl');
 
@@ -29,27 +31,38 @@ module.exports = Duck.Web.Koa({
 					use: [
 						{
 							mount: '/:projectId',
-							prefix: '/version',
-							Router: Router.Version
-						},
-						{
-							mount: '/:projectId',
-							prefix: '/flow',
-							Router: Router.Flow,
 							use: [
 								{
-									mount: '/:flowId',
-									prefix: '/trace',
-									Router: Router.Trace
+									prefix: '/version',
+									Router: Router.Version
+								},
+								{
+									prefix: '/flow',
+									Router: Router.Flow,
+									use: [
+										{
+											mount: '/:flowId',
+											prefix: '/trace',
+											Router: Router.Trace
+										}
+									]
+								},
+								{
+									prefix: '/member',
+									Router: Router.Member
 								}
 							]
 						}
 					]
 				},
 				{
+					prefix: '/admin',
+					Router: Router.Admin
+				},
+				{
 					prefix: '/plugin',
-					Router(router, { Register }) {
-						Register.routeList.forEach(install => install(router));
+					Router(router, { pluginManager, datahubs }) {
+						pluginManager.routeList.forEach(install => install(router, datahubs.sdlc));
 					}
 				}
 			],

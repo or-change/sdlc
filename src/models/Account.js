@@ -9,7 +9,8 @@ module.exports = {
 					id: { type: 'string' },
 					name: { type: 'string' },
 					password: { type: 'string' },
-					administrator: { type: 'boolean'}
+					administrator: { type: 'boolean'},
+					createdAt: { type: 'date'}
 				},
 				allowNull: []
 			},

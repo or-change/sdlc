@@ -9,6 +9,8 @@ module.exports = {
 					id: { type: 'string' },
 					name: { type: 'string' },
 					owner: { type: 'string' },
+					language: { type: 'string' },
+					abstract: { type: 'string' },
 					createdAt: { type: 'date' }
 				}
 			},
