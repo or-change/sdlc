@@ -1,11 +1,30 @@
 'use strict';
 
 module.exports = function (router, { Model }, { AccessControl }) {
-	router.post('/account', AccessControl('account.post'), ctx => {
+	router.use(AccessControl('admin.system')).post('/account',async ctx => {
+		const { name, password, administrator } = ctx.requst.body;
 
-	}).del('/account/:accountId', AccessControl('account.delete'), ctx => {
+		ctx.body = await Model.Account.create({
+			name, password, administrator
+		});
+	}).param('accountId', async (accountId, ctx, next) => {
+		const account = await Model.Account.query(accountId);
 
-	}).put('/project/:projectId', AccessControl('project.update'). ctx => {
+		if (!account) {
+			return ctx.throw(404, 'Account is NOT found.');
+		}
 
+		ctx.state.account = account;
+
+		return next();
+	}).put('/account/:accountId', async ctx => {
+		const { password, administrator } = ctx.requst.body;
+		const { account } = ctx.state;
+
+		ctx.body = await account.$update(Object.assign({}, account.$data, { password, administrator }));
+	}).del('/account/:accountId', async ctx => {
+		ctx.body = await ctx.state.account.$delete();
+	}).get('/project', async ctx => {
+		ctx.body = await Model.ProjectList.query();
 	});
 };

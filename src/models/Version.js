@@ -17,10 +17,29 @@ module.exports = {
 				async create() {
 
 				},
+				async update() {
+
+				},
 				async query() {
 
 				},
 				async delete() {
+
+				}
+			}
+		};
+	},
+	VersionList(injection) {
+		return {
+			schemas: {
+				type: 'array',
+				items: {
+					type: 'model',
+					symbol: 'Version'
+				}
+			},
+			methods: {
+				async query() {
 
 				}
 			}

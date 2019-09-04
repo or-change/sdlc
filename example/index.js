@@ -1,11 +1,36 @@
 'use strict';
 
 const SDLC = require('../index');
-const { server } = require('./config.json');
 
-SDLC({
+module.exports = SDLC({
 	data: {
 		id: 'com.orchange.sdlc'
+	},
+	server: {
+		async authenticate(ctx, Model) {
+			const {
+				username
+			} = ctx.request.body;
+	
+			const accountList = await Model.AccountList.query({
+				selector: 'name',
+				args: {
+					name: username,
+					exect: true
+				}
+			});
+	
+			if (!accountList.length) {
+				ctx.throw(401);
+	
+				return null;
+			}
+	
+			return {
+				credential: 'simple',
+				accountId: accountList[0].id
+			};
+		}
 	},
 	plugins: [
 		{
@@ -20,6 +45,4 @@ SDLC({
 			}
 		}
 	]
-}).server.listen(server.port, () => {
-	console.log('server start 80');
 });

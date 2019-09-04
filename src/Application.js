@@ -31,27 +31,23 @@ module.exports = Duck.Web.Koa({
 					use: [
 						{
 							mount: '/:projectId',
-							use: [
-								{
-									prefix: '/version',
-									Router: Router.Version
-								},
-								{
-									prefix: '/flow',
-									Router: Router.Flow,
-									use: [
-										{
-											mount: '/:flowId',
-											prefix: '/trace',
-											Router: Router.Trace
-										}
-									]
-								},
-								{
-									prefix: '/member',
-									Router: Router.Member
-								}
-							]
+							prefix: '/version',
+							Router: Router.Version
+						},
+						{
+							mount: '/:projectId',
+							prefix: '/member',
+							Router: Router.Member
+						},
+						{
+							mount: '/:projectId',
+							prefix: '/flow',
+							Router: Router.Flow,
+						},
+						{
+							mount: '/:projectId',
+							prefix: '/trace',
+							Router: Router.Trace
 						}
 					]
 				},

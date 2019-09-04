@@ -43,5 +43,27 @@ module.exports = {
 				}
 			}
 		};
-	}
+	},
+	FlowList(injection) {
+		return {
+			schemas: {
+				type: 'array',
+				items: {
+					type: 'object',
+					properties: {
+						id: { type: 'string' },
+						parentId: { type: 'string' },
+						name: { type: 'string' },
+						projectId: { type: 'string' },
+						createdAt: { type: 'date' }
+					}
+				}
+			},
+			methods: {
+				async query() {
+					
+				}
+			}
+		};
+	} 
 };

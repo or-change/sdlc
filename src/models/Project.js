@@ -51,6 +51,7 @@ module.exports = {
 					id: { type: 'string' },
 					projectId: { type: 'string' },
 					accountId: { type: 'string' },
+					inviter: { type: 'string' },
 					joinedAt: { type: 'date' },
 					exitedAt: { type: 'date' }
 				}
@@ -62,6 +63,22 @@ module.exports = {
 				async update() {
 
 				},
+				async query() {
+
+				}
+			}
+		};
+	},
+	MemberList(injection) {
+		return {
+			schemas: {
+				type: 'array',
+				items: {
+					type: 'model',
+					symbol: 'Member'
+				}
+			},
+			methods: {
 				async query() {
 
 				}

@@ -24,5 +24,25 @@ module.exports = {
 				}
 			}
 		};
+	},
+	TraceList(injection) {
+		return {
+			schemas: {
+				type: 'object',
+				properties: {
+					id: { type: 'string' },
+					parentId: { type: 'string' },
+					flowId: { type: 'string' },
+					stageId: { type: 'number' },
+					versionId: { type: 'string' },
+					createdAt: { type: 'date' }
+				}
+			},
+			methods: {
+				async query() {
+
+				}
+			}
+		};
 	}
 };

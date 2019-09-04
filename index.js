@@ -23,7 +23,9 @@ module.exports = function SDLC(options) {
 		version: meta.version,
 		description: meta.description,
 		injection: {
-			pluginManager: Register(options.plugins)
+			pluginManager: Register(options.plugins),
+			authenticate: options.server.authenticate,
+			Model: {}
 		},
 		components: [
 			Duck.Web([
@@ -49,7 +51,7 @@ module.exports = function SDLC(options) {
 		}
 	}, ({ Web, Webpack }) => {
 		sdlc.server = Web.Server('app', 'http', Web.Application.Default()); //https
-		sdlc.webpack = Webpack('sdlc');
+		sdlc.webpack = Webpack('sdlc'); //作为工厂传参数
 	});
 
 	return sdlc;
