@@ -25,7 +25,10 @@ module.exports = function ({ pluginManager }) {
 		entry: {
 			bundle: [
 				'@babel/polyfill/dist/polyfill.min.js',
-			].concat(pluginManager.webpackEntryList)
+				path.resolve(__dirname, '../app/register.js')
+			].concat(pluginManager.webpackEntryList).concat([
+				path.resolve(__dirname, '../app/index.js')
+			])
 		},
 		output: {
 			filename: '[name].js',
@@ -49,6 +52,9 @@ module.exports = function ({ pluginManager }) {
 				},
 				{
 					test: /\.js$/,
+					exclude(file) {
+						return /node_module/.test(file) && !/@or-change/.test(file);
+					},
 					use: {
 						loader: 'babel-loader',
 						options: BABEL_OPTIONS

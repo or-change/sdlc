@@ -1,11 +1,10 @@
 'use strict';
 
 const SDLC = require('../index');
+const persistence = require('./persistence');
 
 module.exports = SDLC({
-	data: {
-		id: 'com.orchange.sdlc'
-	},
+	persistence,
 	server: {
 		async authenticate(ctx, Model) {
 			const {

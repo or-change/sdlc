@@ -57,8 +57,8 @@ module.exports = Duck.Web.Koa({
 				},
 				{
 					prefix: '/plugin',
-					Router(router, { pluginManager, datahubs }) {
-						pluginManager.routeList.forEach(install => install(router, datahubs.sdlc));
+					Router(router, { pluginManager, Model }) {
+						pluginManager.routeList.forEach(install => install(router, Model));
 					}
 				}
 			],

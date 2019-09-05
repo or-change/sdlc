@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Account(injection) {
+	Account(store) {
 		return {
 			schemas: {
 				type: 'object',
@@ -30,7 +30,7 @@ module.exports = {
 			}
 		};
 	},
-	AccountList(injection) {
+	AccountList(store) {
 		return {
 			schemas: {
 				type: 'array',
