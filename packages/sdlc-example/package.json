@@ -1,6 +1,6 @@
 {
   "name": "@or-change/sdlc-example",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "> TODO: description",
   "author": "leoword <leowordpassword123>",
   "homepage": "https://github.com/or-change/sdlc#readme",
@@ -18,11 +18,11 @@
     "url": "https://github.com/or-change/sdlc/issues"
   },
   "dependencies": {
-    "@or-change/sdlc": "^0.0.0",
-    "@or-change/sdlc-basicauth": "^1.0.0",
-    "@or-change/sdlc-github": "^0.0.0",
-    "@or-change/sdlc-poster": "^0.0.0",
-    "@or-change/sdlc-register": "^1.0.0"
+    "@or-change/sdlc": "^0.0.1",
+    "@or-change/sdlc-basicauth": "^1.0.1",
+    "@or-change/sdlc-github": "^0.0.1",
+    "@or-change/sdlc-poster": "^0.0.1",
+    "@or-change/sdlc-register": "^1.0.1"
   },
   "devDependencies": {
     "html-webpack-plugin": "^3.2.0",

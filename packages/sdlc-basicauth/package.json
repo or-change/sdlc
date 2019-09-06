@@ -1,6 +1,6 @@
 {
   "name": "@or-change/sdlc-basicauth",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "> TODO: description",
   "author": "leoword <leowordpassword123>",
   "homepage": "https://github.com/or-change/sdlc#readme",
@@ -13,13 +13,12 @@
     "type": "git",
     "url": "git+https://github.com/or-change/sdlc.git"
   },
-  "scripts": {
-  },
+  "scripts": {},
   "bugs": {
     "url": "https://github.com/or-change/sdlc/issues"
   },
   "dependencies": {
-    "@or-change/sdlc": "^0.0.0"
+    "@or-change/sdlc": "^0.0.1"
   },
   "devDependencies": {
     "mocha": "^6.2.0"
