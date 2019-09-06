@@ -5,6 +5,7 @@ const koaBody = require('koa-body');
 
 const Router = {
 	Base: require('./router/Base'),
+	Principal: require('./router/Principal'),
 	Account: require('./router/Account'),
 	Project: require('./router/Project'),
 	Version: require('./router/Version'),
@@ -24,6 +25,10 @@ module.exports = Duck.Web.Koa({
 				{
 					prefix: '/account',
 					Router: Router.Account
+				},
+				{
+					prefix: '/principal',
+					Router: Router.Principal
 				},
 				{
 					prefix: '/project',
@@ -67,7 +72,9 @@ module.exports = Duck.Web.Koa({
 		Duck.Web.Koa.Session()
 	],
 	factory(app, injection, { AppRouter, Session }) {
-		app.use(koaBody());
+		app.use(koaBody({
+			multipart: true
+		}));
 		Session(app);
 
 		const router = AppRouter();

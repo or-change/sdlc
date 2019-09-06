@@ -8,28 +8,29 @@ module.exports = {
 				properties: {
 					id: { type: 'string' },
 					name: { type: 'string' },
-					password: { type: 'string' },
+					avatarHash: { type: 'string' },
 					administrator: { type: 'boolean'},
 					createdAt: { type: 'date'}
 				},
-				allowNull: []
+				allowNull: ['avatarHash']
 			},
 			methods: {
-				async create() {
-
+				async create(payload) {
+					return await store.createAccount(payload);
 				},
-				async update() {
-
+				async update(payload) {
+					return await store.updateAccount(this.id, payload);
 				},
-				async query() {
-
+				async query(accountId) {
+					return await store.getAccount(accountId);
 				},
 				async delete() {
-
+					return await store.deleteAccount(this.id);
 				}
 			}
 		};
 	},
+	// 用户信息，用户摘要信息
 	AccountList(store) {
 		return {
 			schemas: {
@@ -37,8 +38,13 @@ module.exports = {
 				items: { type: 'model', symbol: 'Account'}
 			},
 			methods: {
-				async query() {
+				async query(query) {
+					const selector = {
+						all: store.queryAccountAll,
+						name: store.queryAccountByName
+					};
 
+					return await selector[query.selector](query.args);
 				}
 			}
 		};

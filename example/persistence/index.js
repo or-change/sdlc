@@ -1,83 +1,283 @@
-const data = {
+'use strict';
+
+const store = {
 	account: require('./account.json'),
 	project: require('./project.json'),
 	version: require('./version.json'),
 	member: require('./member.json'),
 	flow: require('./flow.json'),
+	stage: require('./stage.json'),
 	trace: require('./trace.json')
 };
 
-module.exports = {
-	createAccount() {
+function filterDate(arr) {
+	return arr.map(item => {
+		item.createdAt = new Date(item.createdAt);
 
-	},
-	queryAccountAll() {
+		return item;
+	});
+}
 
-	},
-	getAccount() {
+module.exports = function (data = {
+	account: filterDate(store.account),
+	project: filterDate(store.project),
+	version: filterDate(store.version),
+	member: filterDate(store.member),
+	flow: filterDate(store.flow),
+	stage: filterDate(store.stage),
+	trace: filterDate(store.trace),
+}) {
+	const store = {
+		createAccount({
+			name, administrator, avatarHash
+		}) {
+			const account = {
+				id: Math.random().toString(16).substr(2, 8),
+				name, administrator, avatarHash,
+				createdAt: new Date()
+			};
 
-	},
-	updateAccount() {
+			data.account.push(account);
 
-	},
-	deleteAccount() {
+			return account;
+		},
+		queryAccountAll() {
+			return data.account;
+		},
+		queryAccountByName({ name }) {
+			return data.account.filter(account => new RegExp(name).test(account.name));
+		},
+		getAccount(accountId) {
+			return data.account.find(account => account.id === accountId) || null;
+		},
+		updateAccount(accountId, items) {
+			const account = data.account.find(account => account.id === accountId);
 
-	},
-	createProject() {
+			for (const key in account) {
+				if (items[key] !== undefined) {
+					account[key] = items[key];
+				}
+			}
 
-	},
-	queryProjectAll() {
+			return account;
+		},
+		deleteAccount(accountId) {
+			const index = data.account.findIndex(account => account.id === accountId);
 
-	},
-	getProject() {
+			return data.account.splice(index, 1)[0];
+		},
+		createProject({
+			name, ownerId, language, abstract
+		}) {
+			const project = {
+				id: Math.random().toString(16).substr(2, 8),
+				name, ownerId, language, abstract,
+				createdAt: new Date()
+			};
 
-	},
-	updateProject() {
+			data.project.push(project);
 
-	},
-	deleteProject() {
+			return project;
+		},
+		queryProjectAll() {
+			return data.project;
+		},
+		queryProjectByOwnerId({ accountId }) {
+			return data.project.filter(project => project.ownerId === accountId);
+		},
+		queryProjectByMember({ accountId }) {
+			const memberList = store.queryMemberByAccountId({
+				accountId
+			});
 
-	},
-	createVersion() {
+			return data.project.filter(project => {
+				return project.ownerId === accountId || 
+					memberList.find(member => member.projectId === project.id);
+			});
+		},
+		getProject(projectId) {
+			return data.project.find(project => project.id === projectId) || null;
+		},
+		updateProject(projectId, items) {
+			const project = data.project.find(project => project.id === projectId);
 
-	},
-	queryVersionByProjectId() {
+			for (const key in project) {
+				if (items[key] !== undefined) {
+					project[key] = items[key];
+				}
+			}
 
-	},
-	getVersion() {
+			return project;
+		},
+		deleteProject(projectId) {
+			const index = data.project.findIndex(project => project.id === projectId);
 
-	},
-	updateVersion() {
+			return data.project.splice(index, 1)[0];
+		},
+		createMember({
+			projectId, accountId,inviter
+		}) {
+			const member = {
+				id: Math.random().toString(16).substr(2, 8),
+				projectId, accountId, inviter,
+				joinedAt: new Date(),
+				exitedAt: null
+			};
 
-	},
-	createMember() {
+			data.member.push(member);
 
-	},
-	queryMemberByProjecyId() {
+			return member;
+		},
+		queryMemberByProjecyId({ projectId, excludeExited = true }) {
+			return data.member.filter(member => {
+				if (excludeExited) {
+					return member.projectId === projectId && !member.exitedAt;
+				}
 
-	},
-	getMember() {
+				return member.projectId === projectId;
+			});
+		},
+		queryMemberByAccountId({ accountId, excludeExited = true }) {
+			return data.member.filter(member => {
+				if (excludeExited) {
+					return member.accountId === accountId && !member.exitedAt;
+				}
 
-	},
-	updateMember() {
+				return member.accountId === accountId;
+			});
+		},
+		getMember(memberId) {
+			return data.member.find(member => member.id === memberId) || null;
+		},
+		updateMember(memberId) {
+			const member = data.member.find(member => member.id === memberId);
 
-	},
-	createFlow() {
+			member.exitedAt = new Date();
+			return member;
+		},
+		createVersion({
+			semver, projectId, abstract
+		}) {
+			const version = {
+				id: Math.random().toString(16).substr(2, 8),
+				projectId, semver, abstract,
+				createdAt: new Date()
+			};
 
-	},
-	queryFlowByProjecyId() {
+			data.version.push(version);
 
-	},
-	getFlow() {
+			return version;
+		},
+		queryVersionByProjectId({ projectId }) {
+			return data.version.filter(version => version.projectId === projectId);
+		},
+		getVersion(versionId) {
+			return data.version.find(version => version.id === versionId) || null;
+		},
+		updateVersion(versionId, items) {
+			const version = data.version.find(version => version.id === versionId);
 
-	},
-	createTrace() {
+			for (const key in version) {
+				if (items[key] !== undefined) {
+					version[key] = items[key];
+				}
+			}
 
-	},
-	queryTraceByProjecyId() {
+			return version;
+		},
+		deleteVersion(versionId) {
+			const index = data.version.findIndex(version => version.id === versionId);
 
-	},
-	getTrace() {
+			return data.version.splice(index, 1)[0];
+		},
+		createFlow({
+			parentId, name, projectId, stageList, evolution
+		}) {
+			const flowId = Math.random().toString(16).substr(2, 8);
 
-	}
+			const flow = {
+				id: flowId,
+				parentId, name, projectId, evolution,
+				createdAt: new Date()
+			};
+			data.flow.push(flow);
+
+			stageList.forEach((stage, index) => {
+				data.stage.push(Object.assign({}, stage, {
+					id: Math.random().toString(16).substr(2, 8),
+					index, flowId,createdAt: new Date()
+				}));
+			});
+
+			return Object.assign({}, flow, { stageList: stageList });
+		},
+		queryFlowByProjectId({ projectId }) {
+			return data.flow.filter(flow => flow.project === projectId)
+				.map(flow => {
+					const stageList = data.stage.filter(stage => stage.flowId === flow.id)
+						.sort((a, b) => { return a.index- b.index; })
+						.map(stage => {
+							const result = Object.assign({}, stage);
+
+							delete result.id;
+							delete result.createdAt;
+							delete result.index;
+							delete result.flowId;
+
+							return result;
+						});
+
+					flow.stageList = stageList;
+
+					return flow;
+				});
+		},
+		getFlow(flowId) {
+			const flow = data.flow.find(flow => flow.id === flowId) || null;
+
+			const stageList = data.stage.filter(stage => stage.flowId === flow.id)
+				.sort((a, b) => { return a.index- b.index; })
+				.map(stage => {
+					const result = Object.assign({}, stage);
+
+					delete result.id;
+					delete result.createdAt;
+					delete result.index;
+					delete result.flowId;
+
+					return result;
+				});
+
+			flow.stageList = stageList;
+
+			return flow;
+		},
+		createTrace({
+			parentId, flowId, stageId, versionId, abstract
+		}) {
+			const trace = {
+				id: Math.random().toString(16).substr(2, 8),
+				parentId, flowId, stageId, versionId, abstract,
+				createdAt: new Date()
+			};
+
+			data.trace.push(trace);
+
+			return trace;
+		},
+		queryTraceByFlowId({ flowId }) {
+			return data.trace.filter(trace => trace.flowId === flowId);
+		},
+		queryTraceByStageId({ stageId }) {
+			return data.trace.filter(trace => trace.stageId === stageId);
+		},
+		queryTraceByVersionId({ versionId }) {
+			return data.trace.filter(trace => trace.versionId === versionId);
+		},
+		getTrace(traceId) {
+			return data.trace.find(trace => trace.id === traceId) || null;
+		}
+	};
+
+	return store;
 };

@@ -4,18 +4,17 @@ const SDLC = require('../index');
 const persistence = require('./persistence');
 
 module.exports = SDLC({
-	persistence,
+	persistence: persistence(),
 	server: {
 		async authenticate(ctx, Model) {
 			const {
-				username
+				name
 			} = ctx.request.body;
 	
 			const accountList = await Model.AccountList.query({
 				selector: 'name',
 				args: {
-					name: username,
-					exect: true
+					name,
 				}
 			});
 	

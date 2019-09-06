@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Version(injection) {
+	Version(store) {
 		return {
 			schemas: {
 				type: 'object',
@@ -10,26 +10,26 @@ module.exports = {
 					semver: { type: 'string' },
 					projectId: { type: 'string' },
 					abstract: { type: 'string' },
-					createdAt: { type: 'string' }
+					createdAt: { type: 'date' }
 				}
 			},
 			methods: {
-				async create() {
-
+				async create(payload) {
+					return await store.createVersion(payload);
 				},
-				async update() {
-
+				async update(payload) {
+					return await store.updateVersion(this.id, payload);
 				},
-				async query() {
-
+				async query(versionId) {
+					return await store.getVersion(versionId);
 				},
 				async delete() {
-
+					return await store.deleteVersion(this.id);
 				}
 			}
 		};
 	},
-	VersionList(injection) {
+	VersionList(store) {
 		return {
 			schemas: {
 				type: 'array',
@@ -39,8 +39,12 @@ module.exports = {
 				}
 			},
 			methods: {
-				async query() {
-
+				async query(query) {
+					const selector = {
+						projectId: store.queryVersionByProjectId
+					};
+					
+					return await selector[query.selector](query.args);
 				}
 			}
 		};

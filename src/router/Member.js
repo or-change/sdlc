@@ -2,13 +2,24 @@
 
 module.exports = function (router, { Model }, { AccessControl }) {
 	router.post('/', AccessControl('member.create'), async ctx => {
+		const account = await Model.Account.query(ctx.request.body.accountId);
+
+		if (!account) {
+			return ctx.throw(404, 'Account is NOT found.');
+		}
+
 		ctx.body = await Model.Member.create({
 			projectId: ctx.state.project.id,
 			accountId: ctx.request.body.accountId,
-			inviter: ctx.principal.account.id
+			inviter: ctx.state.session.principal.account.id
 		});
 	}).get('/', AccessControl('member.query'), async ctx => {
-		ctx.body = await Model.MemberList.query(ctx.state.project.id);
+		ctx.body = await Model.MemberList.query({
+			selector: 'projectId',
+			args: {
+				projectId: ctx.state.project.id
+			}
+		});
 	}).param('memberId', async (memberId, ctx, next) => {
 		const member = await Model.Member.query(memberId);
 

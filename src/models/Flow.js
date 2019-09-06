@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Flow(injection) {
+	Flow(store) {
 		return {
 			schemas: {
 				type: 'object',
@@ -17,6 +17,7 @@ module.exports = {
 							properties: {
 								name: { type: 'string' },
 								promoted: { type: 'boolean' },
+								initializable: { type: 'boolean' },
 								plugins: {
 									type: 'array',
 									items: { type: 'string' }
@@ -32,19 +33,20 @@ module.exports = {
 						}
 					},
 					createdAt: { type: 'date' }
-				}
+				},
+				allowNull: ['parentId']
 			},
 			methods: {
-				async create() {
-
+				async create(payload) {
+					return await store.createFlow(payload);
 				},
-				async query() {
-					
+				async query(flowId) {
+					return await store.getFlow(flowId);
 				}
 			}
 		};
 	},
-	FlowList(injection) {
+	FlowList(store) {
 		return {
 			schemas: {
 				type: 'array',
@@ -56,14 +58,20 @@ module.exports = {
 						name: { type: 'string' },
 						projectId: { type: 'string' },
 						createdAt: { type: 'date' }
-					}
+					},
+					allowNull: ['parentId']
 				}
 			},
 			methods: {
-				async query() {
-					
+				async query(query) {
+					const selector = {
+						projectId: store.queryFlowByProjectId
+					};
+
+					return await selector[query.selector](query.args);
 				}
 			}
 		};
 	} 
 };
+// flow template ??

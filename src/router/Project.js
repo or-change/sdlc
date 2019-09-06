@@ -22,12 +22,21 @@ module.exports = function (router, { Model }, { AccessControl }) {
 	router.post('/', AccessControl('project.create'), validate, async ctx => {
 		const { name, language, abstract } = ctx.request.body;
 
+		if (!name || !language || !abstract) {
+			return ctx.throw(400, '`request.body.name`, `request.body.language` and `request.body.abstract` are expacted.');
+		}
+
 		ctx.body = await Model.Project.create({
 			name, language, abstract,
-			ownerId: ctx.principal.account.id
+			ownerId: ctx.state.session.principal.account.id
 		});
 	}).get('/', AccessControl('project.query'), async ctx => {
-		ctx.body = await Model.ProjectList.query(ctx.principal.account.id);
+		ctx.body = await Model.ProjectList.query({
+			selector: 'memberOf',
+			args: {
+				accountId: ctx.state.session.principal.account.id
+			}
+		});
 	}).param('projectId', async (projectId, ctx, next) => {
 		const project = await Model.Project.query(projectId);
 
@@ -36,6 +45,12 @@ module.exports = function (router, { Model }, { AccessControl }) {
 		}
 
 		ctx.state.project = project;
+		ctx.state.memberList = await Model.MemberList.query({
+			selector: 'projectId',
+			args: {
+				projectId
+			}
+		});
 
 		return next();
 	}).get('/:projectId', AccessControl('project.get'), ctx => {
@@ -44,7 +59,7 @@ module.exports = function (router, { Model }, { AccessControl }) {
 		const { name, language, abstract } = ctx.request.body;
 		const { project } = ctx.state;
 
-		ctx.body = await project.$update(Object.assign({}, project.$data, { name, language, abstract}));
+		ctx.body = await project.$update(Object.assign({}, project, { name, language, abstract}));
 	}).del('/:projectId', AccessControl('project.delete'), async ctx => {
 		ctx.body = await ctx.state.project.$delete();
 	});

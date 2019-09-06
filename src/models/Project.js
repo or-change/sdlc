@@ -1,49 +1,55 @@
 'use strict';
 
 module.exports = {
-	Project(injection) {
+	Project(store) {
 		return {
 			schemas: {
 				type: 'object',
 				properties: {
 					id: { type: 'string' },
 					name: { type: 'string' },
-					owner: { type: 'string' },
+					ownerId: { type: 'string' },
 					language: { type: 'string' },
 					abstract: { type: 'string' },
 					createdAt: { type: 'date' }
 				}
 			},
 			methods: {
-				async create() {
-
+				async create(payload) {
+					return await store.createProject(payload);
 				},
-				async update() {
-
+				async update(payload) {
+					return await store.updateProject(this.id, payload);
 				},
-				async query() {
-
+				async query(projectId) {
+					return await store.getProject(projectId);
 				},
 				async delete() {
-
+					return await store.deleteProject(this.id);
 				}
 			}
 		};
 	},
-	ProjectList(injection) {
+	ProjectList(store) {
 		return {
 			schemas: {
 				type: 'array',
 				items: { type: 'model', symbol: 'Project'}
 			},
 			methods: {
-				async query() {
+				async query(query) {
+					const selector = {
+						all: store.queryProjectAll,
+						ownerId: store.queryProjectByOwnerId,
+						memberOf: store.queryProjectByMember
+					};
 
+					return await selector[query.selector](query.args);
 				}
 			}
 		};
 	},
-	Member(injection) {
+	Member(store) {
 		return {
 			schemas: {
 				type: 'object',
@@ -54,22 +60,23 @@ module.exports = {
 					inviter: { type: 'string' },
 					joinedAt: { type: 'date' },
 					exitedAt: { type: 'date' }
-				}
+				},
+				allowNull: ['exitedAt']
 			},
 			methods: {
-				async create() {
-
+				async create(payload) {
+					return await store.createMember(payload);
 				},
-				async update() {
-
+				async update(payload) {
+					return await store.updateMember(this.id, payload);
 				},
-				async query() {
-
+				async query(memberId) {
+					return await store.getMember(memberId);
 				}
 			}
 		};
 	},
-	MemberList(injection) {
+	MemberList(store) {
 		return {
 			schemas: {
 				type: 'array',
@@ -79,8 +86,13 @@ module.exports = {
 				}
 			},
 			methods: {
-				async query() {
+				async query(query) {
+					const selector = {
+						projectId: store.queryMemberByProjecyId,
+						accountId: store.queryMemberByAccountId
+					};
 
+					return await selector[query.selector](query.args);
 				}
 			}
 		};

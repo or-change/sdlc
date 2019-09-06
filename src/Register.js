@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (plugins) {
+module.exports = function (plugins, injection) {
 	const store = {
 		pluginList: [],
 		routeList: [],
@@ -32,7 +32,9 @@ module.exports = function (plugins) {
 			id, name, description
 		});
 
-		install(register);
+		install(register, {
+			product: injection.product
+		});
 	});
 
 	return register;

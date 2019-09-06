@@ -3,10 +3,10 @@
 module.exports = function (router,
 	{ product, Model, pluginManager, authenticate }, { AccessControl }) {
 	router.get('/product', AccessControl('product.query'), ctx => {
-		ctx.body = Object.assign({}, product, {
+		ctx.body = Object.assign({}, product.meta, {
 			plugins: pluginManager.pluginList
 		});
-	}).post('/session/principal', AccessControl('principal.create'), async ctx => {
+	}).post('/session/principal', AccessControl('session.principal.create'), async ctx => {
 		const authentication = await authenticate(ctx, Model);
 
 		if (!authentication) {
@@ -34,9 +34,7 @@ module.exports = function (router,
 		}
 
 		return next();
-	}).get('/session/principal', AccessControl('principal.get'), ctx => {
-		ctx.body = ctx.state.session.principal;
-	}).del('/session/principal', AccessControl('principal.delete'), async ctx => {
+	}).del('/session/principal', AccessControl('session.principal.delete'), async ctx => {
 		ctx.body = ctx.state.session.principal;
 		delete ctx.state.session.principal;
 	});

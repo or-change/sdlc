@@ -23,7 +23,6 @@ module.exports = function SDLC(options) {
 		version: meta.version,
 		description: meta.description,
 		injection: {
-			pluginManager: Register(options.plugins),
 			authenticate: options.server.authenticate,
 		},
 		components: [
@@ -45,6 +44,7 @@ module.exports = function SDLC(options) {
 		],
 		installed({ Datahub, injection }) {
 			injection.Model = Datahub('com.orchange.sdlc', options.persistence).model;
+			injection.pluginManager = Register(options.plugins, injection);
 		}
 	}, ({ Web, Webpack }) => {
 		sdlc.server = Web.Server('app', 'http', Web.Application.Default()); //https可以加

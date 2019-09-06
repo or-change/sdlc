@@ -2,13 +2,30 @@
 
 module.exports = function (router, { Model }, { AccessControl }) {
 	router.post('/', AccessControl('trace.create'), async ctx => {
-		const { parentId, stageId, versionId, flowId, abstract } = ctx.requst.body;
+		const { parentId, stageId, versionId, flowId, abstract } = ctx.request.body;
 
-		if (parentId && await Model.Trace.query(parentId)) {
-			return ctx.throw(400, 'Invalid `request.body.parentId`, parent trace NOT existed.');
+		if (parentId) {
+			const trace = await Model.Trace.query(parentId);
+
+			if (!trace) {
+				return ctx.throw(400, 'Invalid `request.body.parentId`, parent trace NOT existed.');
+			}
 		}
 
-		// versionId 路由定义错了或是验证version是否存在？
+		const flow = await Model.Flow.query(flowId);
+		const version = await Model.Version.query(versionId);
+
+		if (!flow) {
+			ctx.throw(400, 'The flow is NOT exited.');
+		}
+
+		if (!flow.stageList[stageId]) {
+			ctx.throw(400, 'The stage of flow is NOT exited.');
+		}
+
+		if (!version) {
+			ctx.throw(400, 'The version is NOT exited.');
+		}
 
 		if (abstract && typeof abstract !== 'string') {
 			return ctx.throw(400, 'Invalid `request.body.abstract`, string expacted.');
@@ -19,7 +36,7 @@ module.exports = function (router, { Model }, { AccessControl }) {
 			versionId, abstract, parentId
 		});
 	}).get('/', AccessControl('trace.query'), async ctx => {
-		ctx.body = await Model.TraceList.query(ctx.state.project.id);
+		ctx.body = await Model.TraceList.query(); //how to choose selector
 	}).param('tranceId', async (tranceId, ctx, next) => {
 		const trace = await Model.Trace.query(tranceId);
 

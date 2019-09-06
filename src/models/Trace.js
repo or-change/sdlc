@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Trace(injection) {
+	Trace(store) {
 		return {
 			schemas: {
 				type: 'object',
@@ -13,19 +13,20 @@ module.exports = {
 					versionId: { type: 'string' },
 					abstract: { type: 'string' },
 					createdAt: { type: 'date' }
-				}
+				},
+				allowNull: ['parentId']
 			},
 			methods: {
-				async create() {
-
+				async create(payload) {
+					return await store.createTrace(payload);
 				},
-				async query() {
-
+				async query(traceId) {
+					return await store.getTrace(traceId);
 				}
 			}
 		};
 	},
-	TraceList(injection) {
+	TraceList(store) {
 		return {
 			schemas: {
 				type: 'object',
@@ -39,8 +40,14 @@ module.exports = {
 				}
 			},
 			methods: {
-				async query() {
+				async query(query) {
+					const selector = {
+						flowId: store.getTraceByFlowId,
+						stageId: store.getTraceByStageId,
+						versionId: store.getTraceByVersionId,
+					};
 
+					return await selector[query.selector](query.args);
 				}
 			}
 		};
