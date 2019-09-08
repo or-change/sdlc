@@ -15,9 +15,9 @@
     "parserOptions": {
         "ecmaVersion": 2018
     },
-    // "plugins": [
-    //     "vue"
-    // ],
+    "plugins": [
+        // "vue"
+    ],
     "rules": {
         "indent": [
             "error",

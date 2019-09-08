@@ -13,7 +13,10 @@
     "type": "git",
     "url": "git+https://github.com/or-change/sdlc.git"
   },
-  "scripts": {},
+  "scripts": {
+    "test": "mocha",
+    "dev": "webpack-dev-server --config ./build/webpack.dev.js"
+  },
   "bugs": {
     "url": "https://github.com/or-change/sdlc/issues"
   },
@@ -25,7 +28,9 @@
     "@or-change/sdlc-register": "^1.0.1"
   },
   "devDependencies": {
+    "@or-change/sdlc-store-memory": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "mocha": "^6.2.0"
+    "mocha": "^6.2.0",
+    "webpack-dev-server": "^3.8.0"
   }
 }

@@ -1,0 +1,29 @@
+{
+  "name": "@or-change/sdlc-store-memory",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "leoword <leowordpassword123>",
+  "homepage": "https://github.com/or-change/sdlc#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "files": [
+    "store"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/or-change/sdlc.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/or-change/sdlc/issues"
+  },
+  "dependencies": {
+    "@or-change/sdlc": "^0.0.1",
+    "mocha": "^6.2.0"
+  }
+}

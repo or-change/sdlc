@@ -52,6 +52,7 @@
     "webpack-merge": "^4.2.2"
   },
   "devDependencies": {
+    "@or-change/sdlc-store-memory": "^1.0.0",
     "mocha": "^6.2.0"
   }
 }
