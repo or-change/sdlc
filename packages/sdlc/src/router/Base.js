@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (router,
-	{ product, Model, pluginManager, authenticate }, { AccessControl }) {
+	{ AccessControl }, { product, Model, pluginManager, authenticate }) {
 	router.get('/product', AccessControl('product.query'), ctx => {
 		ctx.body = Object.assign({}, product.meta, {
 			plugins: pluginManager.pluginList

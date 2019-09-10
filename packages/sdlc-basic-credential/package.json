@@ -1,11 +1,11 @@
 {
-  "name": "@or-change/sdlc-basicauth",
+  "name": "@or-change/sdlc-basic-credentical",
   "version": "1.0.1",
   "description": "> TODO: description",
   "author": "leoword <leowordpassword123>",
   "homepage": "https://github.com/or-change/sdlc#readme",
   "license": "ISC",
-  "main": "lib/sdlc-basicauth.js",
+  "main": "index.js",
   "publishConfig": {
     "access": "public"
   },

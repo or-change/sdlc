@@ -8,12 +8,6 @@ module.exports = function (plugins, injection) {
 	};
 	
 	const register = {
-		route(route) {
-			store.routeList.push(route);
-		},
-		entry(pathname) {
-			store.webpackEntryList.push(pathname);
-		},
 		get pluginList() {
 			return store.pluginList.slice(0);
 		},
@@ -26,13 +20,15 @@ module.exports = function (plugins, injection) {
 	};
 
 	plugins.forEach(plugin => {
-		const { id, name, description, install } = plugin;
+		const { id, name, description, install, route, entry } = plugin;
 	
 		store.pluginList.push({
 			id, name, description
 		});
+		store.routeList.push(route);
+		store.webpackEntryList.push(entry); //entry类型？？
 
-		install(register, {
+		install({
 			product: injection.product
 		});
 	});

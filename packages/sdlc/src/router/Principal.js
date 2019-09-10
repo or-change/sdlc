@@ -1,6 +1,6 @@
 'use strict'; 
 
-module.exports = function (router, { Model }, { AccessControl }) {
+module.exports = function (router, { AccessControl }, { Model }) {
 	router.get('/', AccessControl('principal.get'), async ctx => {
 		ctx.body = ctx.state.session.principal;
 	}).put('/', AccessControl('principal.update'), async ctx => {

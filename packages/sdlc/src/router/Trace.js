@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (router, { Model }, { AccessControl }) {
+module.exports = function (router, { AccessControl }, { Model }) {
 	router.post('/', AccessControl('trace.create'), async ctx => {
 		const { parentId, stageId, versionId, flowId, abstract } = ctx.request.body;
 

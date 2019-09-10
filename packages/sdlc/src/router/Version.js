@@ -2,7 +2,7 @@
 
 const semverValidate = require('semver');
 
-module.exports = function (router, { Model }, { AccessControl }) {
+module.exports = function (router, { AccessControl }, { Model }) {
 	router.post('/', AccessControl('version.create'), async ctx => {
 		const { semver, abstract } = ctx.request.body;
 

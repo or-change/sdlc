@@ -1,24 +1,23 @@
 'use strict';
 
 const Duck = require('@or-change/duck');
-const meta = require('./package.json');
+const DuckWeb = require('@or-change/duck-web');
+const DuckDatahub = require('@or-change/duck-datahub');
+const DuckWebpack = require('@or-change/duck-webpack');
 
 const Webpack = require('./src/webpack');
-const Register = require('./src/Register');
 const Application = require('./src/Application');
-const models = [
-	require('./src/models/Account'),
-	require('./src/models/Project'),
-	require('./src/models/Flow'),
-	require('./src/models/Trace'),
-	require('./src/models/Version')
-];
+const models = require('./src/models');
+const Register = require('./src/Register');
+
+const SDLC_HASH = 'com.orchange.sdlc';
+const meta = require('./package.json');
 
 module.exports = function SDLC(options) {
 	const sdlc = {};
 
 	Duck({
-		id: 'com.orchange.sdlc',
+		id: SDLC_HASH,
 		name: 'sdlc',
 		version: meta.version,
 		description: meta.description,
@@ -26,28 +25,28 @@ module.exports = function SDLC(options) {
 			authenticate: options.server.authenticate,
 		},
 		components: [
-			Duck.Web([
+			DuckWeb([
 				{
 					id: 'Default',
 					Application
 				}
 			]),
-			Duck.Datahub([
+			DuckDatahub([
 				{
-					id: 'com.orchange.sdlc',
+					id: SDLC_HASH,
 					models: models.reduce((all, group) => Object.assign(all, group), {})
 				}
 			]),
-			Duck.Webpack({
+			DuckWebpack({
 				sdlc: Webpack
 			})
 		],
 		installed({ Datahub, injection }) {
-			injection.Model = Datahub('com.orchange.sdlc', options.store).model;
+			injection.Model = Datahub(SDLC_HASH, options.store).model;
 			injection.pluginManager = Register(options.plugins, injection);
 		}
 	}, ({ Web, Webpack }) => {
-		sdlc.server = Web.Server('app', 'http', Web.Application.Default()); //https可以加
+		sdlc.server = Web.Http.createServer(Web.Application('Default'));
 		sdlc.webpack = Webpack('sdlc');
 	});
 

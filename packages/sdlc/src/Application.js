@@ -1,6 +1,10 @@
 'use strict';
 
-const Duck = require('@or-change/duck');
+const DuckWebKoa = require('@or-change/duck-web-koa');
+const DuckWebKoaRouter = require('@or-change/duck-web-koa-router');
+const DuckKoaAcl = require('@or-change/duck-web-koa-acl');
+const DuckWebKoaSession = require('@or-change/duck-web-koa-session');
+
 const koaBody = require('koa-body');
 
 const Router = {
@@ -16,68 +20,65 @@ const Router = {
 };
 const AccessControl = require('./AccessControl');
 
-module.exports = Duck.Web.Koa({
-	plugins: [
-		Duck.Web.Koa.KoaRouter({
-			prefix: '/api',
-			Router: Router.Base,
-			use: [
-				{
-					prefix: '/account',
-					Router: Router.Account
-				},
-				{
-					prefix: '/principal',
-					Router: Router.Principal
-				},
-				{
-					prefix: '/project',
-					Router: Router.Project,
-					use: [
-						{
-							mount: '/:projectId',
-							prefix: '/version',
-							Router: Router.Version
-						},
-						{
-							mount: '/:projectId',
-							prefix: '/member',
-							Router: Router.Member
-						},
-						{
-							mount: '/:projectId',
-							prefix: '/flow',
-							Router: Router.Flow,
-						},
-						{
-							mount: '/:projectId',
-							prefix: '/trace',
-							Router: Router.Trace
-						}
-					]
-				},
-				{
-					prefix: '/admin',
-					Router: Router.Admin
-				},
-				{
-					prefix: '/plugin',
-					Router(router, { pluginManager, Model }) {
-						pluginManager.routeList.forEach(install => install(router, Model));
-					}
-				}
-			],
-		}),
-		Duck.Web.Koa.AccessControl(AccessControl),
-		Duck.Web.Koa.Session()
-	],
-	factory(app, injection, { AppRouter, Session }) {
-		app.use(koaBody({
-			multipart: true
-		}));
-		Session(app);
+module.exports = DuckWebKoa((app, { AppRouter, Session }) => {
+	app.use(koaBody({
+		multipart: true
+	}));
 
-		const router = AppRouter();
-		app.use(router.routes()).use(router.allowedMethods());
-	}
-});
+	Session(app);
+
+	app.use(AppRouter().routes());
+}, [
+	DuckWebKoaRouter({
+		prefix: '/api',
+		Router: Router.Base,
+		use: [
+			{
+				prefix: '/account',
+				Router: Router.Account
+			},
+			{
+				prefix: '/principal',
+				Router: Router.Principal
+			},
+			{
+				prefix: '/project',
+				Router: Router.Project,
+				use: [
+					{
+						mount: '/:projectId',
+						prefix: '/version',
+						Router: Router.Version
+					},
+					{
+						mount: '/:projectId',
+						prefix: '/member',
+						Router: Router.Member
+					},
+					{
+						mount: '/:projectId',
+						prefix: '/flow',
+						Router: Router.Flow,
+					},
+					{
+						mount: '/:projectId',
+						prefix: '/trace',
+						Router: Router.Trace
+					}
+				]
+			},
+			{
+				prefix: '/admin',
+				Router: Router.Admin
+			},
+			{
+				prefix: '/plugin',
+				Router(router, context, { pluginManager, Model }) {
+					pluginManager.routeList.forEach(install => install(router, Model));
+				}
+			}
+		],
+	}),
+	DuckKoaAcl(AccessControl),
+	DuckWebKoaSession()
+]);

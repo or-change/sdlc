@@ -35,10 +35,10 @@ module.exports = SDLC({
 			id: 'com.test.test',
 			name: 'test',
 			install(sdlc) {
-				sdlc.route(function install(route) {
-					route.get('/test', ctx => {
-						ctx.body = 'add success!!';
-					});
+			},
+			route(route) {
+				route.get('/test', ctx => {
+					ctx.body = 'add success!!';
 				});
 			}
 		}

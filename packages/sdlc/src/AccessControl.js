@@ -4,7 +4,7 @@ const _ = 0;
 const $ = 1;
 
 module.exports = {
-	asserts:                [
+	asserts: [
 		function withoutPrincipal(ctx) {
 			return !ctx.state.session.principal;
 		},

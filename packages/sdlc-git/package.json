@@ -1,13 +1,17 @@
 {
-  "name": "@or-change/sdlc-store-memory",
+  "name": "@or-change/sdlc-git",
   "version": "1.0.0",
   "description": "> TODO: description",
   "author": "leoword <leowordpassword123>",
   "homepage": "https://github.com/or-change/sdlc#readme",
   "license": "ISC",
-  "main": "index.js",
+  "main": "lib/sdlc-git.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
   "files": [
-    "store"
+    "lib"
   ],
   "publishConfig": {
     "access": "public"
@@ -21,9 +25,5 @@
   },
   "bugs": {
     "url": "https://github.com/or-change/sdlc/issues"
-  },
-  "devDependencies": {
-    "@or-change/sdlc": "^0.0.1",
-    "mocha": "^6.2.0"
   }
 }
