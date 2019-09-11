@@ -13,7 +13,8 @@ const { server, webpack } = new SDLC(options);
 	server: {
 		type: 'object',
 		properties: {
-			authenticate: { type: 'function' }
+			authenticate: { type: 'function' },
+			session: { type: 'object' }
 		}
 	},
 	plugins: {

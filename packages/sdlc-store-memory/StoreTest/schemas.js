@@ -89,6 +89,10 @@ module.exports = {
 		properties: {
 			id: { type: 'string' },
 			parentId: { type: ['string', 'null'] },
+			children: {
+				type: 'array',
+				items: { type: 'string' }
+			},
 			flowId: { type: 'string' },
 			stageId: { type: 'number' },
 			versionId: { type: 'string' },

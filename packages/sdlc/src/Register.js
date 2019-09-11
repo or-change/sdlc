@@ -28,9 +28,7 @@ module.exports = function (plugins, injection) {
 		store.routeList.push(route);
 		store.webpackEntryList.push(entry); //entry类型？？
 
-		install({
-			product: injection.product
-		});
+		install(injection);
 	});
 
 	return register;

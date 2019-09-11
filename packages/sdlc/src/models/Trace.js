@@ -8,6 +8,7 @@ module.exports = {
 				properties: {
 					id: { type: 'string' },
 					parentId: { type: 'string' },
+					children: { type: 'array' },
 					flowId: { type: 'string' },
 					stageId: { type: 'number' },
 					versionId: { type: 'string' },
@@ -22,6 +23,12 @@ module.exports = {
 				},
 				async query(traceId) {
 					return await store.getTrace(traceId);
+				},
+				async update(payload) {
+					return await store.updateTrace(this.id, payload);
+				},
+				async delete() {
+					return await store.destroyTrace(this.id);
 				}
 			}
 		};
