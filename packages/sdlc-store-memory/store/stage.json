@@ -1,1 +1,12 @@
-[]
+[
+	{
+		"id": "230f3110",
+		"flowId": "230f3110",
+		"index": 0,
+		"name": "stage 1",
+		"promoted": true,
+		"initializable": true,
+		"plugins": [],
+		"createdAt": "2019-09-11T07:04:47.370Z"
+	}
+]

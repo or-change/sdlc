@@ -93,6 +93,7 @@ module.exports = {
 				type: 'array',
 				items: { type: 'string' }
 			},
+			projectId: { type: 'string' },
 			flowId: { type: 'string' },
 			stageId: { type: 'number' },
 			versionId: { type: 'string' },

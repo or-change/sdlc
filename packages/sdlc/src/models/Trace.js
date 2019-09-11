@@ -8,7 +8,13 @@ module.exports = {
 				properties: {
 					id: { type: 'string' },
 					parentId: { type: 'string' },
-					children: { type: 'array' },
+					children: {
+						type: 'array',
+						items: {
+							type: 'string'
+						}
+					},
+					projectId: { type: 'string' },
 					flowId: { type: 'string' },
 					stageId: { type: 'number' },
 					versionId: { type: 'string' },
@@ -28,7 +34,7 @@ module.exports = {
 					return await store.updateTrace(this.id, payload);
 				},
 				async delete() {
-					return await store.destroyTrace(this.id);
+					return await store.deleteTrace(this.id);
 				}
 			}
 		};
@@ -45,9 +51,10 @@ module.exports = {
 			methods: {
 				async query(query) {
 					const selector = {
+						projectId: store.queryTraceByProjectId,
 						flowId: store.queryTraceByFlowId,
-						// stageId: store.queryTraceByStageId,
-						versionId: store.queryTraceByVersionId,
+						stageId: store.queryTraceByStageId,
+						versionId: store.queryTraceByVersionId
 					};
 
 					return await selector[query.selector](query.args);

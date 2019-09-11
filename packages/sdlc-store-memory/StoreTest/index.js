@@ -73,9 +73,9 @@ module.exports = function (store) {
 			});
 		
 			it('Update account', async () => {
-				accountValidatot(await store.updateAccount(account.id, {
+				accountValidatot(await store.updateAccount(account.id, Object.assign({}, account, {
 					name: 'test-update'
-				}));
+				})));
 			});
 		
 			it('Delete account', async () => {
@@ -131,9 +131,9 @@ module.exports = function (store) {
 			});
 	
 			it('Update project', async () => {
-				projectValidator(await store.updateProject(project.id, {
+				projectValidator(await store.updateProject(project.id, Object.assign({}, project, {
 					name: 'project 1 update'
-				}));
+				})));
 			});
 	
 			it('Delete project', async () => {
@@ -165,9 +165,9 @@ module.exports = function (store) {
 			});
 
 			it('Update version', async () => {
-				versionValidator(await store.updateVersion(version.id, {
+				versionValidator(await store.updateVersion(version.id, Object.assign({}, version, {
 					abstract: 'test'
-				}));
+				})));
 			});
 		});
 
@@ -247,7 +247,8 @@ module.exports = function (store) {
 
 			before(async () => {
 				trace = await store.createTrace({
-					parentId: null, flowId: flow.id, stageId: 0, versionId: version.id, abstract: ''
+					parentId: null, flowId: flow.id, stageId: 0, versionId: version.id, abstract: '',
+					projectId: project.id
 				});
 			});
 
@@ -255,28 +256,38 @@ module.exports = function (store) {
 				traceValidator(trace);
 			});
 
-			it('Query trace by flowId', async () => {
-				const traceList = await store.queryTraceByFlowId({ flowId: flow.id });
+			it('Query trace by projectId', async () => {
+				const traceList = await store.queryTraceByProjectId({ projectId: project.id });
 
 				if (Array.isArray(traceList)) {
 					traceList.forEach(trace => traceValidator(trace));
 				} else {
-					assert.ok(false, 'return value of queryTraceByFlowId should be an array.');
+					assert.ok(false, 'return value of queryTraceByProjectId should be an array.');
+				}
+			});
+
+			it('Query trace by flowId', async () => {
+				const traceList = await store.queryTraceByFlowId({ projectId: project.id, flowId: flow.id });
+
+				if (Array.isArray(traceList)) {
+					traceList.forEach(trace => traceValidator(trace));
+				} else {
+					assert.ok(false, 'return value of queryTraceByVersionId should be an array.');
 				}
 			});
 
 			it('Query trace by stageId', async () => {
-				const traceList = await store.queryTraceByStageId({ stageId: 0 });
+				const traceList = await store.queryTraceByStageId({ projectId: project.id, stageId: 0 });
 
 				if (Array.isArray(traceList)) {
 					traceList.forEach(trace => traceValidator(trace));
 				} else {
-					assert.ok(false, 'return value of queryTraceByStageId should be an array.');
+					assert.ok(false, 'return value of queryTraceByVersionId should be an array.');
 				}
 			});
 
 			it('Query trace by versionId', async () => {
-				const traceList = await store.queryTraceByVersionId({ versionId: version.id });
+				const traceList = await store.queryTraceByVersionId({ projectId: project.id, versionId: version.id });
 
 				if (Array.isArray(traceList)) {
 					traceList.forEach(trace => traceValidator(trace));
@@ -287,6 +298,16 @@ module.exports = function (store) {
 
 			it('Get trace', async () => {
 				traceValidator(await store.getTrace(trace.id));
+			});
+
+			it('Update trace', async () => {
+				traceValidator(await store.updateTrace(trace.id, Object.assign({}, trace, {
+					abstract: 'trace update'
+				})));
+			});
+
+			it('Delete trace', async () => {
+				traceValidator(await store.deleteTrace(trace.id));
 			});
 		});
 	});

@@ -230,6 +230,10 @@ module.exports = function (data = {
 		getFlow(flowId) {
 			const flow = data.flow.find(flow => flow.id === flowId) || null;
 
+			if (!flow) {
+				return flow;
+			}
+
 			const stageList = data.stage.filter(stage => stage.flowId === flow.id)
 				.sort((a, b) => { return a.index- b.index; })
 				.map(stage => {
@@ -248,11 +252,12 @@ module.exports = function (data = {
 			return flow;
 		},
 		createTrace({
-			parentId, flowId, stageId, versionId, abstract
+			parentId, flowId, stageId, versionId, abstract, projectId
 		}) {
 			const trace = {
 				id: Math.random().toString(16).substr(2, 8),
 				parentId, flowId, stageId, versionId, abstract,
+				children: [], projectId,
 				createdAt: new Date()
 			};
 
@@ -260,17 +265,36 @@ module.exports = function (data = {
 
 			return trace;
 		},
-		queryTraceByFlowId({ flowId }) {
-			return data.trace.filter(trace => trace.flowId === flowId);
+		queryTraceByProjectId({ projectId }) {
+			return data.trace.filter(trace => trace.projectId === projectId);
 		},
-		queryTraceByStageId({ stageId }) {
-			return data.trace.filter(trace => trace.stageId === stageId);
+		queryTraceByFlowId({ projectId, flowId }) {
+			return data.trace.filter(trace => trace.projectId === projectId && trace.flowId === flowId);
 		},
-		queryTraceByVersionId({ versionId }) {
-			return data.trace.filter(trace => trace.versionId === versionId);
+		queryTraceByStageId({ projectId, stageId }) {
+			return data.trace.filter(trace => trace.projectId === projectId && trace.stageId === stageId);
+		},
+		queryTraceByVersionId({ projectId, versionId }) {
+			return data.trace.filter(trace => trace.versionId === trace.projectId === projectId && versionId);
 		},
 		getTrace(traceId) {
 			return data.trace.find(trace => trace.id === traceId) || null;
+		},
+		updateTrace(traceId, items) {
+			const trace = data.trace.find(trace => trace.id === traceId);
+
+			for (const key in trace) {
+				if (items[key] !== undefined) {
+					trace[key] = items[key];
+				}
+			}
+
+			return trace;
+		},
+		deleteTrace(traceId) {
+			const index = data.trace.findIndex(trace => trace.id === traceId);
+
+			return data.trace.splice(index, 1)[0];
 		}
 	};
 

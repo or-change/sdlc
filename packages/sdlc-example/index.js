@@ -6,7 +6,7 @@ const Store = require('@or-change/sdlc-store-memory');
 module.exports = SDLC({
 	store: Store(),
 	server: {
-		async authenticate(ctx, Model) {
+		async authenticate(ctx, { Model }) {
 			const {
 				name
 			} = ctx.request.body;

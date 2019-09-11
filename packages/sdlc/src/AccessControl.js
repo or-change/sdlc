@@ -52,6 +52,7 @@ module.exports = {
 		'trace.create':                    [_, $, _, _, $],
 		'trace.query':                     [_, $, _, $, _],
 		'trace.get':                       [_, $, _, $, _],
+		'trace.delete':                    [_, $, _, $, _],
 		'admin.system':                    [_, $, $, _, _]
 	}
 };
