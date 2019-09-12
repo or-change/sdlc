@@ -44,8 +44,8 @@ module.exports = SDLC({
 		// 	},
 		// 	key: ''
 		// },
-		installed() {
-
+		installed({ product }) {
+			product.on('account-created', (account) => { console.log(account); });
 		}
 	},
 	plugins: [
@@ -54,14 +54,20 @@ module.exports = SDLC({
 			name: 'test',
 			install(injection) {
 			},
-			routes: {
-				account: (route) => {
-					route.get('/test', ctx => {
+			routers: {
+				Account: (router) => {
+					router.get('/test', ctx => {
 						ctx.body = 'add success!!';
 					});
 				},
-				plugin: (route) => {
-					route.get('/test', ctx => {
+				$project: (router, context, injection) => {
+					router.get('/test', ctx => {
+						console.log(context, injection);
+						ctx.body = ctx.state.project;
+					});
+				},
+				Plugin: (router) => {
+					router.get('/test', ctx => {
 						ctx.body = 'add success!!';
 					});
 				}

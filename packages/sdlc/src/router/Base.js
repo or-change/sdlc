@@ -1,10 +1,10 @@
 'use strict';
 
 module.exports = function (router,
-	{ AccessControl }, { product, Model, pluginManager, authenticate, injection}) {
+	{ AccessControl }, { product, Model, Plugin, authenticate, injection}) {
 	router.get('/product', AccessControl('product.query'), ctx => {
 		ctx.body = Object.assign({}, product.meta, {
-			plugins: pluginManager.pluginList
+			plugins: Plugin.plugins
 		});
 	}).post('/session/principal', AccessControl('session.principal.create'), async ctx => {
 		const authentication = await authenticate(ctx, injection);

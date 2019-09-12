@@ -10,9 +10,7 @@ jila: 问题追踪（交互信息）
 
 plugin manage:
 
-extension point:
-
-1> product emiter 路由的日志（插件使用）--   模型层 抛事件 路由 抛事件（选择哪些） 是否可以扩展？？（内部日志插件，外部product事件） poster \/ 部分
+<!-- 1> product emiter 路由的日志（插件使用）--   模型层 抛事件 路由 抛事件（选择哪些） 是否可以扩展？？（内部日志插件，外部product事件） poster \/ 部分 -->
 <!-- 2> 路由扩展																																																													\/ -->
 <!-- 3> 前端扩展 (webpack数组)																																																						\/ -->
 4> 扩展点类型，source（sourceService）其他插件使用 参数：options, 结果：blob (source.helper),
@@ -24,5 +22,10 @@ extension point:
 
 project 多发行 管理（plugin）
 				分支
+后端：
+flow update功能（更新flow的name, stage的name， plugin 和delete stage）
+更改model stage的promoted,initializable提升，变成数组类型
 
+前端：
 页面布局图，明天讨论如何在前端扩展插件
+前端插件按作用域扩展（project,account,stage,menu...）

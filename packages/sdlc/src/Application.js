@@ -6,11 +6,11 @@ const DuckKoaAcl = require('@or-change/duck-web-koa-acl');
 const DuckWebKoaRouter = require('@or-change/duck-web-koa-router');
 
 const AccessControl = require('./AccessControl');
-const Router = require('./router');
+const router = require('./router');
 
 const koaBody = require('koa-body');
 
-module.exports = function ({ session, routes }) {
+module.exports = function ({ session }) {
 	return DuckWebKoa((app, { AppRouter, Session }) => {
 		app.use(koaBody({
 			multipart: true
@@ -19,9 +19,14 @@ module.exports = function ({ session, routes }) {
 		Session(app);
 	
 		app.use(AppRouter().routes());
-	}, [
-		DuckWebKoaRouter(Router(routes)),
-		DuckKoaAcl(AccessControl),
-		DuckWebKoaSession(session)
-	]);
+	}, {
+		plugins: [
+			DuckWebKoaRouter(router),
+			DuckKoaAcl(AccessControl),
+			DuckWebKoaSession(session)
+		],
+		installed(context, { Plugin, injection }) {
+			context.mountRouter = Plugin.RouterMounter(context, injection);
+		}
+	});
 };

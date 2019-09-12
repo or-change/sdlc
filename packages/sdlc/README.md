@@ -34,7 +34,7 @@ const { server, webpack } = new SDLC(options);
 
 ## plugins
 
-Register plugin to SDLC core, and you can extend route and webpack in plugin install function
+Register plugin to SDLC core, and you can extend router and webpack in plugin install function
 (广度 扩展点确定，深度 前端扩展)
 
 1.备好前端开发环境

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (router, { AccessControl }, { Model }) {
+module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 	router.use(AccessControl('admin.system')).post('/account',async ctx => {
 		const { name, avatarHash, administrator } = ctx.request.body;
 
@@ -29,4 +29,6 @@ module.exports = function (router, { AccessControl }, { Model }) {
 			selector: 'all'
 		});
 	});
+
+	mountRouter('Admin', router);
 };

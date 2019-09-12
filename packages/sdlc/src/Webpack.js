@@ -20,13 +20,13 @@ const BABEL_OPTIONS = {
 	sourceType: 'unambiguous'
 };
 
-module.exports = function ({ pluginManager }) {
+module.exports = function ({ Plugin }) {
 	return {
 		entry: {
 			bundle: [
 				'@babel/polyfill/dist/polyfill.min.js',
 				path.resolve(__dirname, '../app/register.js')
-			].concat([
+			].concat(Plugin.entrys).concat([
 				path.resolve(__dirname, '../app/index.js')
 			])
 		},

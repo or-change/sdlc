@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (router, { AccessControl }, { Model }) {
+module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 	router.post('/', AccessControl('flow.create'), async ctx => {
 		const { parentId, name, stageList, evolution } = ctx.request.body;
 
@@ -65,7 +65,11 @@ module.exports = function (router, { AccessControl }, { Model }) {
 				project: ctx.state.project.id
 			}
 		});
-	}).param('flowId', async (flowId, ctx, next) => {
+	});
+
+	mountRouter('Flow', router);
+	
+	router.param('flowId', async (flowId, ctx, next) => {
 		const flow = await Model.Flow.query(flowId);
 
 		if (!flow) {
@@ -78,4 +82,6 @@ module.exports = function (router, { AccessControl }, { Model }) {
 	}).get('/:flowId', AccessControl('flow.get'), ctx => {
 		ctx.body = ctx.state.flow;
 	});
+
+	mountRouter('Flow', router, '/:flowId');
 };

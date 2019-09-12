@@ -1,41 +1,85 @@
 'use strict';
 
-const store = {
-	pluginList: [],
-	routeList: [],
-	webpackEntryList: []
-};
+module.exports = function (plugins) {
+	const store = {
+		routers: {
+			'Account': [],
+			'Principal': [],
+			'Project': [],
+			'$project': [],
+			'Flow': [],
+			'$flow': [],
+			'Trace': [],
+			'$trace': [],
+			'Member': [],
+			'$member': [],
+			'Version': [],
+			'$version': [],
+			'Admin': [],
+			'Plugin': []
+		}
+	};
 
-const register = {
-	get pluginList() {
-		return store.pluginList.slice(0);
-	},
-	get routeList() {
-		return store.routeList.slice(0);
-	},
-	get webpackEntryList() {
-		return store.webpackEntryList.slice(0);
+	function validate(plugins) {
+		const pluginStore = [];
+
+		plugins.forEach(plugin => {
+			const { id, routers} = plugin;
+
+			if (pluginStore.indexOf(id) !== -1) {
+				throw new Error('The id of plugin is EXISTED.');
+			}
+
+			pluginStore.push(id);
+
+			Object.keys(routers).forEach(mountPoint => {
+				if (!store.routers[mountPoint]) {
+					throw new Error(`The '${mountPoint}' mountPoint of router is NOT existed.`);
+				}
+			});
+		});
 	}
-};
 
-module.exports = function (plugins, injectionExtention) {
+	validate(plugins);
+
 	plugins.forEach(plugin => {
 		const {
-			id, name, description,
-			routes = {}, entry = [], install
+			routers = {}
 		} = plugin;
 
-		
-		store.pluginList.push({
-			id, name, description
-		});
-		store.routeList.push(routes);
-		store.webpackEntryList.push(...entry);
-
-		if (install) {
-			install(injectionExtention);
+		for (let mountPoint in routers) {
+			store.routers[mountPoint].push(routers[mountPoint]);
 		}
 	});
 
-	return register;
+	return function PluginAccessor() {
+		return {
+			RouterMounter(context, injection) {
+				const { KoaRouter } = context;
+
+				return function mountRouter(mountName, router, path) {
+					store.routers[mountName].forEach(Router => {
+						const childRouter = new KoaRouter(path ? { prefix: path } : {});
+
+						Router(childRouter, context, injection);
+						router.use(childRouter.routes());
+					});
+				};
+			},
+			inject(injection) {
+				plugins.forEach(({ install = () => {} }) => install(injection));
+			},
+			get entrys() {
+				const webpackEntrys = [];
+				plugins.forEach(({ entrys = [] }) => webpackEntrys.concat(entrys));
+
+				return webpackEntrys;
+			},
+			get plugins() {
+				return plugins.map(({ id, name, description }) => {
+					return { id, name, description };
+				});
+			}
+		};
+	};
 };

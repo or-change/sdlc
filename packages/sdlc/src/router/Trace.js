@@ -1,6 +1,7 @@
 'use strict';
 
-module.exports = function (router, { AccessControl }, { Model }) {
+module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
+
 	router.post('/', AccessControl('trace.create'), async ctx => {
 		const { parentId, stageId, versionId, flowId, abstract } = ctx.request.body;
 		const projectId = ctx.state.project.id;
@@ -81,7 +82,11 @@ module.exports = function (router, { AccessControl }, { Model }) {
 		}
 
 		ctx.body = await Model.TraceList.query(query);
-	}).param('traceId', async (tranceId, ctx, next) => {
+	});
+
+	mountRouter('Trace', router);
+	
+	router.param('traceId', async (tranceId, ctx, next) => {
 		const trace = await Model.Trace.query(tranceId);
 
 		if (!trace) {
@@ -107,4 +112,6 @@ module.exports = function (router, { AccessControl }, { Model }) {
 
 		ctx.body = await ctx.state.trace.$delete();
 	});
+
+	mountRouter('$trace', router, '/:traceId');
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (router, { AccessControl }, { Model }) {
+module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 	router.post('/', AccessControl('member.create'), async ctx => {
 		const account = await Model.Account.query(ctx.request.body.accountId);
 
@@ -20,7 +20,11 @@ module.exports = function (router, { AccessControl }, { Model }) {
 				projectId: ctx.state.project.id
 			}
 		});
-	}).param('memberId', async (memberId, ctx, next) => {
+	});
+
+	mountRouter('Member', router);
+	
+	router.param('memberId', async (memberId, ctx, next) => {
 		const member = await Model.Member.query(memberId);
 
 		if (!member) {
@@ -35,4 +39,6 @@ module.exports = function (router, { AccessControl }, { Model }) {
 	}).del('/:memberId', AccessControl('member.delete'), async ctx => {
 		ctx.body = await ctx.state.member.$update();
 	});
+
+	mountRouter('$member', router, '/:memberId');
 };

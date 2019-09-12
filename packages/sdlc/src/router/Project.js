@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (router, { AccessControl }, { Model }) {
+module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 	function validate(ctx, next) {
 		const { name, language, abstract } = ctx.request.body;
 
@@ -37,7 +37,11 @@ module.exports = function (router, { AccessControl }, { Model }) {
 				accountId: ctx.state.session.principal.account.id
 			}
 		});
-	}).param('projectId', async (projectId, ctx, next) => {
+	});
+
+	mountRouter('Project', router);
+	
+	router.param('projectId', async (projectId, ctx, next) => {
 		const project = await Model.Project.query(projectId);
 
 		if (!project) {
@@ -63,4 +67,6 @@ module.exports = function (router, { AccessControl }, { Model }) {
 	}).del('/:projectId', AccessControl('project.delete'), async ctx => {
 		ctx.body = await ctx.state.project.$delete();
 	});
+
+	mountRouter('$project', router, '/:projectId');
 };

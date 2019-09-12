@@ -2,7 +2,7 @@
 
 const semverValidate = require('semver');
 
-module.exports = function (router, { AccessControl }, { Model }) {
+module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 	router.post('/', AccessControl('version.create'), async ctx => {
 		const { semver, abstract } = ctx.request.body;
 
@@ -24,7 +24,11 @@ module.exports = function (router, { AccessControl }, { Model }) {
 				projectId: ctx.state.project.id
 			}
 		});
-	}).param('versionId', async (versionId, ctx, next) => {
+	});
+
+	mountRouter('Version', router);
+	
+	router.param('versionId', async (versionId, ctx, next) => {
 		const version = await Model.Version.query(versionId);
 
 		if (!version) {
@@ -47,4 +51,6 @@ module.exports = function (router, { AccessControl }, { Model }) {
 			abstract
 		});
 	});
+
+	mountRouter('$version', router, '/:versionId');
 };
