@@ -27,7 +27,12 @@ export default function install(Vue) {
 				await agent.delete('/session/principal');
 			},
 			async get() {
-				const { data: principal } = await agent.get('/session/principal');
+				const { data: principal } = await agent.get('/principal');
+
+				return principal;
+			},
+			async update(payload) {
+				const { data: principal } = await agent.put('/principal', payload);
 
 				return principal;
 			}
@@ -52,17 +57,17 @@ export default function install(Vue) {
 			async update(accountId, payload) {
 				return await agent.put(`/account/${accountId}`, payload);
 			},
-			async get(accountId) {
-				const { data: account } = await agent.get(`/account/${accountId}`);
+			// async get(accountId) {
+			// 	const { data: account } = await agent.get(`/account/${accountId}`);
 
-				return {
-					id: account.id,
-					name: account.name,
-					email: account.email,
-					avatar: account.avatar,
-					administrator: account.administrator
-				};
-			}
+			// 	return {
+			// 		id: account.id,
+			// 		name: account.name,
+			// 		email: account.email,
+			// 		avatar: account.avatar,
+			// 		administrator: account.administrator
+			// 	};
+			// }
 		},
 		project: {
 			async create(project) {
@@ -83,12 +88,13 @@ export default function install(Vue) {
 			},
 			async query() {
 				const { data: projectList} = await agent.get('/project');
-
+				
 				return projectList.map(project => {
 					return {
 						id: project.id,
 						name: project.name,
 						ownerId: project.ownerId,
+						language: project.language,
 						createdAt: new Date(project.createdAt)
 					};
 				});
@@ -100,6 +106,8 @@ export default function install(Vue) {
 					id: project.id,
 					name: project.name,
 					ownerId: project.ownerId,
+					language: project.language,
+					abstract: project.abstract,
 					createdAt: new Date(project.createdAt)
 				};
 			},
@@ -112,6 +120,8 @@ export default function install(Vue) {
 						const { data: versionList} = await agent.get(`/project/${projectId}/version`, {
 							params: filter
 						});
+
+						return versionList;
 					},
 					async get(versionId) {
 						const { data: version} = await agent.get(`/project/${projectId}/version/${versionId}`);

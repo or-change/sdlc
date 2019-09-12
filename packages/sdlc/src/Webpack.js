@@ -26,7 +26,7 @@ module.exports = function ({ pluginManager }) {
 			bundle: [
 				'@babel/polyfill/dist/polyfill.min.js',
 				path.resolve(__dirname, '../app/register.js')
-			].concat(pluginManager.webpackEntryList).concat([
+			].concat([
 				path.resolve(__dirname, '../app/index.js')
 			])
 		},
@@ -58,6 +58,14 @@ module.exports = function ({ pluginManager }) {
 					use: {
 						loader: 'babel-loader',
 						options: BABEL_OPTIONS
+					}
+				},
+				{
+					test: /\.(png|jpg|svg|gif|jpeg)$/,
+					loader: 'url-loader',
+					options: {
+						limit: 10000,
+						outputPath: 'images/'
 					}
 				},
 				{

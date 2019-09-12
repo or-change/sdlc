@@ -8,10 +8,14 @@ import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import http from './plugins/http';
 import extension from './plugins/extension';
+import dateFormat from './plugins/dateFormat';
+import customComponents from './components/utils';
 
 Vue.use(BootstrapVue);
 Vue.use(http);
 Vue.use(extension);
+Vue.use(dateFormat);
+Vue.use(customComponents);
 
 import App from './components/App.vue';
 import store from './store';
@@ -29,7 +33,7 @@ router.beforeEach((to, from, next) => {
 	
 		if (signedIn) {
 			if (to.matched.find(match => match.meta.unauthencated === true)) {
-				return next('/');
+				return next('/desktop');
 			}
 		} else {
 			if (to.matched.find(match => match.meta.authencated === true)) {
