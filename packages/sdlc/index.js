@@ -10,14 +10,17 @@ const Application = require('./src/Application');
 const models = require('./src/models');
 const Register = require('./src/Register');
 
-const SDLC_HASH = 'com.orchange.sdlc';
+const APPID = 'com.orchange.sdlc';
 const meta = require('./package.json');
 
 module.exports = function SDLC(options) {
 	const sdlc = {};
+	
+	const pluginInjection = Duck.Injection();
+	const pluginManager = Register(options.plugins, pluginInjection);
 
 	Duck({
-		id: SDLC_HASH,
+		id: APPID,
 		name: 'sdlc',
 		version: meta.version,
 		description: meta.description,
@@ -28,12 +31,15 @@ module.exports = function SDLC(options) {
 			DuckWeb([
 				{
 					id: 'Default',
-					Application
+					Application: Application({
+						session: options.server.session,
+						routes: pluginManager.routeList
+					})
 				}
 			]),
 			DuckDatahub([
 				{
-					id: SDLC_HASH,
+					id: APPID,
 					models: models.reduce((all, group) => Object.assign(all, group), {})
 				}
 			]),
@@ -42,8 +48,10 @@ module.exports = function SDLC(options) {
 			})
 		],
 		installed({ Datahub, injection }) {
-			injection.Model = Datahub(SDLC_HASH, options.store).model;
-			injection.pluginManager = Register(options.plugins, injection);
+			injection.Model = Datahub(APPID, options.store).model;
+			injection.pluginManager = pluginManager;
+
+			options.server.installed(injection, pluginInjection);
 		}
 	}, ({ Web, Webpack }) => {
 		sdlc.server = Web.Http.createServer(Web.Application('Default'));

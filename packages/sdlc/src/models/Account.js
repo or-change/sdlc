@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Account(store) {
+	Account(store, { product }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -16,21 +16,29 @@ module.exports = {
 			},
 			methods: {
 				async create(payload) {
-					return await store.createAccount(payload);
+					const account = await store.createAccount(payload);
+					product.emit('account-created', account);
+
+					return account;
 				},
 				async update(payload) {
-					return await store.updateAccount(this.id, payload);
+					const account = await store.updateAccount(this.id, payload);
+					product.emit('account-updated', account);
+
+					return account;
 				},
 				async query(accountId) {
 					return await store.getAccount(accountId);
 				},
 				async delete() {
-					return await store.deleteAccount(this.id);
+					const account = await store.deleteAccount(this.id);
+					product.emit('account-deleted', account);
+
+					return account;
 				}
 			}
 		};
 	},
-	// 用户信息，用户摘要信息
 	AccountList(store) {
 		return {
 			schemas: {

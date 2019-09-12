@@ -1,34 +1,40 @@
 'use strict';
 
-module.exports = function (plugins, injection) {
-	const store = {
-		pluginList: [],
-		routeList: [],
-		webpackEntryList: []
-	};
-	
-	const register = {
-		get pluginList() {
-			return store.pluginList.slice(0);
-		},
-		get routeList() {
-			return store.routeList.slice(0);
-		},
-		get webpackEntryList() {
-			return store.webpackEntryList.slice(0);
-		}
-	};
+const store = {
+	pluginList: [],
+	routeList: [],
+	webpackEntryList: []
+};
 
+const register = {
+	get pluginList() {
+		return store.pluginList.slice(0);
+	},
+	get routeList() {
+		return store.routeList.slice(0);
+	},
+	get webpackEntryList() {
+		return store.webpackEntryList.slice(0);
+	}
+};
+
+module.exports = function (plugins, injectionExtention) {
 	plugins.forEach(plugin => {
-		const { id, name, description, install, route, entry } = plugin;
-	
+		const {
+			id, name, description,
+			routes = {}, entry = [], install
+		} = plugin;
+
+		
 		store.pluginList.push({
 			id, name, description
 		});
-		store.routeList.push(route);
-		store.webpackEntryList.push(entry); //entry类型？？
+		store.routeList.push(routes);
+		store.webpackEntryList.push(...entry);
 
-		install(injection);
+		if (install) {
+			install(injectionExtention);
+		}
 	});
 
 	return register;

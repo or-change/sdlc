@@ -12,14 +12,17 @@ plugin manage:
 
 extension point:
 
-1> product emiter 路由的日志（插件使用）--   模型层 抛事件 路由 抛事件（选择哪些） 是否可以扩展？？（内部日志插件，外部product事件） poster \/
-2> 路由扩展																																																													\/
-3> 前端扩展 (webpack数组)																																																						\/
+1> product emiter 路由的日志（插件使用）--   模型层 抛事件 路由 抛事件（选择哪些） 是否可以扩展？？（内部日志插件，外部product事件） poster \/ 部分
+<!-- 2> 路由扩展																																																													\/ -->
+<!-- 3> 前端扩展 (webpack数组)																																																						\/ -->
 4> 扩展点类型，source（sourceService）其他插件使用 参数：options, 结果：blob (source.helper),
-5> injection扩展
+<!-- 5> injection扩展 -->
 6> issuse ??
 
-trace回滚（delete）add router for filter trace of project
+<!-- trace回滚（delete）add router for filter trace of project -->
+<!-- session可配置 -->
 
-project 多发行 管理（plugin ? core ?）
+project 多发行 管理（plugin）
 				分支
+
+页面布局图，明天讨论如何在前端扩展插件

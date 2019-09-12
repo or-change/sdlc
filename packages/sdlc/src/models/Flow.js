@@ -74,4 +74,4 @@ module.exports = {
 		};
 	} 
 };
-// flow template ??
+// flow template 有emit必要??

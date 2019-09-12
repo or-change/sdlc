@@ -28,19 +28,45 @@ module.exports = SDLC({
 				credential: 'simple',
 				accountId: accountList[0].id
 			};
+		},
+		// session: {
+		// 	get() {
+
+		// 	},
+		// 	set() {
+
+		// 	},
+		// 	destroy() {
+
+		// 	},
+		// 	install() {
+
+		// 	},
+		// 	key: ''
+		// },
+		installed() {
+
 		}
 	},
 	plugins: [
 		{
 			id: 'com.test.test',
 			name: 'test',
-			install(sdlc) {
+			install(injection) {
 			},
-			route(route) {
-				route.get('/test', ctx => {
-					ctx.body = 'add success!!';
-				});
-			}
+			routes: {
+				account: (route) => {
+					route.get('/test', ctx => {
+						ctx.body = 'add success!!';
+					});
+				},
+				plugin: (route) => {
+					route.get('/test', ctx => {
+						ctx.body = 'add success!!';
+					});
+				}
+			},
+			entry: ['./server.js']
 		}
 	]
 });

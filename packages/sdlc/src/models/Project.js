@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Project(store) {
+	Project(store, { product }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -16,16 +16,25 @@ module.exports = {
 			},
 			methods: {
 				async create(payload) {
-					return await store.createProject(payload);
+					const project = await store.createProject(payload);
+					product.emit('project-created', project);
+
+					return project;
 				},
 				async update(payload) {
-					return await store.updateProject(this.id, payload);
+					const project = await store.updateProject(this.id, payload);
+					product.emit('project-updated', project);
+
+					return project;
 				},
 				async query(projectId) {
 					return await store.getProject(projectId);
 				},
 				async delete() {
-					return await store.deleteProject(this.id);
+					const project = await store.deleteProject(this.id);
+					product.emit('project-deleted', project);
+
+					return project;
 				}
 			}
 		};
