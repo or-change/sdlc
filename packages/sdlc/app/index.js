@@ -11,11 +11,15 @@ import extension from './plugins/extension';
 import dateFormat from './plugins/dateFormat';
 import customComponents from './components/utils';
 
+import mixin from './components/mixin';
+
 Vue.use(BootstrapVue);
 Vue.use(http);
 Vue.use(extension);
 Vue.use(dateFormat);
 Vue.use(customComponents);
+
+Vue.mixin(mixin);
 
 import App from './components/App.vue';
 import store from './store';

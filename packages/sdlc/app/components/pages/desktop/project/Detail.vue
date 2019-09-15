@@ -69,13 +69,14 @@
 
 
     <h4 class="mb-3" style="font-weight:bold;color:#6772e5;">项目成员</h4>
-    <b-card></b-card>
+    <custom-project-member 
+      :projectId="projectId" 
+      :projectOwner="project.owner"
+      class="mb-3"
+    ></custom-project-member>
 
     <h4 class="mb-3" style="font-weight:bold;color:#6772e5;">版本信息</h4>
-    <custom-project-version :projectId="projectId"></custom-project-version>
-
-
-    <!-- <h4 class="mb-3" style="font-weight:bold;color:#6772e5;">项目管理</h4> -->
+    <custom-project-version :projectId="projectId" class="mb-3"></custom-project-version>
 
     <h4 class="mb-3" style="font-weight:bold;color:#6772e5;">阶段追踪</h4>
 
@@ -118,14 +119,13 @@ export default {
   },
   mounted() {
     this.getProjectById();
-    // this.queryMemberList();
-    // this.queryVersionList(); 
   },
   methods: {
     async getProjectById() {
       const project = await this.$http.project.get(this.projectId);
 
       this.project.name = project.name;
+      this.project.owner = project.ownerId;
       this.project.language = project.language;
       this.project.abstract = project.abstract;
       this.project.createdAt = project.createdAt;
@@ -138,44 +138,15 @@ export default {
           language: this.project.language,
           abstract: this.project.abstract
         });
-        this.$bvToast.toast('更新成功', {
-          title: null,
-          variant: 'success',
-          toaster: 'b-toaster-top-center',
-          autoHideDelay: 2000,
-          noCloseButton: true,
-          solid: true
-        });
+        this.showToast('success', '更新成功');
       } catch (error) {
         console.log(error);
-        this.$bvToast.toast('更新失败', {
-          title: null,
-          variant: 'danger',
-          toaster: 'b-toaster-top-center',
-          autoHideDelay: 2000,
-          noCloseButton: true,
-          solid: true
-        });
+        this.showToast('danger', '更新失败');
       }
     },
     async deleteProject() {
       await this.$http.project.delete(this.projectId);
       this.$router.push('/desktop/project');
-    },
-    async queryAccountList() {
-      const accountList = await this.$http.account();
-      // console.log(accountList);
-      
-    },
-    async createMember() {
-
-    },
-    async queryMemberList() {
-      const memberList = await this.$http.project.member(this.projectId).query();
-      // console.log(memberList);
-    },
-    async deleteMember() {
-
     },
     async createFlow() {
 

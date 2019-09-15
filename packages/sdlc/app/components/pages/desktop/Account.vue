@@ -72,24 +72,10 @@ export default {
 				await this.$http.principal.update({
 					name: this.account.name
 				})
-				this.$bvToast.toast('更新成功', {
-          title: null,
-          variant: 'success',
-          toaster: 'b-toaster-top-center',
-          autoHideDelay: 2000,
-          noCloseButton: true,
-          solid: true
-        });
+				this.showToast('success', '更新成功');
 			} catch (error) {
 				console.log(error);
-				this.$bvToast.toast('更新失败', {
-          title: null,
-          variant: 'danger',
-          toaster: 'b-toaster-top-center',
-          autoHideDelay: 2000,
-          noCloseButton: true,
-          solid: true
-        });
+				this.showToast('danger', '更新失败');
 			}
 		}
 	}

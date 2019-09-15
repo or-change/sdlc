@@ -135,7 +135,7 @@ export default {
     }
   },
   computed: {
-    accountId() {
+    principalId() {
       return this.$store.state.principal.id;
     },
     nameState() {
@@ -151,11 +151,11 @@ export default {
        const list = this.projectList.filter(project => {
         if (this.projectOwnerDisplay.length === 1 
           && this.projectOwnerDisplay[0] === 'owner') {
-          return project.ownerId === this.accountId;
+          return project.ownerId === this.principalId;
         } 
         else if (this.projectOwnerDisplay.length === 1 
           && this.projectOwnerDisplay[0] === 'member') {
-          return project.ownerId !== this.accountId;
+          return project.ownerId !== this.principalId;
         } else if (this.projectOwnerDisplay.length === 0) {
           return false;
         }
@@ -182,27 +182,13 @@ export default {
       this.isBusy = false
 		},
     async createProject() {
-      this.newProject.ownerId =  this.accountId;
+      this.newProject.ownerId =  this.principalId;
       try {
         await this.$http.project.create(this.newProject);
-        this.$bvToast.toast('创建成功', {
-          title: null,
-          variant: 'success',
-          toaster: 'b-toaster-top-center',
-          autoHideDelay: 2000,
-          noCloseButton: true,
-          solid: true
-        });
+        this.showToast('success', '创建成功');
       } catch (error) {
         console.log(error);
-        this.$bvToast.toast('创建失败', {
-          title: null,
-          variant: 'danger',
-          toaster: 'b-toaster-top-center',
-          autoHideDelay: 2000,
-          noCloseButton: true,
-          solid: true
-        });
+				this.showToast('danger', '创建失败');				
       }
       this.hideCreateProjectModal();
       this.queryProjectList();

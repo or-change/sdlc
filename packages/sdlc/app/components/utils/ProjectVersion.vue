@@ -164,54 +164,24 @@ export default {
     async createVersion() {
       try {
         await this.$http.project.version(this.projectId).create(this.newVersion);
-        this.$bvToast.toast('添加成功', {
-          title: null,
-          variant: 'success',
-          toaster: 'b-toaster-top-center',
-          autoHideDelay: 2000,
-          noCloseButton: true,
-          solid: true
-        });
+        this.showToast('success', '添加成功');
         this.hideCreateVersionModal();
         this.queryVersionList();
       } catch (error) {
         console.log(error);
-        this.$bvToast.toast('添加失败', {
-          title: null,
-          variant: 'danger',
-          toaster: 'b-toaster-top-center',
-          autoHideDelay: 2000,
-          noCloseButton: true,
-          solid: true
-        });
+        this.showToast('danger', '添加失败');
       }
-
     },
     async updateVersion() {
       try {
         await this.$http.project.version(this.projectId).update(this.versionSelected.id, {
           abstract: this.versionSelected.abstract
         });
-        this.$bvToast.toast('更新成功', {
-          title: null,
-          variant: 'success',
-          toaster: 'b-toaster-top-center',
-          autoHideDelay: 2000,
-          noCloseButton: true,
-          solid: true
-        });
+        this.showToast('success', '更新成功');
       } catch (error) {
         console.log(error);
-        this.$bvToast.toast('更新失败', {
-          title: null,
-          variant: 'danger',
-          toaster: 'b-toaster-top-center',
-          autoHideDelay: 2000,
-          noCloseButton: true,
-          solid: true
-        });
+        this.showToast('danger', '更新失败');
       }
-
     },
     showCreateVersionModal() {
       this.$refs['create-version-modal'].show();
