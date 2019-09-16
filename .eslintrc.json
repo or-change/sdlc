@@ -2,7 +2,8 @@
     "env": {
         "browser": true,
         "es6": true,
-        "node": true
+        "node": true,
+        "mocha": true
     },
     "extends": [
         "eslint:recommended"
@@ -16,7 +17,7 @@
         "ecmaVersion": 2018
     },
     "plugins": [
-        // "vue"
+        "vue"
     ],
     "rules": {
         "indent": [

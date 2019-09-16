@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Flow(store) {
+	Flow(store, { ServiceLogger }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -38,7 +38,11 @@ module.exports = {
 			},
 			methods: {
 				async create(payload) {
-					return await store.createFlow(payload);
+					const flow = await store.createFlow(payload);
+
+					ServiceLogger.info({ type: 'create flow', info: flow});
+
+					return flow;
 				},
 				async query(flowId) {
 					return await store.getFlow(flowId);

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Project(store, { product }) {
+	Project(store, { product, ServiceLogger }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -19,11 +19,13 @@ module.exports = {
 					const project = await store.createProject(payload);
 					product.emit('project-created', project);
 
+					ServiceLogger.info({ type: 'create project', info: project});
 					return project;
 				},
 				async update(payload) {
 					const project = await store.updateProject(this.id, payload);
 					product.emit('project-updated', project);
+					ServiceLogger.info({ type: 'update project', info: project});
 
 					return project;
 				},
@@ -33,6 +35,7 @@ module.exports = {
 				async delete() {
 					const project = await store.deleteProject(this.id);
 					product.emit('project-deleted', project);
+					ServiceLogger.info({ type: 'delete project', info: project});
 
 					return project;
 				}
@@ -58,7 +61,7 @@ module.exports = {
 			}
 		};
 	},
-	Member(store) {
+	Member(store, { ServiceLogger }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -74,10 +77,18 @@ module.exports = {
 			},
 			methods: {
 				async create(payload) {
-					return await store.createMember(payload);
+					const member = await store.createMember(payload);
+
+					ServiceLogger.info({ type: 'create member', info: member});
+
+					return member;
 				},
 				async update(payload) {
-					return await store.updateMember(this.id, payload);
+					const member = await store.updateMember(this.id, payload);
+
+					ServiceLogger.info({ type: 'delete member', info: member});
+
+					return member;
 				},
 				async query(memberId) {
 					return await store.getMember(memberId);

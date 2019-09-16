@@ -1,15 +1,16 @@
 'use strict';
 
-module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
+module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model, ServiceLogger }) {
 
-	router.post('/', AccessControl('trace.create'), async ctx => {
+	router.post('/',Validator.Body({
+		type: 'object',
+		properties: {
+			abstract: { type: 'string' }
+		}
+	}), AccessControl('trace.create'), async ctx => {
 		const { parentId, stageId, versionId, flowId, abstract } = ctx.request.body;
 		const projectId = ctx.state.project.id;
-
-		if (abstract && typeof abstract !== 'string') {
-			return ctx.throw(400, 'Invalid `request.body.abstract`, string expacted.');
-		}
-
+		
 		const existedTrace = await Model.TraceList.query({
 			selector: 'projectId',
 			args: {
@@ -61,6 +62,7 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 		}
 
 		ctx.body = trace;
+		ServiceLogger.debug({ type: `POST /api/project/${ctx.state.project.id}/trace`, info: { status: ctx.status }});
 	}).get('/', AccessControl('trace.query'), async ctx => {
 		const { flowId, stageId, versionId } = ctx.query;
 		const projectId = ctx.state.project.id;
@@ -82,6 +84,8 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 		}
 
 		ctx.body = await Model.TraceList.query(query);
+
+		ServiceLogger.debug({ type: `GET /api/project/${ctx.state.project.id}/trace`, info: { status: ctx.status }});
 	});
 
 	mountRouter('Trace', router);
@@ -98,6 +102,8 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 		return next();
 	}).get('/:tranceId', AccessControl('trace.get'), ctx => {
 		ctx.body = ctx.state.trace;
+
+		ServiceLogger.debug({ type: `GET /api/project/${ctx.state.project.id}/trace/${ctx.status.trace.id}`, info: { status: ctx.status }});
 	}).del('/:traceId', AccessControl('trace.delete'), async ctx => {
 		const { children, id, parentId} = ctx.state.trace;
 
@@ -111,6 +117,8 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 		}));
 
 		ctx.body = await ctx.state.trace.$delete();
+
+		ServiceLogger.debug({ type: `DELETE /api/project/${ctx.state.project.id}/trace/${ctx.status.trace.id}`, info: { status: ctx.status }});
 	});
 
 	mountRouter('$trace', router, '/:traceId');

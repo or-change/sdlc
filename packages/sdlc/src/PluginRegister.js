@@ -1,5 +1,5 @@
-'use strict';
 
+// normalize
 module.exports = function (plugins) {
 	const store = {
 		routers: {
@@ -59,10 +59,10 @@ module.exports = function (plugins) {
 
 				return function mountRouter(mountName, router, path) {
 					store.routers[mountName].forEach(Router => {
-						const childRouter = new KoaRouter(path ? { prefix: path } : {});
+						const childRouter = new KoaRouter();
 
 						Router(childRouter, context, injection);
-						router.use(childRouter.routes());
+						router.use(path ? path : '', childRouter.routes());
 					});
 				};
 			},

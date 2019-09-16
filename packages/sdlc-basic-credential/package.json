@@ -1,6 +1,7 @@
 {
   "name": "@or-change/sdlc-basic-credentical",
   "version": "1.0.1",
+  "private": true,
   "description": "> TODO: description",
   "author": "leoword <leowordpassword123>",
   "homepage": "https://github.com/or-change/sdlc#readme",

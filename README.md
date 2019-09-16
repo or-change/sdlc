@@ -29,3 +29,4 @@ flow update功能（更新flow的name, stage的name， plugin 和delete stage）
 前端：
 页面布局图，明天讨论如何在前端扩展插件
 前端插件按作用域扩展（project,account,stage,menu...）
+private true

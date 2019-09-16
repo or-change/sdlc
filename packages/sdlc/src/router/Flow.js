@@ -1,7 +1,33 @@
 'use strict';
 
-module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
-	router.post('/', AccessControl('flow.create'), async ctx => {
+module.exports = function (router, { AccessControl, mountRouter, Validator  }, { Model, ServiceLogger }) {
+	router.post('/', Validator.Body({
+		type: 'object',
+		properties: {
+			name: { type: 'string' },
+			stageList: {
+				type: 'array',
+				items: {
+					type: 'object',
+					properties: {
+						name: { type: 'string' },
+						promoted: { type: 'boolean' },
+						initializable: { type: 'boolean' },
+						plugins: { type: 'array' }
+					},
+					required: ['name', 'promoted', 'initializable', 'plugins']
+				}
+			},
+			evolution: {
+				type: 'array',
+				items: {
+					type: 'array'
+				}
+			}
+		},
+		required: ['name', 'stageList', 'evolution'],
+		additionalProperties: false
+	}), AccessControl('flow.create'), async ctx => {
 		const { parentId, name, stageList, evolution } = ctx.request.body;
 
 		if (parentId) {
@@ -12,52 +38,12 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 			}
 		}
 
-		if (typeof name !== 'string') {
-			ctx.throw(400, 'Invalid `request.body.name`, string expacted.');
-		}
-
-		if (!Array.isArray(stageList)) {
-			ctx.throw(400, 'Invalid `request.body.stageList`, array expacted.');
-		}
-
-		if (!Array.isArray(evolution)) {
-			ctx.throw(400, 'Invalid `request.body.evolution`, array expacted.');
-		}
-
-		stageList.forEach(stage => {
-			if (typeof stage !== 'object') {
-				ctx.throw(400, 'Invalid item of `request.body.stageList`, object expacted.');
-			}
-
-			const { name, promoted, initializable, plugins } = stage;
-
-			if (typeof name !== 'string') {
-				ctx.throw(400, 'Invalid name of stage, string expacted.');
-			}
-
-			if (typeof promoted !== 'boolean') {
-				ctx.throw(400, 'Invalid promoted of stage, boolean expacted.');
-			}
-
-			if (typeof initializable !== 'boolean') {
-				ctx.throw(400, 'Invalid initializable of stage, boolean expacted.');
-			}
-
-			if (!Array.isArray(plugins)) {
-				ctx.throw(400, 'Invalid plugins of stage, array expacted.');
-			}
-		});
-
-		evolution.forEach(item => {
-			if (!Array.isArray(item)) {
-				ctx.throw(400, 'Invalid item of evolution, array expacted.');
-			}
-		});
-
 		ctx.body = await Model.Flow.create({
 			parentId, name, stageList, evolution,
 			projectId: ctx.state.project.id
 		});
+
+		ServiceLogger.debug({ type: `POST /api/project/${ctx.state.project.id}/flow`, info: { status: ctx.status }});
 	}).get('/', AccessControl('flow.query'), async ctx => {
 		ctx.body = await Model.FlowList.query({
 			selector: 'projectId',
@@ -65,6 +51,8 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 				projectId: ctx.state.project.id
 			}
 		});
+
+		ServiceLogger.debug({ type: `GET /api/project/${ctx.state.project.id}/flow`, info: { status: ctx.status }});
 	});
 
 	mountRouter('Flow', router);
@@ -81,6 +69,8 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 		return next();
 	}).get('/:flowId', AccessControl('flow.get'), ctx => {
 		ctx.body = ctx.state.flow;
+
+		ServiceLogger.debug({ type: `POST /api/project/${ctx.state.project.id}/flow/${ctx.state.flow.id}`, info: { status: ctx.status }});
 	});
 
 	mountRouter('Flow', router, '/:flowId');

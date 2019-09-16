@@ -18,7 +18,7 @@ function filterDate(arr) {
 	});
 }
 
-module.exports = function (data = {
+module.exports = function Store(data = {
 	account: filterDate(store.account),
 	project: filterDate(store.project),
 	version: filterDate(store.version),

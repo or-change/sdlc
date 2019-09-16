@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Account(store, { product }) {
+	Account(store, { product, ServiceLogger }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -19,11 +19,15 @@ module.exports = {
 					const account = await store.createAccount(payload);
 					product.emit('account-created', account);
 
+					ServiceLogger.info({ type: 'create account', info: account});
+
 					return account;
 				},
 				async update(payload) {
 					const account = await store.updateAccount(this.id, payload);
 					product.emit('account-updated', account);
+
+					ServiceLogger.info({ type: 'update account', info: account});
 
 					return account;
 				},
@@ -33,6 +37,8 @@ module.exports = {
 				async delete() {
 					const account = await store.deleteAccount(this.id);
 					product.emit('account-deleted', account);
+
+					ServiceLogger.info({ type: 'delete account', info: account});
 
 					return account;
 				}
