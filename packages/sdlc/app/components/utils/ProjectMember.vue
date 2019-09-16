@@ -3,7 +3,7 @@
 		<b-card class="mb-3">
 			<div v-if="memberList.length === 0">无</div>
 			<div
-				v-if="memberList.length !== 0"
+				v-if="memberList.length !== 0 && accountList.length !== 0"
 				v-for="(member, index) in memberList"
 				:key="index"
 				class="mr-3"

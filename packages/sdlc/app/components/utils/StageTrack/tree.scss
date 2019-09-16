@@ -1,0 +1,117 @@
+$tree-height: 350px;
+$header-row-height: 32px;
+$body-row-height: 30px;
+
+.stage-track-tree {
+  max-height: $tree-height;
+  width: 100%;
+  overflow: auto;
+  position: relative;
+  background-color:#ffffff;
+	border-top: 1px solid #bbbbbb;
+
+  .tree-table {
+    width: auto;
+    table-layout:fixed;
+    
+    .tree-table-header-cell {
+      height: $header-row-height;
+      line-height: $header-row-height;
+      border: 1px solid #bbbbbb;
+      border-top: none;
+      white-space: nowrap;
+      font-size: 14px;
+      color: #323130;
+      text-align: center;
+    }
+
+    .tree-table-body {
+      .tree-table-body-row {
+        .tree-table-body-cell {
+          min-width: 110px;
+          white-space: nowrap;
+          border: 1px solid #bbbbbb;			
+          font-size: 12px;
+          text-align: center;
+          color: #605e5c;
+
+          &:nth-child(1) {
+            border-bottom: none;
+            border-top:none;
+          }
+  
+          .tree-body-cell-node {
+            height: calc(#{$body-row-height} - 6px);
+            width:20px;
+            display:inline-block;
+            position:relative;
+          }
+        }
+        
+        &:nth-last-child(1) {
+          .tree-table-body-cell {
+            border-bottom: 1px solid #bbbbbb;
+          }
+        }
+      }
+    }
+
+    .trace-active {
+      background-color: #D3D2D1 !important;
+    }
+  
+    .tree-point {
+      position:absolute;
+      top: 50%;
+      left: 50%;
+      height: 10px;
+      width: 10px;
+      transform: translate(-50%, -50%);
+      background-color: #000;
+      border-radius: 50%;
+    }
+  
+    .tree-up {
+      height: calc(50% + 4px);
+      position: absolute;
+      border-right: 2px solid #000;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+  
+    .tree-down {
+      height: calc(50% + 4px);
+      position: absolute;
+      border-right: 2px solid #000;
+      left: 50%;
+      transform: translate(-50%, 100%);
+    }
+  
+    .tree-right {
+      width: calc(50% + 2px);
+      position: absolute;
+      border-bottom: 2px solid #000;
+      top: 50%;
+      transform: translate(100%, -50%);
+    }
+  
+    .tree-left {
+      width: calc(50% + 2px);
+      position: absolute;
+      border-bottom: 2px solid #000;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+  
+    .tree-turn {
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: 50%;
+      height: 50%;
+      border-right: 2px solid #000;
+      border-bottom: 2px solid #000;
+      border-bottom-right-radius: 7px 7px;
+    }
+  }
+}

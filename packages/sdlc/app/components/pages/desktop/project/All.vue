@@ -165,7 +165,7 @@ export default {
       });
 
       return list.sort((projectA, projectB) => {
-        return projectB.createdAt - projectA.createdAt;
+        return Date.parse(projectB.createdAt) - Date.parse(projectA.createdAt);
       });
     },
     rows() {

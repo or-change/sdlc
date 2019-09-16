@@ -1,0 +1,123 @@
+$wrap-height: 350px;
+$header-row-height: 32px;
+$body-row-height: 30px;
+$col-width: 130px;
+$col-width-fixed: 80px;
+
+.stage-track-wrap {
+	width: 100%;
+	position: relative;
+	background-color:#ffffff;
+	border-right: 1px solid #bbbbbb;
+	border-top: 1px solid #bbbbbb;
+	border-bottom: 1px solid #bbbbbb;
+
+	.wrap-header {
+		overflow: hidden;
+		.wrap-table-header-cell {
+			border-top: none !important;
+		}
+		.wrap-table-header-cell:nth-last-child(1) {
+			border-right: none !important;
+		}
+	}
+
+	.wrap-side {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: calc($body-row-height + 1);
+		background-color:#fff;
+
+		.wrap-table-header-cell {
+			border-top: none !important;
+		}
+		.wrap-side-body {
+			max-height: calc(#{$wrap-height} - (#{$header-row-height} + 5px));
+			overflow: hidden;
+		}
+	}
+	
+	.wrap-body {
+		max-height: calc(#{$wrap-height} - (#{$header-row-height} + 5px));
+		overflow: hidden;
+
+		.wrap-table-body-cell:nth-last-child(1) {
+			border-right: none !important;
+		}
+	}
+
+	.wrap-table {
+		width: auto;
+		table-layout:fixed;
+
+		.wrap-table-header {
+			
+			.wrap-table-header-row {
+				user-select: none;
+			}
+
+			.wrap-table-header-cell {
+        min-width: $col-width;
+				height: $header-row-height;
+				line-height: $header-row-height;
+				border: 1px solid #bbbbbb;
+				white-space: nowrap;
+				font-size: 14px;
+				color: #323130;
+				text-align: center;
+
+				&:nth-child(1) {
+					min-width: $col-width-fixed;
+				}
+			}
+		}
+
+		.wrap-table-body {
+			.wrap-table-body-row {
+				height: calc(#{$body-row-height} - 3px);
+				line-height: calc(#{$body-row-height} - 3px);
+				user-select: none;
+
+				&:nth-child(1) {
+					.wrap-table-body-cell {
+						border-top: none;
+					}
+				}
+
+				&:nth-last-child(1) {
+					.wrap-table-body-cell {
+						border-bottom: none;
+					}
+				}
+			}
+
+			.wrap-table-body-cell {
+        min-width: $col-width;
+				white-space: nowrap;
+				border: 1px solid #bbbbbb;			
+				font-size: 12px;
+				text-align: center;
+				box-sizing: border-box;
+
+				&:nth-child(1) {
+					min-width: $col-width-fixed;
+				}
+
+				&.own-trace {
+					background-color: #ccffcc;
+				}
+
+				&.trace-active {
+					// box-shadow: inset 0.5em 0.5em 0.5em #FF7C04, inset -0.5em -0.5em 0.5em #FF7C04;
+					background-color: #FFD875;
+				}
+			}
+
+			.wrap-cell-hover:hover{
+				// box-shadow: inset 0.5em 0.5em 0.5em #FFD875, inset -0.5em -0.5em 0.5em #FFD875;
+				background-color: #FFD875;
+			}
+		}
+	}
+}

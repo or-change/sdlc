@@ -187,6 +187,8 @@ export default function install(Vue) {
 						const { data: flowList} = await agent.get(`/project/${projectId}/flow`, {
 							params: filter
 						});
+
+						return flowList;
 					},
 					async get(flowId) {
 						const { data: flow} = await agent.get(`/project/${projectId}/flow/${flowId}`);
@@ -202,6 +204,8 @@ export default function install(Vue) {
 						const { data: traceList} = await agent.get(`/project/${projectId}/trace`, {
 							params: filter
 						});
+
+						return traceList;
 					},
 					async get(traceId) {
 						const { data: trace} = await agent.get(`/project/${projectId}/trace/${traceId}`);

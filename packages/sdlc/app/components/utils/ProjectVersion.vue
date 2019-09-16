@@ -146,20 +146,22 @@ export default {
   methods: {
     async queryVersionList() {
       const versionList = await this.$http.project.version(this.projectId).query();
+      
+      if (versionList.length !== 0) {
+        this.versionList = versionList.sort((versionA, versionB) => {
+          return versionA.semver.replace(/\./g, '') - versionB.semver.replace(/\./g, '');
+        });
 
-      this.versionList = versionList.sort((versionA, versionB) => {
-        return versionA.semver.replace(/\./g, '') - versionB.semver.replace(/\./g, '');
-      });
+        this.versionSelected.id = versionList[0].id;
 
-      this.versionSelected.id = versionList[0].id;
-
-      this.versionSelector = [];
-      versionList.forEach(version => {
-        this.versionSelector.push({
-          value: version.id,
-          text: `v${version.semver}`
-        })
-      });
+        this.versionSelector = [];
+        versionList.forEach(version => {
+          this.versionSelector.push({
+            value: version.id,
+            text: `v${version.semver}`
+          })
+        });
+      }
     },
     async createVersion() {
       try {
@@ -167,6 +169,7 @@ export default {
         this.showToast('success', '添加成功');
         this.hideCreateVersionModal();
         this.queryVersionList();
+        this.$parent.queryVersionList();
       } catch (error) {
         console.log(error);
         this.showToast('danger', '添加失败');
