@@ -50,9 +50,15 @@
 							}"></div>
 						</div>
 					</td>
-					<td class="tree-table-body-cell">{{ data.flow }}</td>
+					<td 
+						v-if="flowList.length !== 0"
+						class="tree-table-body-cell"
+					>{{ flowList.find(flow => flow.id === data.flow).name }}</td>
 					<td class="tree-table-body-cell">{{ data.stage }}</td>
-					<td class="tree-table-body-cell">{{ data.version }}</td>
+					<td 
+						v-if="versionList.length !== 0"
+						class="tree-table-body-cell"
+					>{{ versionList.find(version => version.id === data.version).semver }}</td>
 					<!-- <td class="tree-table-body-cell">{{ data.message }}</td> -->
 					<td class="tree-table-body-cell">{{ data.date | dateFormat }}</td>
 				</tr>
@@ -65,6 +71,8 @@
 export default {
 	props: {
 		traceData: Array,
+		versionList: Array,
+		flowList: Array,
 		active: String,
 		traceChanger: String
 	},

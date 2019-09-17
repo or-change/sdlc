@@ -62,7 +62,7 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
 		ctx.body = await Model.FlowList.query({
 			selector: 'projectId',
 			args: {
-				project: ctx.state.project.id
+				projectId: ctx.state.project.id
 			}
 		});
 	});

@@ -207,7 +207,7 @@ module.exports = function (data = {
 			return Object.assign({}, flow, { stageList: stageList });
 		},
 		queryFlowByProjectId({ projectId }) {
-			return data.flow.filter(flow => flow.project === projectId)
+			return data.flow.filter(flow => flow.projectId === projectId)
 				.map(flow => {
 					const stageList = data.stage.filter(stage => stage.flowId === flow.id)
 						.sort((a, b) => { return a.index- b.index; })

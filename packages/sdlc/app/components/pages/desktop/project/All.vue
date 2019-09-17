@@ -57,11 +57,11 @@
 			:current-page="currentPage"
 			class="text-center project-list"
 		>
-			<template v-slot:name="data">
+			<template v-slot:cell(name)="data">
 				<b-link :href='`#/desktop/project/${data.item.id}`'>{{ data.item.name }}</b-link>
 			</template>
 
-			<template v-slot:createdAt="data">
+			<template v-slot:cell(createdAt)="data">
 				{{ data.item.createdAt | dateFormat }}
 			</template>
 

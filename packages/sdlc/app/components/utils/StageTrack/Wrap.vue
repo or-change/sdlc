@@ -35,7 +35,8 @@
 							class="wrap-table-body-row"
 						>
 							<td class="wrap-table-body-cell">
-								{{ versionList.find(version => version.id === trace.version).semver }}
+								<!-- {{ versionList.find(version => version.id === trace.version).semver }} -->
+								{{ trace.version }}
 							</td>
 						</tr>
 					</tbody>
@@ -96,6 +97,9 @@ export default {
 		traceData() {
 			this.getDataList();
 		},
+		versionList() {
+			this.wrapDataSort();
+		},
 		active(val) {
 			if (this.traceChanger === 'tree') {
 				const trace = this.traceData.find(ele => {
@@ -110,7 +114,7 @@ export default {
 					return stage === trace.stage;
 				});
 
-				this.$refs['wrap-body'].scrollTop = 44 * (wrapRow - 2);
+				this.$refs['wrap-body'].scrollTop = 29 * (wrapRow - 2);
 				this.$refs['wrap-body'].scrollLeft = 120 * (wrapCol - 1) - 75;
 			}
 			this.syncWrapHeaderAndSide();
@@ -143,12 +147,7 @@ export default {
 		getDataList() {
 			this.wrapDataList = [];
 			
-			const clone = this.traceData.slice(0);
-			clone.sort((traceA, traceB) => {
-				return Date.parse(traceB.date) - Date.parse(traceA.date)
-			})
-			
-			clone.forEach(trace => {
+			this.traceData.forEach(trace => {
 				const stageVersionIndex = this.wrapDataList.findIndex(wrapTrace => {
 					return wrapTrace.version === trace.version;
 				});
@@ -178,6 +177,19 @@ export default {
 					});
 				}
 			});
+
+			if (this.versionList.length !== 0) {
+				this.wrapDataSort();
+			}
+		},
+		wrapDataSort() {
+			this.wrapDataList.map(wrap => {
+				wrap.version = this.versionList.find(version => version.id === wrap.version).semver;
+			});
+
+			this.wrapDataList.sort((wrapA, wrapB) => {
+				return wrapB.version.replace(/\./g, '') - wrapA.version.replace(/\./g, '');
+			})
 		},
 		setTraceActive(hash, name) {
 			if (hash !== '') {

@@ -40,15 +40,15 @@
 				class="member-list text-center"
 			>
 				<template
-					v-slot:name="data"
+					v-slot:cell(name)="data"
 				>{{ accountList.find(account => account.id === data.item.accountId).name }}</template>
 				<template
-					v-slot:inviter="data"
+					v-slot:cell(inviter)="data"
 				>{{ accountList.find(account => account.id === data.item.inviter).name }}</template>
 				<template
-					v-slot:joinedAt="data"
+					v-slot:cell(joinedAt)="data"
 				>{{ data.item.joinedAt | dateFormat }}</template>
-				<template v-slot:action="data">
+				<template v-slot:cell(action)="data">
 					<b-button
 						size="sm"
 						variant="link"
@@ -87,7 +87,7 @@
 				:filter="accountFilter"
 				class="account-list text-center"
 			>
-				<template v-slot:action="data">
+				<template v-slot:cell(action)="data">
 					<b-button
 						size="sm"
 						variant="link"
