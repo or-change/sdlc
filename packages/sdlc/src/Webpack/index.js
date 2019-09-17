@@ -1,7 +1,8 @@
-'use strict';
+
 
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+// const normalize = require('./normalize');
 
 const BABEL_OPTIONS = {
 	presets: [
@@ -20,14 +21,14 @@ const BABEL_OPTIONS = {
 	sourceType: 'unambiguous'
 };
 
-module.exports = function ({ Plugin }) {
+module.exports = function ({ Plugin }, options) {
+
 	return {
 		entry: {
 			bundle: [
-				'@babel/polyfill/dist/polyfill.min.js',
-				path.resolve(__dirname, '../app/register.js')
+				'@babel/polyfill/dist/polyfill.min.js'
 			].concat(Plugin.entrys).concat([
-				path.resolve(__dirname, '../app/index.js')
+				path.resolve(__dirname, '../../app/index.js')
 			])
 		},
 		output: {
@@ -37,7 +38,12 @@ module.exports = function ({ Plugin }) {
 		},
 		target: 'web',
 		resolve: {
-			extensions: ['.js', '.vue']
+			extensions: ['.js', '.vue'],
+			alias: {
+				'sdlc': path.join(__dirname, './modules/SDLC.js'),
+				'sdlc-product-factory': options.app && options.app.extend ?
+					options.app.extend : path.join(__dirname, 'modules/DefaultFactory.js')
+			}
 		},
 		module: {
 			rules: [

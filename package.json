@@ -7,6 +7,8 @@
   },
   "scripts": {
     "eslint": "eslint packages/**/*.js",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "bootstrap": "lerna bootstrap --hoist",
+    "clean": "lerna clean -y"
   }
 }

@@ -1,7 +1,10 @@
-'use strict';
+
 
 const SDLC = require('@or-change/sdlc');
 const Store = require('@or-change/sdlc-store-memory');
+const git = require('@or-change/sdlc-git');
+const poster = require('@or-change/sdlc-poster');
+const path = require('path');
 
 module.exports = SDLC({
 	store: Store(),
@@ -49,30 +52,10 @@ module.exports = SDLC({
 		}
 	},
 	plugins: [
-		{
-			id: 'com.test.test',
-			name: 'test',
-			install(injection) {
-			},
-			routers: {
-				Account: (router) => {
-					router.get('/test', ctx => {
-						ctx.body = 'add success!!';
-					});
-				},
-				$project: (router, context, injection) => {
-					router.get('/test', ctx => {
-						console.log(context, injection);
-						ctx.body = ctx.state.project;
-					});
-				},
-				Plugin: (router) => {
-					router.get('/test', ctx => {
-						ctx.body = 'add success!!';
-					});
-				}
-			},
-			entry: ['./server.js']
-		}
-	]
+		git,
+		poster
+	],
+	app: {
+		extend: path.resolve(__dirname, './app1/SDLCFactory.js')
+	}
 });

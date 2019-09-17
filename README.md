@@ -26,7 +26,9 @@ project 多发行 管理（plugin）
 flow update功能（更新flow的name, stage的name， plugin 和delete stage）
 更改model stage的promoted,initializable提升，变成数组类型
 
-前端：
-页面布局图，明天讨论如何在前端扩展插件
-前端插件按作用域扩展（project,account,stage,menu...）
-private true
+<!-- private true -->
+plugin 
+后端和前端做映射（后端注册的时候同时提供前端插件信息）改进后端插件注册管理器行为
+
+
+plugin: new injection extend old injection(改进)

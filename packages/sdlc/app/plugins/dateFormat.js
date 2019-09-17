@@ -9,5 +9,5 @@ function format(time) {
 }
 
 export default function install(Vue) {
-	Vue.filter('dateFormat', format)
+	Vue.filter('dateFormat', format);
 }

@@ -2,5 +2,9 @@
   "packages": [
     "packages/*"
   ],
+  "bootstrap": {
+    "ignore": "component-*",
+    "npmClientArgs": ["--no-package-lock"]
+  },
   "version": "independent"
 }

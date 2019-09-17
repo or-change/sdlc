@@ -1,4 +1,4 @@
-
+'use strict';
 // normalize
 module.exports = function (plugins) {
 	const store = {
@@ -71,7 +71,7 @@ module.exports = function (plugins) {
 			},
 			get entrys() {
 				const webpackEntrys = [];
-				plugins.forEach(({ entrys = [] }) => webpackEntrys.concat(entrys));
+				plugins.forEach(({ entry = '' }) => webpackEntrys.push(entry));
 
 				return webpackEntrys;
 			},

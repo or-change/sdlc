@@ -1,5 +1,3 @@
-'use strict';
-
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 const path = require('path');

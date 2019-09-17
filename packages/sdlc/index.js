@@ -1,4 +1,4 @@
-'use strict';
+
 
 const Duck = require('@or-change/duck');
 const DuckWeb = require('@or-change/duck-web');
@@ -48,8 +48,6 @@ module.exports = function SDLC(options) {
 			DuckLog()
 		],
 		installed({ Datahub, injection, Logger }) {
-			injection.Model = Datahub(APP_ID, options.store).model;
-
 			injection.ServiceLogger =  Logger({
 				format(meta, message) {
 					return `[${meta.time.toISOString()}] [${meta.level.name.toUpperCase()}] [${meta.category}]: ${message.type}${JSON.stringify(message.info)}`;
@@ -64,13 +62,13 @@ module.exports = function SDLC(options) {
 					})
 				]
 			});
-
+			injection.Model = Datahub(APP_ID, options.store).model;
 			injection.Plugin.inject(injection);
 			options.server.installed(injection);
 		}
 	}, ({ Web, Webpack }) => {
 		sdlc.server = Web.Http.createServer(Web.Application('Default'));
-		sdlc.webpack = Webpack('sdlc');
+		sdlc.webpack = Webpack('sdlc', { app: options.app });
 	});
 
 	return sdlc;
