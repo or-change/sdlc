@@ -1,9 +1,8 @@
-
-
+'use strict';
 const SDLC = require('@or-change/sdlc');
 const Store = require('@or-change/sdlc-store-memory');
 const git = require('@or-change/sdlc-git');
-const poster = require('@or-change/sdlc-poster');
+const register = require('@or-change/sdlc-register');const poster = require('@or-change/sdlc-poster');
 const path = require('path');
 
 module.exports = SDLC({
@@ -53,6 +52,7 @@ module.exports = SDLC({
 	},
 	plugins: [
 		git,
+		register,
 		poster
 	],
 	app: {

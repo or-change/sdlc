@@ -63,5 +63,4 @@ typings/
 .vscode
 
 config.json
-
-log
+storelog

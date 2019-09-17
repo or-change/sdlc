@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "description": "> TODO: description",
-  "author": "leoword <leowordpassword123>",
+  "author": "Wang Yanjun <iswangyj@yeah.com>",
   "homepage": "https://github.com/or-change/sdlc#readme",
   "license": "ISC",
-  "main": "lib/sdlc-github.js",
+  "main": "lib/github.js",
   "publishConfig": {
     "access": "public"
   },
@@ -14,7 +14,9 @@
     "type": "git",
     "url": "git+https://github.com/or-change/sdlc.git"
   },
-  "scripts": {},
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
   "bugs": {
     "url": "https://github.com/or-change/sdlc/issues"
   },

@@ -6,7 +6,7 @@
   "author": "leoword <leowordpassword123>",
   "homepage": "https://github.com/or-change/sdlc#readme",
   "license": "ISC",
-  "main": "lib/sdlc-register.js",
+  "main": "index.js",
   "publishConfig": {
     "access": "public"
   },

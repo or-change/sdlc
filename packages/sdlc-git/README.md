@@ -1,11 +1,11 @@
-# `@or-change/sdlc-git`
+# `@or-change/sdlc-github`
 
 > TODO: description
 
 ## Usage
 
 ```
-const sdlcGit = require('@or-change/sdlc-git');
+const sdlcGithub = require('@or-change/sdlc-github');
 
 // TODO: DEMONSTRATE API
 ```
