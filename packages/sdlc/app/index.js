@@ -9,11 +9,13 @@ import BootstrapVue from 'bootstrap-vue';
 import http from './plugins/http';
 import dateFormat from './plugins/dateFormat';
 import customComponents from './components/utils';
+import mixin from './components/mixin';
 
 Vue.use(BootstrapVue);
 Vue.use(http);
 Vue.use(dateFormat);
 Vue.use(customComponents);
+Vue.mixin(mixin);
 
 import App from './components/App';
 import store from './store';
