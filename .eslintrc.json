@@ -5,16 +5,21 @@
         "node": true,
         "mocha": true
     },
-    "parser": "babel-eslint",
+    "parser": "vue-eslint-parser",
     "extends": [
-        "eslint:recommended"
+        "eslint:recommended",
+        "plugin:vue/essential"
     ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 6
+        "parser": "babel-eslint",
+        "ecmaVersion": 6,
+        "ecmaFeatures": {
+            "impliedStrict": false
+        }
     },
     "plugins": [
         "vue"
