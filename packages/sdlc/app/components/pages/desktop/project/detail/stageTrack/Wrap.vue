@@ -4,11 +4,17 @@
 			<table class="wrap-table">
 				<thead class="wrap-table-header">
 					<tr class="wrap-table-header-row">
-						<th class="wrap-table-header-cell"></th>
+						<th :class="{
+							'wrap-table-header-cell': true,
+							'wrap-table-header-cell-full':  stageList.length < 4
+						}"></th>
 						<th
 							v-for="(header, index) in stageList"
 							:key="index"
-							class="wrap-table-header-cell"
+							:class="{
+								'wrap-table-header-cell': true,
+								'wrap-table-header-cell-full':  stageList.length < 4
+							}"
 						>{{ header }}</th>
 					</tr>
 				</thead>
@@ -21,7 +27,12 @@
 				<table class="wrap-table">
 					<thead class="wrap-table-header">
 						<tr class="wrap-table-header-row">
-							<th class="wrap-table-header-cell">&nbsp;</th>
+							<th :class="{
+								'wrap-table-header-cell': true,
+								'wrap-side-cell-one': stageList.length === 1,
+								'wrap-side-cell-two': stageList.length === 2,
+								'wrap-side-cell-three': stageList.length === 3
+							}">&nbsp;</th>
 						</tr>
 					</thead>
 				</table>
@@ -34,7 +45,12 @@
 							:key="index"
 							class="wrap-table-body-row"
 						>
-							<td class="wrap-table-body-cell">
+							<td :class="{
+								'wrap-table-body-cell': true,
+								'wrap-side-cell-one': stageList.length === 1,
+								'wrap-side-cell-two': stageList.length === 2,
+								'wrap-side-cell-three': stageList.length === 3
+							}">
 								<!-- {{ versionList.find(version => version.id === trace.version).semver }} -->
 								{{ trace.version }}
 							</td>
@@ -59,13 +75,17 @@
 						:key="index" 
 						class="wrap-table-body-row"
 					>
-						<td class="wrap-table-body-cell">{{ stage.version }}</td>
+						<td :class="{
+							'wrap-table-body-cell': true,
+							'wrap-table-body-cell-full': stageList.length < 4,
+						}">{{ stage.version }}</td>
 						<td
 							v-for="(trace, index) in stage.traceList" 
 							:key="index"
 							:class="{
 								'wrap-table-body-cell': true,
 								'wrap-cell-hover': true,
+								'wrap-table-body-cell-full': stageList.length < 4,
 								'own-trace': trace.hash !== '',
 								'trace-active': trace.hash === active && trace.hash !== ''
 							}"
@@ -184,7 +204,11 @@ export default {
 		},
 		wrapDataSort() {
 			this.wrapDataList.map(wrap => {
-				wrap.version = this.versionList.find(version => version.id === wrap.version).semver;
+				const version = this.versionList.find(version => version.id === wrap.version);
+
+				if (version !== undefined) {
+					wrap.version = version.semver;
+				}
 			});
 
 			this.wrapDataList.sort((wrapA, wrapB) => {

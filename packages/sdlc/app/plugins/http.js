@@ -115,6 +115,8 @@ export default function install(Vue) {
 				return {
 					async create(payload) {
 						const {data: version} = await agent.post(`/project/${projectId}/version`, payload);
+
+						return version;
 					},
 					async query(filter) {
 						const { data: versionList} = await agent.get(`/project/${projectId}/version`, {
@@ -125,9 +127,13 @@ export default function install(Vue) {
 					},
 					async get(versionId) {
 						const { data: version} = await agent.get(`/project/${projectId}/version/${versionId}`);
+
+						return version;
 					},
 					async update(versionId, payload) {
 						const { data: version} = await agent.put(`/project/${projectId}/version/${versionId}`, payload);
+
+						return version;
 					}
 				};
 			},
@@ -182,6 +188,8 @@ export default function install(Vue) {
 				return {
 					async create(payload) {
 						const {data: flow} = await agent.post(`/project/${projectId}/flow`, payload);
+
+						return flow;
 					},
 					async query(filter) {
 						const { data: flowList} = await agent.get(`/project/${projectId}/flow`, {
@@ -192,6 +200,8 @@ export default function install(Vue) {
 					},
 					async get(flowId) {
 						const { data: flow} = await agent.get(`/project/${projectId}/flow/${flowId}`);
+
+						return flow;
 					}
 				};
 			},
@@ -199,6 +209,8 @@ export default function install(Vue) {
 				return {
 					async create(payload) {
 						const {data: trace} = await agent.post(`/project/${projectId}/trace`, payload);
+
+						return trace;
 					},
 					async query(filter) {
 						const { data: traceList} = await agent.get(`/project/${projectId}/trace`, {
@@ -209,6 +221,8 @@ export default function install(Vue) {
 					},
 					async get(traceId) {
 						const { data: trace} = await agent.get(`/project/${projectId}/trace/${traceId}`);
+
+						return trace;
 					}
 				};
 			}

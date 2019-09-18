@@ -1,13 +1,13 @@
 <template>
 
 	<div class="desktop">
-		<b-navbar toggleable="lg" type="dark" variant="primary">
+		<b-navbar toggleable="lg" type="dark" variant="dark">
 			<b-navbar-brand href="#/">
 				<img 
 					src="../../assets/logo.png" 
 					style="width:30px;height:30px;" 
 					class="inline-block align-top"
-				>
+				/>
 				SDLC安全开发管控平台
 			</b-navbar-brand>
 
@@ -30,7 +30,7 @@
 					<b-dropdown-divider></b-dropdown-divider>
 					<b-dropdown-item @click="signout">退出</b-dropdown-item>
 				</b-nav-item-dropdown>
-			</b-navbar-nav>
+			</b-navbar-nav> 
 		</b-navbar>
 
 		<div id="app-desktop-container"

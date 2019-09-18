@@ -38,7 +38,7 @@
           class="w-100"
           size="sm"
           variant="info"
-          @click="showCreateVersionModal()"
+          @click="showCreateVersion()"
         ><i
           class="fas fa-plus mr-2"
         />添加新版本</b-button>
@@ -53,58 +53,27 @@
           class="fas fa-check mr-2"
         />更新版本信息</b-button>
       </b-col>
-      <!-- <b-col cols="2">
-        <b-button
-          class="w-100"
-          size="sm"
-          variant="danger"
-          @click="deleteVersion"
-        ><i
-          class="fas fa-times mr-2"
-        />删除当前版本</b-button>
-      </b-col> -->
     </b-row>
 
     <b-modal ref="create-version-modal" hide-footer title="创建新版本">
-      <div>
-        <b-form-group label="版本号: (格式: 1.0.0)">
-					<b-form-input 
-            size="sm" 
-            v-model="newVersion.semver" 
-            :state="semverState"
-          ></b-form-input>
-				</b-form-group>
-        <b-form-group label="版本简介:">
-					<b-form-textarea 
-						rows="3"
-						no-resize
-						size="sm" 
-						v-model='newVersion.abstract'
-            :state="abstractStage"
-					></b-form-textarea>
-				</b-form-group>
-      </div>
-      <b-button 
-        class="mt-3" 
-        variant="primary" 
-        block 
-        @click="createVersion" 
-        :disabled="!semverState || !abstractStage"
-      >确认创建版本</b-button>
-      <b-button 
-        class="mt-2" 
-        variant="warning" 
-        block 
-        @click="hideCreateVersionModal()"
-      >关闭并清除填入信息</b-button>
+      <VersionCreate
+        :projectId="projectId"
+        @queryVersionList="queryVersionList"
+      ></VersionCreate>
     </b-modal>
+
   </div>
 </template>
 
 <script>
+import VersionCreate from './VersionCreate';
+
 export default {
   props: {
     projectId: String
+  },
+  components: {
+    VersionCreate
   },
   data() {
     return {
@@ -114,19 +83,7 @@ export default {
         id: '',
         createdAt: '',
         abstract: ''
-      },
-      newVersion: {
-        semver: '',
-        abstract: ''
       }
-    }
-  },
-  computed: {
-    semverState() {
-      return this.newVersion.semver.length > 0;
-    },
-    abstractStage() {
-      return this.newVersion.abstract.length > 0;
     }
   },
   watch: {
@@ -162,18 +119,7 @@ export default {
           })
         });
       }
-    },
-    async createVersion() {
-      try {
-        await this.$http.project.version(this.projectId).create(this.newVersion);
-        this.showToast('success', '添加成功');
-        this.hideCreateVersionModal();
-        this.queryVersionList();
-        this.$parent.queryVersionList();
-      } catch (error) {
-        console.log(error);
-        this.showToast('danger', '添加失败');
-      }
+      this.$parent.queryVersionList();
     },
     async updateVersion() {
       try {
@@ -186,15 +132,9 @@ export default {
         this.showToast('danger', '更新失败');
       }
     },
-    showCreateVersionModal() {
+
+    showCreateVersion() {
       this.$refs['create-version-modal'].show();
-    },
-    hideCreateVersionModal() {
-      this.$refs['create-version-modal'].hide();
-      this.newVersion = {
-        semver: '',
-        abstract: ''
-      }
     }
   }
 }

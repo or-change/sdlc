@@ -74,26 +74,31 @@
 
 
 		<h4 class="mb-3" style="font-weight:bold;color:#6772e5;">项目成员</h4>
-		<custom-project-member
+		<Member
 			:projectId="projectId"
 			:projectOwner="project.owner"
 			class="mb-3"
-		></custom-project-member>
+		></Member>
 
 		<h4 class="mb-3" style="font-weight:bold;color:#6772e5;">版本信息</h4>
-		<custom-project-version
+		<Version
 			:projectId="projectId"
 			class="mb-3"
-		></custom-project-version>
+		></Version>
 
 		<h4 class="mb-3" style="font-weight:bold;color:#6772e5;">阶段追踪</h4>
-		<custom-stage-track
+		<StageTrack
 			:projectId="projectId"
-		></custom-stage-track>
+			:versionList="versionList"
+		></StageTrack>
 	</div>
 </template>
 
 <script>
+import Member from './detail/member/Member';
+import Version from './detail/version/Version';
+import StageTrack from './detail/stageTrack/StageTrack';
+
 export default {
 	data() {
 		return {
@@ -105,7 +110,13 @@ export default {
 				createdAt: null
 			},
 			accountList: [],
+			versionList: []
 		}
+	},
+	components: {
+		Member,
+		Version,
+		StageTrack
 	},
 	computed: {
 		accountId() {
@@ -161,15 +172,8 @@ export default {
 			this.accountList = await this.$http.account.query();
 		},
 		async queryVersionList() {
-			const versionList = await this.$http.project.version(this.projectId).query();
-			this.versionList = versionList;
-			this.versionSelector = versionList.map(version => {
-				return {
-					value: version.id,
-					text: version.semver
-				}
-			})
-		}
+			this.versionList = await this.$http.project.version(this.projectId).query();
+		} 
 	}
 }
 </script>

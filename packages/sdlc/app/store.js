@@ -37,7 +37,7 @@ export default new Vuex.Store({
 				name: null,
 				id: null,
 				administrator: false
-			}
+			};
 		}
 	}
 });
