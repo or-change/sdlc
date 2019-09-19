@@ -2,7 +2,7 @@
 
 const semverValidate = require('semver');
 
-module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model, ServiceLogger }) {
+module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model, AccessLog }) {
 	router.post('/', Validator.Body({
 		type: 'object',
 		properties: {
@@ -22,7 +22,7 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 			semver, abstract, projectId: ctx.state.project.id
 		});
 
-		ServiceLogger.debug({ type: `POST /api/project/${ctx.state.project.id}/version`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `POST /api/project/${ctx.state.project.id}/version`, info: { status: ctx.status }});
 	}).get('/', AccessControl('version.query'), async ctx => {
 		ctx.body = await Model.VersionList.query({
 			selector: 'projectId',
@@ -31,7 +31,7 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 			}
 		});
 
-		ServiceLogger.debug({ type: `GET /api/project/${ctx.state.project.id}/version`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `GET /api/project/${ctx.state.project.id}/version`, info: { status: ctx.status }});
 	});
 
 	mountRouter('Version', router);
@@ -49,7 +49,7 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 	}).get('/:versionId', AccessControl('version.get'), ctx => {
 		ctx.body = ctx.state.version;
 
-		ServiceLogger.debug({ type: `GET /api/project/${ctx.state.project.id}/version/${ctx.status.version.id}`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `GET /api/project/${ctx.state.project.id}/version/${ctx.status.version.id}`, info: { status: ctx.status }});
 	}).put('/:versionId', Validator.Body({
 		type: 'object',
 		properties: {
@@ -64,7 +64,7 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 			abstract
 		});
 
-		ServiceLogger.debug({ type: `PUT /api/project/${ctx.state.project.id}/version/${ctx.status.version.id}`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `PUT /api/project/${ctx.state.project.id}/version/${ctx.status.version.id}`, info: { status: ctx.status }});
 	});
 
 	mountRouter('$version', router, '/:versionId');

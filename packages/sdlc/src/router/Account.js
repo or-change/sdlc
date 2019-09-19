@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (router, { AccessControl, mountRouter }, { Model, ServiceLogger }) {
+module.exports = function (router, { AccessControl, mountRouter }, { Model, AccessLog }) {
 	router.get('/', AccessControl('account.query'), async ctx => {
 		ctx.body = await Model.AccountList.query({
 			selector: 'name',
@@ -9,7 +9,7 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model, Serv
 			}
 		});
 		
-		ServiceLogger.debug({ type: 'GET /api/account', info: { status: ctx.status }});
+		AccessLog.debug({ type: 'GET /api/account', info: { status: ctx.status }});
 	});
 
 	mountRouter('Account', router);

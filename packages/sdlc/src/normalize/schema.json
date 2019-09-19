@@ -1,0 +1,168 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["store"],
+	"properties": {
+		"plugins": {
+			"type": "array"
+		},
+		"server": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"authenticate": {
+					"instanceof": "Function"
+				},
+				"installed": {
+					"instanceof": "Function"
+				},
+				"session": {
+					"type": "object"
+				},
+				"log": {
+					"type": "object",
+					"additionalProperties": false,
+					"properties": {
+						"access": {
+							"type": "object"
+						},
+						"model": {
+							"type": "object"
+						},
+						"authentication": {
+							"type": "object"
+						},
+						"exceptions": {
+							"type": "object"
+						}
+					}
+				}
+			}
+		},
+		"store": {
+			"type": "object",
+			"properties": {
+				"createAccount": {
+					"instanceof": "Function"
+				},
+				"queryAccountAll": {
+					"instanceof": "Function"
+				},
+				"queryAccountByName": {
+					"instanceof": "Function"
+				},
+				"getAccount": {
+					"instanceof": "Function"
+				},
+				"updateAccount": {
+					"instanceof": "Function"
+				},
+				"deleteAccount": {
+					"instanceof": "Function"
+				},
+				"createProject": {
+					"instanceof": "Function"
+				},
+				"queryProjectAll": {
+					"instanceof": "Function"
+				},
+				"queryProjectByOwnerId": {
+					"instanceof": "Function"
+				},
+				"queryProjectByMember": {
+					"instanceof": "Function"
+				},
+				"getProject": {
+					"instanceof": "Function"
+				},
+				"updateProject": {
+					"instanceof": "Function"
+				},
+				"deleteProject": {
+					"instanceof": "Function"
+				},
+				"createMember": {
+					"instanceof": "Function"
+				},
+				"queryMemberByProjecyId": {
+					"instanceof": "Function"
+				},
+				"queryMemberByAccountId": {
+					"instanceof": "Function"
+				},
+				"getMember": {
+					"instanceof": "Function"
+				},
+				"updateMember": {
+					"instanceof": "Function"
+				},
+				"createVersion": {
+					"instanceof": "Function"
+				},
+				"queryVersionByProjectId": {
+					"instanceof": "Function"
+				},
+				"getVersion": {
+					"instanceof": "Function"
+				},
+				"updateVersion": {
+					"instanceof": "Function"
+				},
+				"createFlow": {
+					"instanceof": "Function"
+				},
+				"queryFlowByProjectId": {
+					"instanceof": "Function"
+				},
+				"getFlow": {
+					"instanceof": "Function"
+				},
+				"createTrace": {
+					"instanceof": "Function"
+				},
+				"queryTraceByProjectId": {
+					"instanceof": "Function"
+				},
+				"queryTraceByFlowId": {
+					"instanceof": "Function"
+				},
+				"queryTraceByStageId": {
+					"instanceof": "Function"
+				},
+				"queryTraceByVersionId": {
+					"instanceof": "Function"
+				},
+				"getTrace": {
+					"instanceof": "Function"
+				},
+				"updateTrace": {
+					"instanceof": "Function"
+				},
+				"deleteTrace": {
+					"instanceof": "Function"
+				}
+			},
+			"additionalProperties": false,
+			"required": [
+				"createAccount", "queryAccountAll", "queryAccountByName",
+				"getAccount", "updateAccount", "deleteAccount", "createProject",
+				"queryProjectAll", "queryProjectByOwnerId", "queryProjectByMember",
+				"getProject", "updateProject", "deleteProject", "createMember",
+				"queryMemberByProjecyId", "queryMemberByAccountId", "getMember",
+				"updateMember", "createVersion", "queryVersionByProjectId",
+				"getVersion", "updateVersion", "createFlow", "queryFlowByProjectId",
+				"getFlow", "createTrace", "queryTraceByProjectId", "queryTraceByFlowId",
+				"queryTraceByStageId", "queryTraceByVersionId", "getTrace", "updateTrace",
+				"deleteTrace"
+			]
+		},
+		"app": {
+			"type": "object",
+			"properties": {
+				"extend": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

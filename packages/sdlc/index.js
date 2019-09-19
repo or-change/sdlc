@@ -1,4 +1,4 @@
-
+'use strict';
 
 const Duck = require('@or-change/duck');
 const DuckWeb = require('@or-change/duck-web');
@@ -8,15 +8,18 @@ const DuckLog  = require('@or-change/duck-log');
 
 const Webpack = require('./src/webpack');
 const Application = require('./src/Application');
+const LoggerFactory = require('./src/Logger');
 const models = require('./src/models');
 const PluginRegister = require('./src/PluginRegister');
 
 const APP_ID = 'com.orchange.sdlc';
 const meta = require('./package.json');
+const normalize = require('./src/normalize');
 
 module.exports = function SDLC(options) {
 	const sdlc = {};
-	const PluginAccessor = PluginRegister(options.plugins);
+	const finalOptions = normalize(options);
+	const PluginAccessor = PluginRegister(finalOptions.plugins);
 
 	Duck({
 		id: APP_ID,
@@ -24,7 +27,7 @@ module.exports = function SDLC(options) {
 		version: meta.version,
 		description: meta.description,
 		injection: {
-			authenticate: options.server.authenticate,
+			authenticate: finalOptions.server.authenticate,
 			Plugin: PluginAccessor()
 		},
 		components: [
@@ -32,7 +35,7 @@ module.exports = function SDLC(options) {
 				{
 					id: 'Default',
 					Application: Application({
-						session: options.server.session
+						session: finalOptions.server.session
 					})
 				}
 			]),
@@ -42,33 +45,28 @@ module.exports = function SDLC(options) {
 					models: models.reduce((all, group) => Object.assign(all, group), {})
 				}
 			]),
-			DuckWebpack({
-				sdlc: Webpack
-			}),
+			DuckWebpack({ sdlc: Webpack }),
 			DuckLog()
 		],
-		installed({ Datahub, injection, Logger }) {
-			injection.ServiceLogger =  Logger({
-				format(meta, message) {
-					return `[${meta.time.toISOString()}] [${meta.level.name.toUpperCase()}] [${meta.category}]: ${message.type}${JSON.stringify(message.info)}`;
-				}
+		installed({ Datahub, injection }) {
+			const Logger = LoggerFactory(injection);
+			const { access, model, authentication, exception } = finalOptions.server.log;
+
+			[
+				{ type: 'AccessLog', options: access }, { type: 'ModelLog', options: model },
+				{ type: 'AuthenticationLog', options: authentication }, { type: 'ExceptionLogger', options: exception }
+			].forEach(({ type, options }) => {
+				injection[type] = Logger(type, options);
 			});
-			injection.ExceptionLogger = Logger({
-				appenders: [
-					DuckLog.Appender.File({
-						file: {
-							size: 128 * 1024 * 1024
-						}
-					})
-				]
-			});
-			injection.Model = Datahub(APP_ID, options.store).model;
+
+			injection.Model = Datahub(APP_ID, finalOptions.store).model;
 			injection.Plugin.inject(injection);
-			options.server.installed(injection);
+
+			finalOptions.server.installed(injection);
 		}
 	}, ({ Web, Webpack }) => {
 		sdlc.server = Web.Http.createServer(Web.Application('Default'));
-		sdlc.webpack = Webpack('sdlc', { app: options.app });
+		sdlc.webpack = Webpack('sdlc', { app: finalOptions.app });
 	});
 
 	return sdlc;

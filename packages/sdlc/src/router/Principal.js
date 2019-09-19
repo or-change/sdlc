@@ -1,10 +1,10 @@
 'use strict'; 
 
-module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model, ServiceLogger }) {
+module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model, AccessLog }) {
 	router.get('/', AccessControl('principal.get'), async ctx => {
 		ctx.body = ctx.state.session.principal;
 
-		ServiceLogger.debug({ type: 'GET /api/principal', info: { status: ctx.status }});
+		AccessLog.debug({ type: 'GET /api/principal', info: { status: ctx.status }});
 	}).put('/', Validator.Body({
 		type: 'object',
 		properties: {
@@ -22,7 +22,7 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 		ctx.state.session.principal.account = await account.$update(Object.assign({}, account, { name }));
 		ctx.body = ctx.state.session.principal;
 
-		ServiceLogger.debug({ type: 'PUT /api/principal', info: { status: ctx.status }});
+		AccessLog.debug({ type: 'PUT /api/principal', info: { status: ctx.status }});
 	});
 
 	mountRouter('Principal', router);

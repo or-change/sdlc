@@ -28,6 +28,25 @@ const { server, webpack } = new SDLC(options);
 				install: { type: 'function' }
 			}
 		}
+	},
+	log: {
+		type: 'object',
+		properties: {
+			access: {
+				label: '',
+				preventLevels ??
+				file(pathname, size, number)
+			},
+			model: {
+
+			},
+			authentication: {
+
+			},
+			exception: {
+
+			}
+		}
 	}
 }
 ```

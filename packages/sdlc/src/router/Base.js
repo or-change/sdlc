@@ -1,13 +1,13 @@
 'use strict';
 
 module.exports = function (router,
-	{ AccessControl }, { product, Model, Plugin, authenticate, injection, ServiceLogger }) {
+	{ AccessControl }, { product, Model, Plugin, authenticate, injection, AccessLog }) {
 	router.get('/product', AccessControl('product.query'), ctx => {
 		ctx.body = Object.assign({}, product.meta, {
 			plugins: Plugin.plugins
 		});
 
-		ServiceLogger.debug({ type: 'GET /api/product', info: { status: ctx.status }});
+		AccessLog.debug({ type: 'GET /api/product', info: { status: ctx.status }});
 	}).post('/session/principal', AccessControl('session.principal.create'), async ctx => {
 		const authentication = await authenticate(ctx, injection);
 
@@ -29,7 +29,7 @@ module.exports = function (router,
 		ctx.state.session.principal = principal;
 		ctx.body = principal;
 
-		ServiceLogger.debug({ type: 'POST /api/session/pricipal', info: { status: ctx.status }});
+		AccessLog.debug({ type: 'POST /api/session/pricipal', info: { status: ctx.status }});
 	}).use(async (ctx, next) => {
 		const principal = await ctx.state.session.principal;
 
@@ -42,6 +42,6 @@ module.exports = function (router,
 		ctx.body = ctx.state.session.principal;
 		delete ctx.state.session.principal;
 
-		ServiceLogger.debug({ type: 'DELETE /api/session/pricipal', info: { status: ctx.status }});
+		AccessLog.debug({ type: 'DELETE /api/session/pricipal', info: { status: ctx.status }});
 	});
 };

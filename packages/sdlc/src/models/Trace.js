@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Trace(store, { ServiceLogger }) {
+	Trace(store, { ModelLog }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -27,7 +27,7 @@ module.exports = {
 				async create(payload) {
 					const trace = await store.createTrace(payload);
 
-					ServiceLogger.info({ type: 'create trace', info: trace});
+					ModelLog.info({ type: 'create trace', info: trace});
 					return trace;
 				},
 				async query(traceId) {
@@ -36,13 +36,13 @@ module.exports = {
 				async update(payload) {
 					const trace = await store.updateTrace(this.id, payload);
 
-					ServiceLogger.info({ type: 'update trace', info: trace});
+					ModelLog.info({ type: 'update trace', info: trace});
 					return trace;
 				},
 				async delete() {
 					const trace = await store.deleteTrace(this.id);
 
-					ServiceLogger.info({ type: 'delete trace', info: trace});
+					ModelLog.info({ type: 'delete trace', info: trace});
 					return trace;
 				}
 			}

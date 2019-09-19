@@ -19,14 +19,14 @@ module.exports = function ({ session }) {
 	
 		Session(app);
 
-		app.use(async (ctx, next) => {
-			try {
-				await next();
-			} catch (error) {
-				ExceptionLogger.error(error);
-				ctx.res.end();
-			}
-		});
+		// app.use(async (ctx, next) => {
+		// 	try {
+		// 		await next();
+		// 	} catch (error) {
+		// 		ExceptionLogger.error(error);
+		// 		ctx.res.end();
+		// 	}
+		// });
 	
 		app.use(AppRouter().routes());
 	}, {

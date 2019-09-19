@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Version(store, { ServiceLogger }) {
+	Version(store, { ModelLog }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -17,13 +17,13 @@ module.exports = {
 				async create(payload) {
 					const version = await store.createVersion(payload);
 
-					ServiceLogger.info({ type: 'create version', info: version });
+					ModelLog.info({ type: 'create version', info: version });
 					return version;
 				},
 				async update(payload) {
 					const version = await store.updateVersion(this.id, payload);
 
-					ServiceLogger.info({ type: 'update version', info: version });
+					ModelLog.info({ type: 'update version', info: version });
 					return version;
 				},
 				async query(versionId) {

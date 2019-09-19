@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (router, { AccessControl, mountRouter }, { Model, ServiceLogger }) {
+module.exports = function (router, { AccessControl, mountRouter }, { Model, AccessLog }) {
 	router.post('/', AccessControl('member.create'), async ctx => {
 		const account = await Model.Account.query(ctx.request.body.accountId);
 
@@ -14,7 +14,7 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model, Serv
 			inviter: ctx.state.session.principal.account.id
 		});
 
-		ServiceLogger.debug({ type: `POST /api/project/${ctx.state.project.id}/member`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `POST /api/project/${ctx.state.project.id}/member`, info: { status: ctx.status }});
 	}).get('/', AccessControl('member.query'), async ctx => {
 		ctx.body = await Model.MemberList.query({
 			selector: 'projectId',
@@ -23,7 +23,7 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model, Serv
 			}
 		});
 
-		ServiceLogger.debug({ type: `GET /api/project/${ctx.state.project.id}/member`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `GET /api/project/${ctx.state.project.id}/member`, info: { status: ctx.status }});
 	});
 
 	mountRouter('Member', router);
@@ -41,11 +41,11 @@ module.exports = function (router, { AccessControl, mountRouter }, { Model, Serv
 	}).get('/:memberId', AccessControl('member.get'), ctx => {
 		ctx.body = ctx.state.member;
 
-		ServiceLogger.debug({ type: `GET /api/project/${ctx.state.project.id}/member/${ctx.state.member.id}`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `GET /api/project/${ctx.state.project.id}/member/${ctx.state.member.id}`, info: { status: ctx.status }});
 	}).del('/:memberId', AccessControl('member.delete'), async ctx => {
 		ctx.body = await ctx.state.member.$update();
 
-		ServiceLogger.debug({ type: `DELETE /api/project/${ctx.state.project.id}/member/${ctx.state.member.id}`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `DELETE /api/project/${ctx.state.project.id}/member/${ctx.state.member.id}`, info: { status: ctx.status }});
 	});
 
 	mountRouter('$member', router, '/:memberId');

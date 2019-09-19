@@ -51,8 +51,8 @@ module.exports = SDLC({
 		}
 	},
 	plugins: [
-		git,
-		register,
+		git(),
+		register(),
 		poster
 	],
 	app: {

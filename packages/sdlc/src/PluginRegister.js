@@ -1,52 +1,92 @@
 'use strict';
-// normalize
-module.exports = function (plugins) {
-	const store = {
-		routers: {
-			'Account': [],
-			'Principal': [],
-			'Project': [],
-			'$project': [],
-			'Flow': [],
-			'$flow': [],
-			'Trace': [],
-			'$trace': [],
-			'Member': [],
-			'$member': [],
-			'Version': [],
-			'$version': [],
-			'Admin': [],
-			'Plugin': []
-		}
-	};
 
-	function validate(plugins) {
-		const pluginStore = [];
+const { Validator } = require('@or-change/duck');
+const mountPoints = [
+	'Account', 'Principal', 'Project', '$project', 'Flow',
+	'$flow', 'Trace', '$trace', 'Member', '$member',
+	'Version', '$version', 'Admin', 'Plugin'
+];
 
-		plugins.forEach(plugin => {
-			const { id, routers} = plugin;
-
-			if (pluginStore.indexOf(id) !== -1) {
-				throw new Error('The id of plugin is EXISTED.');
-			}
-
-			pluginStore.push(id);
-
-			Object.keys(routers).forEach(mountPoint => {
-				if (!store.routers[mountPoint]) {
-					throw new Error(`The '${mountPoint}' mountPoint of router is NOT existed.`);
+function normalize(options) {
+	Validator({
+		type: 'array',
+		items: {
+			type: 'object',
+			additionalProperties: false,
+			properties: {
+				id: {
+					type: 'string'
+				},
+				name: {
+					type: 'string'
+				},
+				description: {
+					type: 'string'
+				},
+				entry: {
+					type: 'string'
+				},
+				routers: {
+					type: 'object'
+				},
+				install: {
+					instanceof: 'Function'
 				}
-			});
-		});
-	}
+			}
+		}
+	})(options);
 
-	validate(plugins);
+	return options.map(option => {
+		const finalOptions = {
+			routers: {},
+			install: () => {}
+		};
+	
+		const {
+			id: _id, name: _name, description: _description,
+			entry: _entry, routers: _routers = finalOptions.routers,
+			install: _install = finalOptions.install
+		} = option;
+
+		finalOptions.id = _id;
+		finalOptions.name = _name;
+		finalOptions.description = _description;
+		finalOptions.entry = _entry;
+		finalOptions.routers = _routers;
+		finalOptions.install = _install;
+	
+		return finalOptions;
+	});
+}
+
+function validate(plugins) {
+	const pluginStore = [];
 
 	plugins.forEach(plugin => {
-		const {
-			routers = {}
-		} = plugin;
+		const { id, routers} = plugin;
 
+		if (pluginStore.indexOf(id) !== -1) {
+			throw new Error('The id of plugin is EXISTED.');
+		}
+
+		pluginStore.push(id);
+
+		Object.keys(routers).forEach(mountPoint => {
+			if (mountPoint.indexOf(mountPoint) === -1) {
+				throw new Error(`The '${mountPoint}' mountPoint of router is NOT existed.`);
+			}
+		});
+	});
+}
+
+module.exports = function (plugins) {
+	const store = { routers: {} };
+	mountPoints.forEach(mountPoint => store.routers[mountPoint] = []);
+
+	const finalPlugins = normalize(plugins);
+	validate(finalPlugins);
+
+	finalPlugins.forEach(({ routers }) => {
 		for (let mountPoint in routers) {
 			store.routers[mountPoint].push(routers[mountPoint]);
 		}
@@ -67,16 +107,18 @@ module.exports = function (plugins) {
 				};
 			},
 			inject(injection) {
-				plugins.forEach(({ install = () => {} }) => install(injection));
+				finalPlugins.forEach(({ install }) => install(injection));
 			},
 			get entrys() {
 				const webpackEntrys = [];
-				plugins.forEach(({ entry = '' }) => webpackEntrys.push(entry));
+				finalPlugins.forEach(({ entry }) => {
+					if (entry) { webpackEntrys.push(entry); }
+				});
 
 				return webpackEntrys;
 			},
 			get plugins() {
-				return plugins.map(({ id, name, description }) => {
+				return finalPlugins.map(({ id, name, description }) => {
 					return { id, name, description };
 				});
 			}

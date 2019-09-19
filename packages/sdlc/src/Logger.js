@@ -1,16 +1,53 @@
-module.exports = function () {
-	injection.ServiceLogger =  Logger({
-		format(meta, message) {
-			return `[${meta.time.toISOString()}] [${meta.level.name.toUpperCase()}] [${meta.category}]: ${message.type}${JSON.stringify(message.info)}`;
+'use strict';
+
+const DuckLog  = require('@or-change/duck-log');
+const { Validator } = require('@or-change/duck');
+
+function normalize(type, options) {
+	Validator({
+		type: 'object',
+		additionalProperties: false,
+		properties: {
+			label: { type: 'string' },
+			preventLevels: {
+				type: 'array'
+			},
+			file: {
+				type: 'object'
+			}
 		}
-	});
-	injection.ExceptionLogger = Logger({
-		appenders: [
-			DuckLog.Appender.File({
-				file: {
-					size: 128 * 1024 * 1024
-				}
-			})
-		]
-	});
+	})(options);
+
+	const finalOptions = {
+		label: type
+	};
+
+	const {
+		label: _label = finalOptions.label,
+		preventLevels: _preventLevels,
+		file: _file
+	} = options;
+
+	finalOptions.label = _label;
+	finalOptions.preventLevels = _preventLevels;
+	finalOptions.file = _file;
+
+	return finalOptions;
+}
+
+module.exports = function LoggerProvider({ Logger }) {
+	return function LoggerFactory(type, options = {}) {
+		const { label, preventLevels, file } = normalize(type, options);
+
+		if (file) {
+			return Logger({
+				label, preventLevels,
+				appenders: [
+					DuckLog.Appender.File(file)
+				]
+			});
+		}
+
+		return Logger({ label, preventLevels });
+	};
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model, ServiceLogger }) {
+module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model, AccessLog }) {
 	const validate = Validator.Body({
 		type: 'object',
 		properties: {
@@ -20,7 +20,7 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 			ownerId: ctx.state.session.principal.account.id
 		});
 
-		ServiceLogger.debug({ type: 'POST /api/project', info: { status: ctx.status }});
+		AccessLog.debug({ type: 'POST /api/project', info: { status: ctx.status }});
 	}).get('/', AccessControl('project.query'), async ctx => {
 		ctx.body = await Model.ProjectList.query({
 			selector: 'memberOf',
@@ -29,7 +29,7 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 			}
 		});
 
-		ServiceLogger.debug({ type: 'GET /api/project', info: { status: ctx.status }});
+		AccessLog.debug({ type: 'GET /api/project', info: { status: ctx.status }});
 	});
 
 	mountRouter('Project', router);
@@ -53,18 +53,18 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 	}).get('/:projectId', AccessControl('project.get'), ctx => {
 		ctx.body = ctx.state.project;
 
-		ServiceLogger.debug({ type: `GGET /api/project/${ctx.state.project.id}`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `GGET /api/project/${ctx.state.project.id}`, info: { status: ctx.status }});
 	}).put('/:projectId', AccessControl('project.update'), validate, async ctx => {
 		const { name, language, abstract } = ctx.request.body;
 		const { project } = ctx.state;
 
 		ctx.body = await project.$update(Object.assign({}, project, { name, language, abstract}));
 
-		ServiceLogger.debug({ type: `PUT /api/project/${ctx.state.project.id}`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `PUT /api/project/${ctx.state.project.id}`, info: { status: ctx.status }});
 	}).del('/:projectId', AccessControl('project.delete'), async ctx => {
 		ctx.body = await ctx.state.project.$delete();
 
-		ServiceLogger.debug({ type: `DELETE /api/project/${ctx.state.project.id}`, info: { status: ctx.status }});
+		AccessLog.debug({ type: `DELETE /api/project/${ctx.state.project.id}`, info: { status: ctx.status }});
 	});
 
 	mountRouter('$project', router, '/:projectId');
