@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <b-breadcrumb>
+	<b-container class="pt-3 pb-5">
+		<b-breadcrumb>
 			<b-breadcrumb-item active>
 				<i class="fas fa-home"></i>
 			</b-breadcrumb-item>
 		</b-breadcrumb>
 
-    <h4 class="my-3" style="font-weight:bold;color:#6772e5;">项目数量</h4>
+		<h4 class="my-3" style="font-weight:bold;color:#6772e5;">项目数量</h4>
 		<b-card-group class="text-center">
 			<b-card 
 				v-for="(projectCount, index) in projectCountList"
@@ -22,7 +22,7 @@
 				</b-card-text>
 			</b-card>
 		</b-card-group>
-  </div>
+	</b-container>
 </template>
 
 <script>
@@ -34,7 +34,7 @@ export default {
 				owner: { header: '我负责的项目', color: '#1390FF', count: 0 },
 				member: { header: '我参与的项目', color: '#72B422', count: 0 }
 			}
-		}
+		};
 	},
 	computed: {
 		accountId() {
@@ -58,7 +58,7 @@ export default {
 			});
 		}
 	}
-}
+};
 </script>
 
 <style>

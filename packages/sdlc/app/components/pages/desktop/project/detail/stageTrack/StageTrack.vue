@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-row class="mb-3">
+	<div>
+		<b-row class="mb-3">
 			<b-col cols="3">
 				<b-form-select
 					v-model="flowSelected"
@@ -80,7 +80,7 @@
 			></TraceInit>
 		</b-modal>
 
-  </div>
+	</div>
 </template>
 
 <script>
@@ -94,10 +94,6 @@ import TraceInit from './TraceInit';
 import TraceDetail from './TraceDetail';
 
 export default {
-  props: {
-		projectId: String,
-		versionList: Array
-	},
 	components: {
 		StageTrackWrap,
 		StageTrackTree,
@@ -105,10 +101,11 @@ export default {
 		TraceInit,
 		TraceDetail
 	},
-  data() {
-    return {
+	data() {
+		return {
 			flowList: [],
 			traceList: [],
+			versionList: [],
 			trackStageList: [],
 			trackTraceList: [],
 
@@ -119,9 +116,14 @@ export default {
 
 			traceActive: null,
 			traceChanger: '',
-    }
-  },
-  watch: {
+		};
+	},
+	computed: {
+		projectId() {
+			return this.$route.params.projectId;
+		},
+	},
+	watch: {
 		flowSelected() {
 			this.trackStageList = this.flowList.find(flow => flow.id === this.flowSelected).stageList
 				.map(stage => stage.name);
@@ -134,17 +136,17 @@ export default {
 						stage: this.trackStageList[trace.stageId],
 						version: trace.versionId,
 						date: trace.createdAt
-					}
-				})
+					};
+				});
 			this.initStageSelector = this.flowList.find(flow => flow.id === this.flowSelected).stageList
 				.map((stage, index) => {
 					if (stage.initializable) {
 						return {
 							value: index,
 							text: stage.name
-						}
+						};
 					} else {
-						return null
+						return null;
 					}
 				}).filter(stage => stage !== null);
 			this.traceActive = null;
@@ -154,15 +156,16 @@ export default {
 				return {
 					value: version.id,
 					text: version.semver
-				}
-			})
+				};
+			});
 		}
-  },
-  mounted() {
+	},
+	mounted() {
 		this.queryFlowList();
 		this.queryTraceList();
-  },
-  methods: {
+		this.queryVersionList();
+	},
+	methods: {
 		async queryFlowList() {
 			const flowList = await this.$http.project.flow(this.projectId).query();
 			this.flowList = flowList;
@@ -172,14 +175,14 @@ export default {
 				this.trackStageList = flowList[0].stageList.map(stage => stage.name);
 				this.initStageSelector = flowList[0].stageList.map((stage, index) => {
 					if (stage.initializable) {
-						return { value: index, text: stage.name }
+						return { value: index, text: stage.name };
 					} else {
-						return null
+						return null;
 					}
 				}).filter(stage => stage !== null);
 				this.flowSelector = flowList.map(flow => {
-					return { value: flow.id, text: flow.name }
-				})
+					return { value: flow.id, text: flow.name };
+				});
 			}
 			// console.log(flowList);
 		},
@@ -197,14 +200,17 @@ export default {
 							stage: this.trackStageList[trace.stageId],
 							version: trace.versionId,
 							date: trace.createdAt
-						}
+						};
 					});
 			}
 			// console.log(traceList);
 		},
+		async queryVersionList() {
+			this.versionList = await this.$http.project.version(this.projectId).query();
+		} ,
 		showModal(modalId) {
 			this.$refs[modalId].show();
 		}
-  }
-}
+	}
+};
 </script>

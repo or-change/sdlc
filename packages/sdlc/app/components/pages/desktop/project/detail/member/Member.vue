@@ -28,6 +28,7 @@
 				:projectId="projectId"
 				:memberList="memberList"
 				:accountList="accountList"
+				:projectOwner="projectOwner"
 				@queryMemberList="queryMemberList"
 			></MemberSetting>
 		</b-modal>
@@ -38,23 +39,26 @@
 import MemberSetting from './MemberSetting';
 
 export default {
-	props: {
-		projectId: String,
-		projectOwner: String,
-	},
 	components: {
 		MemberSetting
 	},
 	data() {
 		return {
+			projectOwner: null,
 			accountList: [],
 			memberList: [],
 			accountFilter: null,
-		}
+		};
+	},
+	computed: {
+		projectId() {
+			return this.$route.params.projectId;
+		},
 	},
 	mounted() {
 		this.queryMemberList();
 		this.queryAccountList();
+		this.getProjectById();
 	},
 	methods: {
 		async queryMemberList() {
@@ -63,12 +67,16 @@ export default {
 		async queryAccountList() {
 			this.accountList = await this.$http.account.query();
 		},
-
+		async getProjectById() {
+			const project = await this.$http.project.get(this.projectId);
+			this.projectOwner = project.ownerId;
+		},
+		
 		showMemberSetting() {
 			this.$refs['member-setting-modal'].show();
 		}
 	}
-}
+};
 </script>
 
 <style>

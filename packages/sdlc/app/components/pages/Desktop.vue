@@ -26,19 +26,22 @@
 
 					<b-dropdown-item
 						href="#/desktop/account"
-					>我的信息</b-dropdown-item>
+					>账户信息</b-dropdown-item>
+					<b-dropdown-item
+						href="#/desktop/admin"
+					>管理员</b-dropdown-item>
 					<b-dropdown-divider></b-dropdown-divider>
 					<b-dropdown-item @click="signout">退出</b-dropdown-item>
 				</b-nav-item-dropdown>
 			</b-navbar-nav> 
 		</b-navbar>
 
-		<div id="app-desktop-container"
+		<div 
+			id="app-desktop-container"
 			style="width: 100%; top: 56px; bottom: 0; overflow: auto;"
-			class="position-absolute">
-			<b-container>
-				<router-view class="pt-3 pb-5">桌面路由框架</router-view>
-			</b-container>
+			class="position-absolute"
+		>
+			<router-view>桌面路由框架</router-view>
 		</div>
 	</div>
 

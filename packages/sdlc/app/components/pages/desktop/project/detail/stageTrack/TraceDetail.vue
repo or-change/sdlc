@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-card v-if="traceActive === null">请选择版本</b-card>
+	<div>
+		<b-card v-if="traceActive === null">请选择版本</b-card>
 		<b-card
 			v-if="traceActive !== null"
 			style="min-height:300px;"
@@ -26,17 +26,17 @@
 			/>回滚</b-button> -->
 
 			<h5 class="pt-3 pb-2">资源</h5>
-			<b-tabs card>
+			<!-- <b-tabs card>
 				<b-tab title="工具1">
 					2
 				</b-tab>
 				<b-tab title="工具2">
 					3
 				</b-tab>
-			</b-tabs>
+			</b-tabs> -->
 		</b-card>
 
-    <b-modal ref="evolution-modal" hide-footer scrollable title="演进">
+		<b-modal ref="evolution-modal" hide-footer scrollable title="演进">
 			<TraceEvolution
 				:projectId="projectId"
 				:traceList="traceList"
@@ -48,39 +48,39 @@
 				@queryTraceList="queryTraceList"
 			></TraceEvolution>
 		</b-modal>
-  </div>
+	</div>
 </template>
 
 <script>
 import TraceEvolution from './TraceEvolution';
 
 export default {
-  props: {
-    projectId: String,
-    traceActive: String,
-    traceList: Array,
-    flowList: Array,
-    flowSelected: String,
-    versionSelector: Array,
-    trackStageList: Array
+	props: {
+		projectId: String,
+		traceActive: String,
+		traceList: Array,
+		flowList: Array,
+		flowSelected: String,
+		versionSelector: Array,
+		trackStageList: Array
 	},
 	components: {
 		TraceEvolution
-  },
-  data() {
-    return {
-      evolutionStageSelector: [],
+	},
+	data() {
+		return {
+			evolutionStageSelector: [],
 			versionDetail: {
 				promoted: true,
 				abstract: ''
 			}
-    }
-  },
-  watch: {
+		};
+	},
+	watch: {
 		traceActive(val) {
 			if (val !== null) {
-        const activeTrace = this.traceList.find(trace => trace.id === this.traceActive);
-        const selectedFlow = this.flowList.find(flow => flow.id === this.flowSelected);
+				const activeTrace = this.traceList.find(trace => trace.id === this.traceActive);
+				const selectedFlow = this.flowList.find(flow => flow.id === this.flowSelected);
 
 				this.evolutionStageSelector = selectedFlow.evolution[activeTrace.stageId]
 					.map((evo, index) => {
@@ -88,9 +88,9 @@ export default {
 							return {
 								value: index,
 								text: this.trackStageList[index]
-							}
+							};
 						} else {
-							return null
+							return null;
 						}
 					}).filter(evo => evo !== null);
 
@@ -98,17 +98,17 @@ export default {
 				this.versionDetail.abstract = activeTrace.abstract;
 			}
 		}
-  },
-  methods: {
-    queryTraceList() {
-      this.$emit('queryTraceList');
-    },
-    
-    showModal(modalId) {
+	},
+	methods: {
+		queryTraceList() {
+			this.$emit('queryTraceList');
+		},
+		
+		showModal(modalId) {
 			this.$refs[modalId].show();
 		}
-  }
-}
+	}
+};
 </script>
 
 <style>

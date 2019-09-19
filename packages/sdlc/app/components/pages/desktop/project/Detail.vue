@@ -1,183 +1,92 @@
 <template>
 	<div>
-		<b-breadcrumb>
-			<b-breadcrumb-item to="/">
-				<i class="fas fa-home"></i>
-			</b-breadcrumb-item>
-			<b-breadcrumb-item to="/desktop/project">我的项目</b-breadcrumb-item>
-			<b-breadcrumb-item active></b-breadcrumb-item>
-		</b-breadcrumb>
+		<div class="detail-header">
+			<b-container class="pt-3">
+				<b-breadcrumb class="detail-breadcrumb">
+					<b-breadcrumb-item to="/">
+						<i class="fas fa-home"></i>
+					</b-breadcrumb-item>
+					<b-breadcrumb-item to="/desktop/project">我的项目</b-breadcrumb-item>
+					<b-breadcrumb-item active>{{ projectName }}</b-breadcrumb-item>
+				</b-breadcrumb>
 
-		<h4 class="mb-3" style="font-weight:bold;color:#6772e5;">项目属性</h4>
-		<b-row>
-			<b-col>
-				<b-form-group label="项目名称:">
-					<b-form-input trim size="sm" v-model="project.name"></b-form-input>
-				</b-form-group>
-			</b-col>
-			<b-col>
-				<b-form-group label="开发语言:">
-					<b-form-input v-model="project.language" size="sm"></b-form-input>
-				</b-form-group>
-			</b-col>
-			<b-col>
-				<b-form-group label="负责人:">
-					<b-form-input
-						v-if="accountList.length !== 0 && project.owner.length !== 0"
-						readonly
-						size="sm"
-						:value="accountList.find(account => account.id === project.owner).name "
-					></b-form-input>
-				</b-form-group>
-			</b-col>
-			<b-col>
-				<b-form-group label="创建时间:">
-					<b-form-input :value="project.createdAt | dateFormat" size="sm" readonly></b-form-input>
-				</b-form-group>
-			</b-col>
-		</b-row>
-		<b-row>
-			<b-col>
-				<b-form-group label="项目简介:">
-					<b-form-textarea
-						rows="3"
-						no-resize
-						size="sm"
-						v-model="project.abstract"
-					></b-form-textarea>
-				</b-form-group>
-			</b-col>
-		</b-row>
-		<b-row class="mb-3">
-			<b-col cols="2">
-				<b-button
-					class="w-100"
-					size="sm"
-					variant="success"
-					@click="updateProject"
-					:disabled="!projectNameState || !projectLanguageState || !projectAbstractState"
-				><i
-					class="fas fa-check mr-2"
-				/>更新项目属性</b-button>
-			</b-col>
-			<b-col cols="2">
-				<b-button
-					class="w-100"
-					size="sm"
-					variant="danger"
-					@click="deleteProject"
-				><i
-					class="fas fa-times mr-2"
-				/>删除此项目</b-button>
-			</b-col>
-		</b-row>
+				<b-nav tabs small class="detail-nav">
+					<b-nav-item
+						v-for="(nav, index) in navList"
+						:key="index"
+						:href="`#/desktop/project/${projectId}/${nav.href}`"
+						:active="routeName === nav.routeName"
+						:title="nav.name"
+					><i :class="`${nav.icon} mr-2`"></i>{{ nav.name }}</b-nav-item>
+				</b-nav>
+			</b-container>
+		</div>
 
-
-		<h4 class="mb-3" style="font-weight:bold;color:#6772e5;">项目成员</h4>
-		<Member
-			:projectId="projectId"
-			:projectOwner="project.owner"
-			class="mb-3"
-		></Member>
-
-		<h4 class="mb-3" style="font-weight:bold;color:#6772e5;">版本信息</h4>
-		<Version
-			:projectId="projectId"
-			class="mb-3"
-		></Version>
-
-		<h4 class="mb-3" style="font-weight:bold;color:#6772e5;">阶段追踪</h4>
-		<StageTrack
-			:projectId="projectId"
-			:versionList="versionList"
-		></StageTrack>
+		<b-container>
+			<router-view class="pt-3 pb-5">项目详情路由框架</router-view>
+		</b-container>
 	</div>
 </template>
 
 <script>
-import Member from './detail/member/Member';
-import Version from './detail/version/Version';
-import StageTrack from './detail/stageTrack/StageTrack';
-
 export default {
 	data() {
 		return {
-			project: {
-				name: '',
-				owner: '',
-				language: '',
-				abstract: '',
-				createdAt: null
-			},
-			accountList: [],
-			versionList: []
-		}
-	},
-	components: {
-		Member,
-		Version,
-		StageTrack
+			projectName: '',
+			navList: [
+				{ name: '项目属性', icon: 'fas fa-align-justify', href: 'property', routeName: 'project-property' },
+				{ name: '项目成员', icon: 'fas fa-users', href: 'member', routeName: 'project-member' },
+				{ name: '版本信息', icon: 'fas fa-bookmark', href: 'version', routeName: 'project-version' },
+				{ name: '阶段追踪', icon: 'fas fa-shoe-prints', href: 'track', routeName: 'project-track' },
+				{ name: '长标题测试长标题测试长标题测试', icon: 'fas fa-atom', href: '', routeName: '' },
+			]
+		};
 	},
 	computed: {
-		accountId() {
-			return this.$store.state.principal.id;
-		},
 		projectId() {
 			return this.$route.params.projectId;
 		},
-		projectNameState() {
-			return this.project.name.length > 0;
-		},
-		projectLanguageState() {
-			return this.project.language.length > 0;
-		},
-		projectAbstractState() {
-			return this.project.abstract.length > 0;
+		routeName() {
+			return this.$route.name;
 		}
 	},
 	mounted() {
 		this.getProjectById();
-		this.queryAccountList();
-		this.queryVersionList();
 	},
 	methods: {
 		async getProjectById() {
 			const project = await this.$http.project.get(this.projectId);
-
-			this.project.name = project.name;
-			this.project.owner = project.ownerId;
-			this.project.language = project.language;
-			this.project.abstract = project.abstract;
-			this.project.createdAt = project.createdAt;
-			// console.log(project);
+			this.projectName = project.name;
 		},
-		async updateProject() {
-			try {
-				await this.$http.project.update(this.projectId, {
-					name: this.project.name,
-					language: this.project.language,
-					abstract: this.project.abstract
-				});
-				this.showToast('success', '更新成功');
-			} catch (error) {
-				console.log(error);
-				this.showToast('danger', '更新失败');
-			}
-		},
-		async deleteProject() {
-			await this.$http.project.delete(this.projectId);
-			this.$router.push('/desktop/project');
-		},
-		async queryAccountList() {
-			this.accountList = await this.$http.account.query();
-		},
-		async queryVersionList() {
-			this.versionList = await this.$http.project.version(this.projectId).query();
-		} 
 	}
-}
+};
 </script>
 
-<style>
+<style lang="scss">
+.detail-header {
+	background-color:#FAFBFC;
+	border-bottom: 1px solid #e1e4e8;
 
+	.detail-breadcrumb {
+		background-color:#FAFBFC;
+
+		.active {
+			background-color: #FAFBFC;
+		}
+	}
+
+	.detail-nav {
+		border-bottom:none;
+
+		li {
+			max-width: 200px;
+
+			a {
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+		}
+	}
+}
 </style>

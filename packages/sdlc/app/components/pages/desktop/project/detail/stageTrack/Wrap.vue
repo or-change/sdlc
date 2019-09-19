@@ -213,7 +213,7 @@ export default {
 
 			this.wrapDataList.sort((wrapA, wrapB) => {
 				return wrapB.version.replace(/\./g, '') - wrapA.version.replace(/\./g, '');
-			})
+			});
 		},
 		setTraceActive(hash, name) {
 			if (hash !== '') {

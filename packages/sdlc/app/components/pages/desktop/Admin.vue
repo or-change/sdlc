@@ -1,5 +1,5 @@
 <template>
-  <b-container class="desktop-account pt-3 pb-5">
+  <b-container class="desktop-admin pt-3 pb-5">
 		<b-row>
 			<b-col cols="3">
 				<b-card no-body>
@@ -20,11 +20,12 @@
 					<b-breadcrumb-item to="/">
 						<i class="fas fa-home"></i>
 					</b-breadcrumb-item>
-					<b-breadcrumb-item active>账户信息</b-breadcrumb-item>
+					<b-breadcrumb-item active>管理员</b-breadcrumb-item>
 					<b-breadcrumb-item active>{{ routeName }}</b-breadcrumb-item>
 				</b-breadcrumb>
-
-				<router-view>用户路由框架</router-view>
+				<div class="h-100">
+					<router-view>管理员路由框架</router-view>
+				</div>
 			</b-col>
 		</b-row>
   </b-container>
@@ -35,11 +36,11 @@ export default {
 	data() {
 		return {
 			navList: [
-				{ name: '用户信息', href: '#/desktop/account/profile', routeName: 'account-profile' },
-				{ name: '其他信息1', href: '', routeName: '' },
-				{ name: '其他信息2', href: '', routeName: '' },
-				{ name: '其他信息3', href: '', routeName: '' },
-				{ name: '其他信息4', href: '', routeName: '' },
+				{ name: 'DDDD', href: '', routeName: '' },
+				{ name: 'EEEE', href: '', routeName: '' },
+				{ name: 'FFFF', href: '', routeName: '' },
+				{ name: 'FFFF', href: '', routeName: '' },
+				{ name: 'FFFF', href: '', routeName: '' },
 			]
 		};
 	},
@@ -47,12 +48,18 @@ export default {
 		routeName() {
 			return this.$route.name;
 		},
+	},
+	mounted() {
+
+	},
+	methods: {
+
 	}
 };
 </script>
 
 <style lang="scss">
-.desktop-account {
+.desktop-admin {
 	.active {
 		background-color: #E9ECEF;
 		a {
