@@ -1,77 +1,97 @@
 'use strict';
 
-module.exports = function (router, { AccessControl, mountRouter, Validator  }, { Model, AccessLog }) {
-	router.post('/', Validator.Body({
-		type: 'object',
-		properties: {
-			name: { type: 'string' },
-			stageList: {
-				type: 'array',
-				items: {
-					type: 'object',
-					properties: {
-						name: { type: 'string' },
-						promoted: { type: 'boolean' },
-						initializable: { type: 'boolean' },
-						plugins: { type: 'array' }
-					},
-					required: ['name', 'promoted', 'initializable', 'plugins']
-				}
-			},
-			evolution: {
-				type: 'array',
-				items: {
-					type: 'array'
-				}
+const schema = {
+	type: 'object',
+	properties: {
+		name: { type: 'string' },
+		parentId: { type: 'string' },
+		stageList: {
+			type: 'array',
+			items: {
+				type: 'object',
+				properties: {
+					name: { type: 'string' },
+					plugins: { type: 'array' }
+				},
+				required: ['name', 'plugins']
 			}
 		},
-		required: ['name', 'stageList', 'evolution'],
-		additionalProperties: false
-	}), AccessControl('flow.create'), async ctx => {
-		const { parentId, name, stageList, evolution } = ctx.request.body;
-
-		if (parentId) {
-			const flow = await Model.Flow.query(parentId);
-
-			if (!flow) {
-				ctx.throw(400, 'Parent Flow is NOT exist.');
+		evolution: {
+			type: 'array',
+			items: {
+				type: 'array'
+			}
+		},
+		promoted: {
+			type: 'array',
+			items: {
+				type: 'boolean'
+			}
+		},
+		initializable: {
+			type: 'array',
+			items: {
+				type: 'boolean'
 			}
 		}
+	},
+	required: ['name', 'parentId', 'stageList', 'evolution', 'promoted', 'initializable'],
+	additionalProperties: false
+};
 
-		ctx.body = await Model.Flow.create({
-			parentId, name, stageList, evolution,
-			projectId: ctx.state.project.id
-		});
+module.exports = function (router, { AccessControl, mountRouter, Validator  }, { Model }) {
+	const validate = Validator.Body(schema);
 
-		AccessLog.debug({ type: `POST /api/project/${ctx.state.project.id}/flow`, info: { status: ctx.status }});
-	}).get('/', AccessControl('flow.query'), async ctx => {
-		ctx.body = await Model.FlowList.query({
-			selector: 'projectId',
-			args: {
-				projectId: ctx.state.project.id
+	router
+		.post('/', validate, AccessControl('flow.create'), async ctx => {
+			const { parentId, name, stageList, evolution, promoted, initializable } = ctx.request.body;
+
+			if (parentId) {
+				const flow = await Model.Flow.query(parentId);
+
+				if (!flow) {
+					ctx.throw(400, 'Parent Flow is NOT exist.');
+				}
 			}
-		});
 
-		AccessLog.debug({ type: `GET /api/project/${ctx.state.project.id}/flow`, info: { status: ctx.status }});
-	});
+			ctx.body = await Model.Flow.create({
+				parentId, name, stageList, evolution,
+				promoted, initializable,
+				projectId: ctx.state.project.id
+			});
+		})
+		.get('/', AccessControl('flow.query'), async ctx => {
+			ctx.body = await Model.FlowList.query({
+				selector: 'projectId',
+				args: {
+					projectId: ctx.state.project.id
+				}
+			});
+		});
 
 	mountRouter('Flow', router);
 	
-	router.param('flowId', async (flowId, ctx, next) => {
-		const flow = await Model.Flow.query(flowId);
+	router
+		.param('flowId', async (flowId, ctx, next) => {
+			const flow = await Model.Flow.query(flowId);
 
-		if (!flow) {
-			return ctx.throw(404, 'Flow is NOT found.');
-		}
+			if (!flow) {
+				return ctx.throw(404, 'Flow is NOT found.');
+			}
 
-		ctx.state.flow = flow;
+			ctx.state.flow = flow;
 
-		return next();
-	}).get('/:flowId', AccessControl('flow.get'), ctx => {
-		ctx.body = ctx.state.flow;
+			return next();
+		})
+		.get('/:flowId', AccessControl('flow.get'), ctx => {
+			ctx.body = ctx.state.flow;
+		})
+		.put('/:flowId', validate, AccessControl('flow.get'), async ctx => {
+			const { stageList } = ctx.request.body;
+			const { flow } = ctx.state;
 
-		AccessLog.debug({ type: `POST /api/project/${ctx.state.project.id}/flow/${ctx.state.flow.id}`, info: { status: ctx.status }});
-	});
+			ctx.body = await flow.$update(Object.assign({}, flow, { stageList }));
+		});
 
 	mountRouter('Flow', router, '/:flowId');
 };

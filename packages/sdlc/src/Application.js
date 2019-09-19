@@ -12,22 +12,35 @@ const router = require('./router');
 const koaBody = require('koa-body');
 
 module.exports = function ({ session }) {
-	return DuckWebKoa((app, { AppRouter, Session }, { ExceptionLogger }) => {
+	return DuckWebKoa((app, { AppRouter, Session }, { ExceptionLogger, AccessLog }) => {
+		app.use(async (ctx, next) => {
+			try {
+				await next();
+			} catch (error) {
+				if (error.status) {
+					AccessLog.warn(`${ctx.protocol} ${ctx.method} ${ctx.path} ${error.status} ${error.message}`);
+					
+					throw error;
+				} else {
+					ExceptionLogger.error(`${error.message} ${error.stack}`);
+				}
+			}
+		});
+
 		app.use(koaBody({
 			multipart: true
 		}));
 	
 		Session(app);
+		
+		app.use(async (ctx, next) => {
+			await next();
 
-		// app.use(async (ctx, next) => {
-		// 	try {
-		// 		await next();
-		// 	} catch (error) {
-		// 		ExceptionLogger.error(error);
-		// 		ctx.res.end();
-		// 	}
-		// });
-	
+			AccessLog(
+				`${ctx.protocol} ${ctx.method} ${ctx.path} ${ctx.status} ${ctx.message} body: ${JSON.stringify(ctx.request.body)} query: ${JSON.stringify(ctx.request.query)}`
+			);
+		});
+
 		app.use(AppRouter().routes());
 	}, {
 		plugins: [

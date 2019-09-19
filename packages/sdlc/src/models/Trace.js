@@ -27,7 +27,8 @@ module.exports = {
 				async create(payload) {
 					const trace = await store.createTrace(payload);
 
-					ModelLog.info({ type: 'create trace', info: trace});
+					ModelLog({ type: 'create trace', info: trace});
+
 					return trace;
 				},
 				async query(traceId) {
@@ -36,13 +37,15 @@ module.exports = {
 				async update(payload) {
 					const trace = await store.updateTrace(this.id, payload);
 
-					ModelLog.info({ type: 'update trace', info: trace});
+					ModelLog({ type: 'update trace', info: trace});
+
 					return trace;
 				},
 				async delete() {
 					const trace = await store.deleteTrace(this.id);
 
-					ModelLog.info({ type: 'delete trace', info: trace});
+					ModelLog({ type: 'delete trace', info: trace});
+					
 					return trace;
 				}
 			}

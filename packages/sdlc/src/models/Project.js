@@ -17,15 +17,17 @@ module.exports = {
 			methods: {
 				async create(payload) {
 					const project = await store.createProject(payload);
-					product.emit('project-created', project);
 
-					ModelLog.info({ type: 'create project', info: project});
+					product.emit('project-created', project);
+					ModelLog({ type: 'create project', info: project});
+
 					return project;
 				},
 				async update(payload) {
 					const project = await store.updateProject(this.id, payload);
+
 					product.emit('project-updated', project);
-					ModelLog.info({ type: 'update project', info: project});
+					ModelLog({ type: 'update project', info: project});
 
 					return project;
 				},
@@ -34,8 +36,9 @@ module.exports = {
 				},
 				async delete() {
 					const project = await store.deleteProject(this.id);
+					
 					product.emit('project-deleted', project);
-					ModelLog.info({ type: 'delete project', info: project});
+					ModelLog({ type: 'delete project', info: project});
 
 					return project;
 				}
@@ -79,14 +82,14 @@ module.exports = {
 				async create(payload) {
 					const member = await store.createMember(payload);
 
-					ModelLog.info({ type: 'create member', info: member});
+					ModelLog({ type: 'create member', info: member});
 
 					return member;
 				},
 				async update(payload) {
 					const member = await store.updateMember(this.id, payload);
 
-					ModelLog.info({ type: 'delete member', info: member});
+					ModelLog({ type: 'delete member', info: member});
 
 					return member;
 				},

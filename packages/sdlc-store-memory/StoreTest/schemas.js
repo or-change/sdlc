@@ -64,8 +64,6 @@ module.exports = {
 					type: 'object',
 					properties: {
 						name: { type: 'string' },
-						promoted: { type: 'boolean' },
-						initializable: { type: 'boolean' },
 						plugins: {
 							type: 'array',
 							items: { type: 'string' }
@@ -79,6 +77,14 @@ module.exports = {
 					type: 'array',
 					items: { type: 'boolean' }
 				}
+			},
+			promoted: {
+				type: 'array',
+				items: { type: 'boolean' }
+			},
+			initializable: {
+				type: 'array',
+				items: { type: 'boolean' }
 			},
 			createdAt: { format: 'date' }
 		}

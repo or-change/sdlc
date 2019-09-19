@@ -9,6 +9,8 @@
             true
         ]
     ],
+    "promoted": [true],
+    "initializable": [true],
     "createdAt": "2019-09-11T07:04:47.370Z"
 	}
 ]

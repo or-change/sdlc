@@ -19,7 +19,12 @@ const Model = Datahub.create({
 		const modelOptions = {};
 
 		for (let key in models) {
-			modelOptions[key] = Object.assign({}, models[key](store), {
+			modelOptions[key] = Object.assign({}, models[key](store, {
+				product: {
+					emit: () => {}
+				}, 
+				ModelLog: () => {}
+			}), {
 				symbol: key
 			});
 		}
@@ -49,23 +54,19 @@ describe('Model Testing', () => {
 			stageList: [
 				{
 					name: 'stage-1',
-					promoted: true,
-					initializable: true,
 					plugins: []
 				},
 				{
 					name: 'stage-2',
-					promoted: false,
-					initializable: true,
 					plugins: []
 				},
 				{
 					name: 'stage-3',
-					promoted: true,
-					initializable: false,
 					plugins: []
 				}
 			],
+			initializable: [true, true, false],
+			promoted: [true, false, true],
 			evolution: [
 				[true, true, false],
 				[false, true, true],
@@ -75,16 +76,15 @@ describe('Model Testing', () => {
 	});
 
 	describe('Trace Testing', () => {
-		async function createTrace({ parentId, flowId, stageId, versionId, abstract }) {
+		async function createTrace({ parentId, flowId, stageId, versionId, abstract, projectId }) {
 			const flow = await Model.Flow.query(flowId);
-			const stage = flow.stageList[stageId];
 			const trace = await Model.Trace.query(parentId);
 
-			if (!stage.promoted && trace) {
+			if (!flow.promoted[stageId] && trace) {
 				assert.ok(trace.versionId !== versionId, 'This stage is NOT allowed to promot version.');
 			}
 
-			if (!stage.initializable) {
+			if (!flow.initializable[stageId]) {
 				assert.ok(!trace.parentId, 'This stage is NOT allowed to initializable.');
 			}
 
@@ -92,7 +92,7 @@ describe('Model Testing', () => {
 				assert.ok(flow.evolution[trace.stageId][stageId], 'This is NOT allowed to remove to this stage.');
 			}
 
-			const newTrace = await Model.Trace.create({ parentId, flowId, stageId, versionId, abstract });
+			const newTrace = await Model.Trace.create({ parentId, flowId, stageId, versionId, abstract, projectId });
 
 			store.traceList.push(newTrace);
 		}
@@ -107,21 +107,21 @@ describe('Model Testing', () => {
 			store.versionList.push(version);
 
 			await createTrace({
-				parentId: null, flowId: store.flow.id,
+				parentId: null, flowId: store.flow.id, projectId: store.project.id,
 				stageId: 0, versionId: version.id, abstract: ''
 			});
 		});
 
 		it('promot verson in stage-0', async () => {
 			await createTrace({
-				parentId: store.traceList[store.traceList.length - 1].id, flowId: store.flow.id,
+				parentId: store.traceList[store.traceList.length - 1].id, flowId: store.flow.id, projectId: store.project.id,
 				stageId: 0, versionId: store.versionList[store.versionList.length - 1].id, abstract: ''
 			});
 		});
 
 		it('move to next stage-1', async () => {
 			await createTrace({
-				parentId: null, flowId: store.flow.id,
+				parentId: null, flowId: store.flow.id, projectId: store.project.id,
 				stageId: 1, versionId: store.versionList[store.versionList.length - 1].id, abstract: ''
 			});
 		});
@@ -137,7 +137,7 @@ describe('Model Testing', () => {
 
 			const trace = await createTrace({
 				parentId: store.traceList[store.traceList.length - 1].id, flowId: store.flow.id,
-				stageId: 2, versionId: version.id, abstract: ''
+				stageId: 2, versionId: version.id, abstract: '', projectId: store.project.id,
 			});
 
 			store.traceList.push(trace);

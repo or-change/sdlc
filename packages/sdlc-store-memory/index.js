@@ -186,13 +186,14 @@ module.exports = function Store(data = {
 			return version;
 		},
 		createFlow({
-			parentId, name, projectId, stageList, evolution
+			parentId, name, projectId, stageList, evolution, promoted, initializable
 		}) {
 			const flowId = Math.random().toString(16).substr(2, 8);
 
 			const flow = {
 				id: flowId,
 				parentId, name, projectId, evolution,
+				promoted, initializable,
 				createdAt: new Date()
 			};
 			data.flow.push(flow);

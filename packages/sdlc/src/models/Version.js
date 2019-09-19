@@ -17,13 +17,15 @@ module.exports = {
 				async create(payload) {
 					const version = await store.createVersion(payload);
 
-					ModelLog.info({ type: 'create version', info: version });
+					ModelLog({ type: 'create version', info: version });
+
 					return version;
 				},
 				async update(payload) {
 					const version = await store.updateVersion(this.id, payload);
 
-					ModelLog.info({ type: 'update version', info: version });
+					ModelLog({ type: 'update version', info: version });
+					
 					return version;
 				},
 				async query(versionId) {

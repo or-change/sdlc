@@ -16,14 +16,20 @@ module.exports = {
 							type: 'object',
 							properties: {
 								name: { type: 'string' },
-								promoted: { type: 'boolean' },
-								initializable: { type: 'boolean' },
 								plugins: {
 									type: 'array',
 									items: { type: 'string' }
 								}
 							}
 						}
+					},
+					promoted: {
+						type: 'array',
+						items: { type: 'boolean' }
+					},
+					initializable: {
+						type: 'array',
+						items: { type: 'boolean' }
 					},
 					evolution: {
 						type: 'array',
@@ -40,7 +46,7 @@ module.exports = {
 				async create(payload) {
 					const flow = await store.createFlow(payload);
 
-					ModelLog.info({ type: 'create flow', info: flow});
+					ModelLog({ type: 'create flow', info: flow});
 
 					return flow;
 				},
