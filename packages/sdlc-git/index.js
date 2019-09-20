@@ -16,23 +16,28 @@ module.exports = function gitPlugin() {
 			Plugin: (router, context) => {
 				const { Validator } = context;
 				
-				router.post('/clone', async ctx => {
-					const validate = Validator({
-						type: 'object',
-						properties: {
-							url: { 
-								type: 'string'
-							}
-						},
-						additionalProperties: false,
-						required: ['url']
-					})(ctx.request.body);
+				router.post('/git/clone', async ctx => {
+					// const validate = Validator({
+					// 	type: 'object',
+					// 	properties: {
+					// 		url: { 
+					// 			type: 'string'
+					// 		}
+					// 	},
+					// 	additionalProperties: false,
+					// 	required: ['url']
+					// })(ctx.request.body);
 
-					if (!validate) {
-						return ctx.throw(400, 'Invalid parameter: missing parameter `url`');
-					}
+					// if (!validate) {
+					// 	return ctx.throw(400, 'Invalid parameter: missing parameter `url`');
+					// }
 
 					const { url } = ctx.request.body;
+
+					if (!url) {
+						return ctx.throw(400, 'Invalid parameter: missing parameter `url`');
+					}
+					
 					const projectName = url.substring(url.lastIndexOf('/') + 1, url.length).replace('.git', '');
 					const tempProjectName = projectName + '-' + Date.now();
 					const tempPath = path.join(__dirname, `/store/temp/${tempProjectName}`);

@@ -1,7 +1,7 @@
 import SDLC from 'sdlc';
 import Git from '../app/components/Git';
 
-SDLC.install('oc.com.or-change.cn', extend => {
+SDLC.install('com.orchage.sdlc.git', extend => {
 	extend
 		.appendRoutes([
 			{
@@ -12,9 +12,9 @@ SDLC.install('oc.com.or-change.cn', extend => {
 		.addTopicItem({
 			id: 'Git-topic',
 			component: Git,
-			label: 'git',
-			install(extend) {
-				extend('add slots');
-			}
+			label: { 
+				sub: 'git' 
+			},
+			path: 'git-topic',
 		});
 });

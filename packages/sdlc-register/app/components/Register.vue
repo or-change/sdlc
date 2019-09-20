@@ -41,10 +41,15 @@
 				</b-col>
 			</b-row>
 			<b-row class="mt-">
-				<b-col cols="3"></b-col>
+				<b-col cols="3" class="text-right">
+					<div id="create-state">
+						<p v-if="createState.success" class="pull-right text-success">创建成功!</p>
+						<p v-if="createState.failed" class="pull-right text-danger">创建失败!</p>
+					</div>
+				</b-col>
 				<b-col class="text-right" cols="6">
 					<b-btn variant="success" @click="reset">重置</b-btn>
-					<b-btn variant="primary" @click="create">创建</b-btn>
+					<b-btn variant="primary" @click="create" :disabled="!nameState">创建</b-btn>
 				</b-col>
 			</b-row>
 		</b-card>
@@ -52,6 +57,8 @@
 </template>
 
 <script>
+import agent from 'http-agent';
+
 function defaultAccount() {
 	return {
 		name: '',
@@ -63,15 +70,41 @@ function defaultAccount() {
 export default {
 	data() {
 		return {
-			account: defaultAccount()
+			account: defaultAccount(),
+			createState: {
+				success: false,
+				failed: false
+			}
 		};
+	},
+	computed: {
+		nameState() {
+			return this.account.name.length > 0 ? true : false;
+		}
 	},
 	methods: {
 		reset() {
 			this.account = defaultAccount();
+			this.createState.success = false;
+			this.createState.failed = false;
 		},
-		create() {
+		async create() {
 
+			try {
+				const newAccount = await agent.post('/account/register', this.account);
+	
+				if (newAccount) {
+					this.createState.success = true;
+				}
+	
+				setTimeout(() => {
+					this.reset();
+				}, 3000);
+			} catch (error) {
+				if (error) {
+					this.createState.failed = true;
+				}
+			}
 		}
 	}
 };

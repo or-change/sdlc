@@ -64,3 +64,5 @@ typings/
 
 config.json
 storelog
+packages/sdlc-git/store/zip
+packages/sdlc-git/store/temp

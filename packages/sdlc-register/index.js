@@ -12,30 +12,28 @@ module.exports = function registerPlugin() {
 				const { Validator } = context;
 
 				router.post('/register', async ctx => {
+					// const validate = Validator({
+					// 	type: 'object',
+					// 	properties: {
+					// 		name: {
+					// 			type: 'string'
+					// 		},
+					// 		administrator: {
+					// 			type: 'boolean'
+					// 		},
+					// 		avatarHash: {
+					// 			type: 'string'
+					// 		}
+					// 	},
+					// 	additionalProperties: false,
+					// 	required: ['name', 'administrator']
+					// })(ctx.request.body);
+
+					// if (!validate) {
+					// 	return ctx.throw(400, 'Invalid parameter: missing parameter `name` or `administrator`');
+					// }
+
 					const { name, administrator, avatarHash } = ctx.request.body;
-					const parameters = ctx.request.body;
-					parameters.administrator = Boolean(administrator);
-					const validate = Validator({
-						type: 'object',
-						properties: {
-							name: {
-								type: 'string'
-							},
-							administrator: {
-								type: 'boolean'
-							},
-							avatarHash: {
-								type: 'string'
-							}
-						},
-						additionalProperties: false,
-						required: ['name', 'administrator']
-					})(parameters);
-
-					if (!validate) {
-						return ctx.throw(400, 'Invalid parameter: missing parameter `name` or `administrator`');
-					}
-
 					const payload = {
 						name,
 						administrator: Boolean(administrator),
