@@ -86,7 +86,7 @@ module.exports = function (router, { AccessControl, mountRouter, Validator  }, {
 		.get('/:flowId', AccessControl('flow.get'), ctx => {
 			ctx.body = ctx.state.flow;
 		})
-		.put('/:flowId', validate, AccessControl('flow.get'), async ctx => {
+		.put('/:flowId', validate, AccessControl('flow.update'), async ctx => {
 			const { stageList } = ctx.request.body;
 			const { flow } = ctx.state;
 

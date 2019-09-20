@@ -34,18 +34,65 @@ const { server, webpack } = new SDLC(options);
 		properties: {
 			access: {
 				label: '',
-				preventLevels ??
-				file(pathname, size, number)
+				preventLevels: {
+					type: 'array'
+				}
+				file: {
+					type: 'object',
+					properties: {
+						pathname: { type: 'string' },
+						size: { type: 'number' },
+						number: { type: 'number' }
+					}
+				}
 			},
 			model: {
-
+				label: '',
+				preventLevels: {
+					type: 'array'
+				}
+				file: {
+					type: 'object',
+					properties: {
+						pathname: { type: 'string' },
+						size: { type: 'number' },
+						number: { type: 'number' }
+					}
+				}
 			},
 			authentication: {
-
+				label: '',
+				preventLevels: {
+					type: 'array'
+				}
+				file: {
+					type: 'object',
+					properties: {
+						pathname: { type: 'string' },
+						size: { type: 'number' },
+						number: { type: 'number' }
+					}
+				}
 			},
 			exception: {
-
+				label: '',
+				preventLevels: {
+					type: 'array'
+				}
+				file: {
+					type: 'object',
+					properties: {
+						pathname: { type: 'string' },
+						size: { type: 'number' },
+						number: { type: 'number' }
+					}
+				}
 			}
+		}
+	},
+	app: {
+		extend: {
+			type: string
 		}
 	}
 }
@@ -53,10 +100,45 @@ const { server, webpack } = new SDLC(options);
 
 ## plugins
 
-Register plugin to SDLC core, and you can extend router and webpack in plugin install function
-(广度 扩展点确定，深度 前端扩展)
+### install(pluginId, pluginFactory)
+pluginId should be registered;
 
-1.备好前端开发环境
-2.确定插件，以及开始实验()
-3.开始连接插件
+pluginFactory Function
+argument object
+{
+	Function appendRoutes(routes Array),
+	Function addNavItem({
+		*path String, *lable: { main String, sub String }
+	}),
+	Function addAccountItem({
+		*path String, *lable: { main String, sub String }, *component
+	}),
+	Function addAdminItem({
+		*path String, *lable: { main String, sub String }, *component
+	}),
+	Function addTopicItem({
+		*id String, *path String, *lable: { main String, sub String }, *component,
+		extend Function(argument Function),
+		target: {
+			id String, pluginId String, install Function
+		}
+	})
+}
+### compile
+
+## Assemble
+
+Provide a Function
+
+argument Object
+
+{
+	Function appendRoutes(routes Array),
+	Function setAuthenticationPage(component Object),
+	Function setFooter(component Object),
+	Function setHome(path string),
+	Function getItems(type [nav, account, admin]),
+	Function getTopics(type [nav, account, admin]),
+	Function setOrder(order Array),
+}
 

@@ -47,6 +47,7 @@ module.exports = {
 		'flow.create':                     [_, $, _, _, $],
 		'flow.query':                      [_, $, _, $, _],
 		'flow.get':                        [_, $, _, $, _],
+		'flow.update':                     [_, $, _, _, $],
 		'trace.create':                    [_, $, _, _, $],
 		'trace.query':                     [_, $, _, $, _],
 		'trace.get':                       [_, $, _, $, _],

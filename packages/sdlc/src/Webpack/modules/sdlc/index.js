@@ -3,7 +3,8 @@ import SDLCProductFactory from 'sdlc-product-factory';
 
 import { store, generateResult } from './store';
 import {
-	routerNormalize, itemNormalize, topicNormalize, orderNormalize
+	routerNormalize, navItemNormalize, itemNormalize,
+	topicNormalize, orderNormalize
 } from './normalize';
 
 function PluginExtender(pluginId) {
@@ -14,7 +15,7 @@ function PluginExtender(pluginId) {
 			return this;
 		},
 		addNavItem(options) {
-			store.workbench.nav.items.push(itemNormalize(options));
+			store.workbench.nav.items.push(navItemNormalize(options));
 
 			return this;
 		},
@@ -65,7 +66,14 @@ function Decorator() {
 			return this;
 		},
 		getItems(type) {
-			return store.workbench[type].items.map(item => Object.assign({}, item));
+			return store.workbench[type].items.map(item => {
+				return { path: item.path, label: item.label.sub };
+			});
+		},
+		getTopics() {
+			return store.workbench.project.topics.map(topic => {
+				return { path: topic.path, label: topic.label.sub };
+			});
 		},
 		setOrder(type, order) {
 			store.workbench[type].order = orderNormalize(order);

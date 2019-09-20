@@ -6,6 +6,27 @@ export function routerNormalize(options) {
 	return options;
 }
 
+export function navItemNormalize(options) {
+	if (typeof options !== 'object') {
+		throw new Error('Object is Expected for extend.');
+	}
+
+	const { path, label } = options;
+
+	if (typeof path !== 'string' ) {
+		throw new Error('options.path should be a string.');
+	}
+
+	if (typeof label !== 'object') {
+		throw new Error('options.label should be an object.');
+	}
+
+	return {
+		path,
+		label: { main: label.main, sub: label.sub }
+	};
+}
+
 export function itemNormalize(options) {
 	if (typeof options !== 'object') {
 		throw new Error('Object is Expected for extend.');
@@ -77,8 +98,18 @@ export function topicNormalize(options) {
 
 export function orderNormalize(options) {
 	if (!Array.isArray(options)) {
-		throw new Error('Array is Expected for extend router.');
+		throw new Error('Array is Expected for order.');
 	}
+
+	options.forEach(item => {
+		if (typeof item !== 'number') {
+			throw new Error('Number is Expected.');
+		}
+
+		if (item < 0) {
+			throw new Error('Must >= 0.');
+		}
+	});
 
 	return options;
 }

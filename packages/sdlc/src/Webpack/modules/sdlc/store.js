@@ -42,14 +42,40 @@ export const store = window.store = {
 
 function sort(items, order) {
 	const result = [];
+	const unOrder = [];
 
-	order.forEach(id => {
-		const item = items.find(item => item.id === id);
+	items.forEach((item, index) => {
+		const position = order.indexOf(index);
 
-		result.push(item);
+		if (position !== -1) {
+			result[position] = item;
+		} else {
+			unOrder.push(item);
+		}
 	});
 
-	return result;
+	return result.concat(unOrder);
+}
+
+function compile(items) {
+	const routes = [];
+	const options = [];
+
+	items.forEach(item => {
+		const { path, component, label } = item;
+
+		if (component) {
+			routes.push({
+				path, component
+			});
+		}
+
+		options.push({
+			path, label: label.main ? label.main : label.sub
+		});
+	});
+
+	return { routes, options };
 }
 
 export function generateResult() {
@@ -60,24 +86,28 @@ export function generateResult() {
 		routes: globalRoutes, AuthenticationPage, Footer, home
 	} = store.global;
 
-	const result = {
+	const accountOptions = compile(sort(account.items, account.order));
+	const adminOptions = compile(sort(admin.items, admin.order));
+	const projectOptions = compile(sort(project.topics, project.order));
+
+	return {
 		routes: {
 			global: globalRoutes,
 			workbench: workbenchRoutes,
-			account: [],
-			admin: [],
-			project: []
+			account: accountOptions.routes,
+			admin: adminOptions.routes,
+			project: projectOptions.routes
 		},
 		AuthenticationPage: AuthenticationPage,
 		Footer: Footer,
 		home: home,
 		workbench: {
-			nav: [],
-			account: [],
-			admin: [],
-			project: []
+			nav: sort(nav.items, nav.order).map(({ path, label }) => {
+				return { path: path, label: label.main ? label.main : label.sub };
+			}),
+			account: accountOptions.options,
+			admin: adminOptions.options,
+			project: projectOptions.options
 		}
 	};
-
-	return result;
 }
