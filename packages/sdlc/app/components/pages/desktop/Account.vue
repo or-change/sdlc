@@ -5,25 +5,16 @@
 				<b-card no-body>
 					<b-nav vertical class="w-100">
 						<b-nav-item
-							v-for="(nav, index) in navList"
-							:key="index"
-							:href="nav.href"
-							:class="{
-								'active': routeName === nav.routeName
-							}"
-						>{{ nav.name }}</b-nav-item>
+							v-for="(nav, index) in navExtend"
+							:key="index" 
+							:to="`/desktop/account/${nav.path}`"
+							exact
+							exact-active-class="active"
+						>{{ nav.label.main ? $t(nav.label.main) : nav.label.sub }}</b-nav-item>
 					</b-nav>
 				</b-card>
 			</b-col>
 			<b-col>
-				<b-breadcrumb>
-					<b-breadcrumb-item to="/">
-						<i class="fas fa-home"></i>
-					</b-breadcrumb-item>
-					<b-breadcrumb-item active>账户信息</b-breadcrumb-item>
-					<b-breadcrumb-item active>{{ routeName }}</b-breadcrumb-item>
-				</b-breadcrumb>
-
 				<router-view>用户路由框架</router-view>
 			</b-col>
 		</b-row>
@@ -34,19 +25,13 @@
 export default {
 	data() {
 		return {
-			navList: [
-				{ name: '用户信息', href: '#/desktop/account/profile', routeName: 'account-profile' },
-				{ name: '其他信息1', href: '', routeName: '' },
-				{ name: '其他信息2', href: '', routeName: '' },
-				{ name: '其他信息3', href: '', routeName: '' },
-				{ name: '其他信息4', href: '', routeName: '' },
-			]
+
 		};
 	},
 	computed: {
-		routeName() {
-			return this.$route.name;
-		},
+		navExtend() {
+			return this.sdlc.workbench.account;
+		}
 	}
 };
 </script>

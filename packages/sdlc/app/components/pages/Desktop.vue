@@ -8,16 +8,25 @@
 					style="width:30px;height:30px;" 
 					class="inline-block align-top"
 				/>
-				SDLC安全开发管控平台
+				{{ $t('desktop.title') }}
 			</b-navbar-brand>
 
 			<b-navbar-nav>
-				<b-nav-item href="#/desktop/overview">总览</b-nav-item>
-				<b-nav-item href="#/desktop/project" class="ml-2">我的项目</b-nav-item>
+				<b-nav-item 
+					v-for="(nav, index) in navExtend"
+					:key="index"
+					:href="`#/desktop/${nav.path}`" 
+					class="ml-2"
+				>{{ nav.label.main ? $t(nav.label.main) : nav.label.sub }}</b-nav-item>
 			</b-navbar-nav>
 
 			<!-- Right aligned nav items -->
 			<b-navbar-nav class="ml-auto">
+				<b-nav-item-dropdown  :text="$t('desktop.lang')" right>
+					<b-dropdown-item @click="$i18n.locale='zh'">中文</b-dropdown-item>
+					<b-dropdown-item @click="$i18n.locale='en'">English</b-dropdown-item>
+				</b-nav-item-dropdown>
+
 				<b-nav-item-dropdown right>
 					<!-- Using 'button-content' slot -->
 					<template
@@ -26,12 +35,12 @@
 
 					<b-dropdown-item
 						href="#/desktop/account"
-					>账户信息</b-dropdown-item>
+					>{{ $t('desktop.account') }}</b-dropdown-item>
 					<b-dropdown-item
 						href="#/desktop/admin"
-					>管理员</b-dropdown-item>
+					>{{ $t('desktop.admin') }}</b-dropdown-item>
 					<b-dropdown-divider></b-dropdown-divider>
-					<b-dropdown-item @click="signout">退出</b-dropdown-item>
+					<b-dropdown-item @click="signout">{{ $t('desktop.signout') }}</b-dropdown-item>
 				</b-nav-item-dropdown>
 			</b-navbar-nav> 
 		</b-navbar>
@@ -53,6 +62,9 @@ export default {
 	computed: {
 		principalName() {
 			return this.$store.state.principal.name;
+		},
+		navExtend() {
+			return this.sdlc.workbench.nav;
 		}
 	},
 	methods: {

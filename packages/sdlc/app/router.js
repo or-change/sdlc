@@ -62,12 +62,10 @@ export default function Router({ routes, AuthenticationPage, home }) {
 							{
 								path: 'profile',
 								component: AccountProfile,
-								name: 'account-profile'
 							},
 							{
 								path: 'accountb',
 								component: ProjectDetailVersion,
-								name: 'account-b'
 							}
 						].concat(account)
 					},
@@ -93,22 +91,18 @@ export default function Router({ routes, AuthenticationPage, home }) {
 							{
 								path: 'property',
 								component: ProjectDetailProperty,
-								name: 'project-property'
 							},
 							{
 								path: 'member',
 								component: ProjectDetailMember,
-								name: 'project-member'
 							},
 							{
 								path: 'version',
 								component: ProjectDetailVersion,
-								name: 'project-version'
 							},
 							{
 								path: 'track',
 								component: ProjectStageTrack,
-								name: 'project-track'
 							},
 						].concat(project)
 					},

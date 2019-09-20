@@ -1,0 +1,54 @@
+signin:
+  title: 'SDLC'
+  username: 'Username'
+  password: 'Password'
+  submit: 'SignIn'
+  footer: 'Or-Change'
+
+desktop:
+  title: 'Security Development Life Control'
+  overview: 'Overview'
+  project: 'Project'
+  lang: 'Language'
+  account: 'Account'
+  admin: 'Admin'
+  signout: 'SignOut'
+
+overview:
+  projectTitle: 'Project'
+  projectSum: 'Project Count'
+  projectOwn: 'Project Owned'
+  projectMember: 'Project Joined'
+
+account:
+  profile: 'Profile'
+
+profile:
+  breadAccount: 'Account'
+  breadProfile: 'Profile'
+  username: 'Username'
+  administrator: 'Administrator'
+  update: 'Update'
+  adminYes: 'Yes'
+  adminNo: 'No'
+
+admin:
+
+projectAll:
+  breadcrumb: 'Project'
+  owned: 'Owned'
+  joined: 'Joined'
+  newProject:
+    title: 'New Project'
+    name: 'Name'
+    language: 'Language'
+    abstract: 'Abstract'
+    submit: 'Create'
+    close: 'Close'
+
+project:
+  breadcrumb: 'Project'
+  property: 'Property'
+  member: 'Member'
+  version: 'Version'
+  track: 'Track'

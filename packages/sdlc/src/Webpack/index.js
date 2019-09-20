@@ -95,7 +95,7 @@ module.exports = function ({ Plugin }, options) {
 				},
 				{
 					test: /\.yaml$/,
-					loader: 'yaml',
+					loader: 'json-loader!yaml-loader',
 				}
 			]
 		},

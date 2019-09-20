@@ -26,6 +26,7 @@ export default new Vuex.Store({
 	mutations: {
 		assignPrincipal(state, principal) {
 			const { name, id, administrator } = principal.account;
+			
 			state.signedIn = true;
 			state.principal.name = name;
 			state.principal.id = id;

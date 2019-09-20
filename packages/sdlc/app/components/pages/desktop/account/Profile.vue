@@ -1,5 +1,13 @@
 <template>
 	<div>
+		<b-breadcrumb>
+			<b-breadcrumb-item to="/">
+				<i class="fas fa-home"></i>
+			</b-breadcrumb-item>
+			<b-breadcrumb-item active>{{ $t('profile.breadAccount') }}</b-breadcrumb-item>
+			<b-breadcrumb-item active>{{ $t('profile.breadProfile') }}</b-breadcrumb-item>
+		</b-breadcrumb>
+
 		<b-row>
 			<b-col cols="3" style="text-align: center">
 				<div>
@@ -7,28 +15,27 @@
 				</div>
 			</b-col>
 			<b-col cols="3">
-				<b-form-group label="用户名:">
+				<b-form-group :label="`${ $t('profile.username') }:`">
 					<b-form-input
 						trim
 						size="sm"
 						v-model='account.name'
-						placeholder="输入用户名"
 					></b-form-input>
 				</b-form-group>
 			</b-col>
 			<b-col cols="3">
-				<b-form-group label="管理员:">
+				<b-form-group :label="`${ $t('profile.administrator') }:`">
 					<b-form-input
 						trim
 						size="sm"
-						:value="account.administrator ? '是' : '否'"
+						:value="account.administrator ? $t('profile.adminYes') : $t('profile.adminNo')"
 						readonly
 					></b-form-input>
 				</b-form-group>
 			</b-col>
 		</b-row>
 		<div style="text-align:right;">
-			<b-button variant="primary" size="sm" @click="updateAccount">更新</b-button>
+			<b-button variant="primary" size="sm" @click="updateAccount">{{ $t('profile.update') }}</b-button>
 		</div>
 	</div>
 </template>

@@ -6,18 +6,19 @@
 					<b-breadcrumb-item to="/">
 						<i class="fas fa-home"></i>
 					</b-breadcrumb-item>
-					<b-breadcrumb-item to="/desktop/project">我的项目</b-breadcrumb-item>
+					<b-breadcrumb-item to="/desktop/project">{{ $t('project.breadcrumb') }}</b-breadcrumb-item>
 					<b-breadcrumb-item active>{{ projectName }}</b-breadcrumb-item>
 				</b-breadcrumb>
 
 				<b-nav tabs small class="detail-nav">
 					<b-nav-item
-						v-for="(nav, index) in navList"
+						v-for="(nav, index) in navExtend"
 						:key="index"
-						:href="`#/desktop/project/${projectId}/${nav.href}`"
-						:active="routeName === nav.routeName"
-						:title="nav.name"
-					><i :class="`${nav.icon} mr-2`"></i>{{ nav.name }}</b-nav-item>
+						exact
+						exact-active-class="active"
+						:to="`/desktop/project/${projectId}/${nav.path}`"
+						:title="nav.label.main ? $t(nav.label.main) : nav.label.sub"
+					>{{ nav.label.main ? $t(nav.label.main) : nav.label.sub }}</b-nav-item>
 				</b-nav>
 			</b-container>
 		</div>
@@ -33,21 +34,14 @@ export default {
 	data() {
 		return {
 			projectName: '',
-			navList: [
-				{ name: '项目属性', icon: 'fas fa-align-justify', href: 'property', routeName: 'project-property' },
-				{ name: '项目成员', icon: 'fas fa-users', href: 'member', routeName: 'project-member' },
-				{ name: '版本信息', icon: 'fas fa-bookmark', href: 'version', routeName: 'project-version' },
-				{ name: '阶段追踪', icon: 'fas fa-shoe-prints', href: 'track', routeName: 'project-track' },
-				{ name: '长标题测试长标题测试长标题测试', icon: 'fas fa-atom', href: '', routeName: '' },
-			]
 		};
 	},
 	computed: {
 		projectId() {
 			return this.$route.params.projectId;
 		},
-		routeName() {
-			return this.$route.name;
+		navExtend() {
+			return this.sdlc.workbench.project;
 		}
 	},
 	mounted() {

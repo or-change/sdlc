@@ -13,14 +13,14 @@ export const store = window.store = {
 		nav: {
 			order: [],
 			items: [
-				{ path: '/overview', label: { sub: '概览' } },
-				{ path: '/project', label: { sub: '我的项目' } }
+				{ path: 'overview', label: { main:'desktop.overview', sub: '概览' } },
+				{ path: 'project', label: { main:'desktop.project', sub: '我的项目' } }
 			]
 		},
 		account: {
 			order: [],
 			items: [
-				{ path: '/profile', label: { sub: '用户信息' } }
+				{ path: 'profile', label: { main: 'account.profile', sub: '用户信息' } }
 			]
 		},
 		admin: {
@@ -30,10 +30,10 @@ export const store = window.store = {
 		project: {
 			order: [],
 			topics: [
-				{ path: '/property', label: { sub: '项目属性' } },
-				{ path: '/member', label: { sub: '项目成员' } },
-				{ path: '/version', label: { sub: '版本信息' } },
-				{ path: '/track', label: { sub: '阶段追踪' } },
+				{ path: 'property', label: { main: 'project.property', sub: '项目属性' } },
+				{ path: 'member', label: { main: 'project.member', sub: '项目成员' } },
+				{ path: 'version', label: { main: 'project.version', sub: '版本信息' } },
+				{ path: 'track', label: { main: 'project.track', sub: '阶段追踪' } },
 			],
 			installers: []
 		}
@@ -71,7 +71,7 @@ function compile(items) {
 		}
 
 		options.push({
-			path, label: label.main ? label.main : label.sub
+			path, label
 		});
 	});
 
@@ -103,7 +103,7 @@ export function generateResult() {
 		home: home,
 		workbench: {
 			nav: sort(nav.items, nav.order).map(({ path, label }) => {
-				return { path: path, label: label.main ? label.main : label.sub };
+				return { path: path, label };
 			}),
 			account: accountOptions.options,
 			admin: adminOptions.options,

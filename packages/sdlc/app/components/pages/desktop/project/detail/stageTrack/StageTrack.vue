@@ -50,7 +50,7 @@
 			</b-col>
 		</b-row>
 
-		<h4 class="mb-3" style="font-weight:bold;color:#6772e5;">详情</h4>
+		<h4 class="mb-3">详情</h4>
 		<TraceDetail
 			:flowList="flowList"
 			:projectId="projectId"

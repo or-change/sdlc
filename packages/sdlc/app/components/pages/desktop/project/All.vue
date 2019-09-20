@@ -4,17 +4,15 @@
 			<b-breadcrumb-item to="/">
 				<i class="fas fa-home"></i>
 			</b-breadcrumb-item>
-			<b-breadcrumb-item active>我的项目</b-breadcrumb-item>
+			<b-breadcrumb-item active>{{ $t('projectAll.breadcrumb') }}</b-breadcrumb-item>
 		</b-breadcrumb>
-
-		<h4 class="mb-3" style="font-weight:bold;color:#6772e5;">项目列表</h4>
 
 		<div class="mb-3" style="position:relative;">
 			<b-form-checkbox-group
 				v-model="projectOwnerDisplay"
 				:options="[
-					{ text: '我负责的', value: 'owner' },
-					{ text: '我参与的', value: 'member' }
+					{ text: $t('projectAll.owned'), value: 'owner' },
+					{ text: $t('projectAll.joined'), value: 'member' }
 				]"
 				name="project-owner"
 				button-variant="primary"
