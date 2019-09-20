@@ -142,3 +142,17 @@ argument Object
 	Function setOrder(order Array),
 }
 
+阶段：
+
+src:
+可以扩展模型层，插件管理器添加接口，给addModel；
+exceptionLog 是否抛，判断环境
+
+app:
+默认的数据作为插件角色；
+label必须是i18n key;
+extend i18n;
+所有都给 id, pluginId
+给组装层plugin扩展实例；
+改变normalize
+topics add ownerOnly

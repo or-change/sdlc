@@ -6,21 +6,22 @@ export const store = window.store = {
 		AuthenticationPage: null,
 		Footer: null,
 		home: '/',
-		routes: []
+		routes: [],
+		i18n: []
 	},
 	workbench: {
 		routes: [],
 		nav: {
 			order: [],
 			items: [
-				{ path: 'overview', label: { main:'desktop.overview', sub: '概览' } },
-				{ path: 'project', label: { main:'desktop.project', sub: '我的项目' } }
+				{ path: 'overview', label: '概览' },
+				{ path: 'project', label: '我的项目' }
 			]
 		},
 		account: {
 			order: [],
 			items: [
-				{ path: 'profile', label: { main: 'account.profile', sub: '用户信息' } }
+				{ path: 'profile', label: '用户信息' }
 			]
 		},
 		admin: {
@@ -30,10 +31,10 @@ export const store = window.store = {
 		project: {
 			order: [],
 			topics: [
-				{ path: 'property', label: { main: 'project.property', sub: '项目属性' } },
-				{ path: 'member', label: { main: 'project.member', sub: '项目成员' } },
-				{ path: 'version', label: { main: 'project.version', sub: '版本信息' } },
-				{ path: 'track', label: { main: 'project.track', sub: '阶段追踪' } },
+				{ path: 'property', label: '项目属性' },
+				{ path: 'member', label: '项目成员' },
+				{ path: 'version', label: '版本信息' },
+				{ path: 'track', label: '阶段追踪' },
 			],
 			installers: []
 		}
@@ -102,9 +103,7 @@ export function generateResult() {
 		Footer: Footer,
 		home: home,
 		workbench: {
-			nav: sort(nav.items, nav.order).map(({ path, label }) => {
-				return { path: path, label };
-			}),
+			nav: sort(nav.items, nav.order),
 			account: accountOptions.options,
 			admin: adminOptions.options,
 			project: projectOptions.options

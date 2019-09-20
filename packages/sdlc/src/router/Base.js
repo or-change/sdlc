@@ -35,15 +35,6 @@ module.exports = function (router,
 			ctx.state.session.principal = principal;
 			ctx.body = principal;
 		})
-		.use(async (ctx, next) => {
-			const principal = await ctx.state.session.principal;
-
-			if (!principal) {
-				return ctx.throw(403, 'Unauthenticated.');
-			}
-
-			return next();
-		})
 		.del('/session/principal', AccessControl('session.principal.delete'), async ctx => {
 			ctx.body = ctx.state.session.principal;
 			delete ctx.state.session.principal;

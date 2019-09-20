@@ -16,6 +16,10 @@ module.exports = function ({ session }) {
 		app.use(async (ctx, next) => {
 			try {
 				await next();
+
+				AccessLog(
+					`${ctx.protocol} ${ctx.method} ${ctx.path} ${ctx.status} ${ctx.message} body: ${JSON.stringify(ctx.request.body)} query: ${JSON.stringify(ctx.request.query)}`
+				);
 			} catch (error) {
 				if (error.status) {
 					AccessLog.warn(`${ctx.protocol} ${ctx.method} ${ctx.path} ${error.status} ${error.message}`);
@@ -32,14 +36,6 @@ module.exports = function ({ session }) {
 		}));
 	
 		Session(app);
-		
-		app.use(async (ctx, next) => {
-			await next();
-
-			AccessLog(
-				`${ctx.protocol} ${ctx.method} ${ctx.path} ${ctx.status} ${ctx.message} body: ${JSON.stringify(ctx.request.body)} query: ${JSON.stringify(ctx.request.query)}`
-			);
-		});
 
 		app.use(AppRouter().routes());
 	}, {

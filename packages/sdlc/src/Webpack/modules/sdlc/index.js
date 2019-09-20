@@ -14,6 +14,10 @@ function PluginExtender(pluginId) {
 		
 			return this;
 		},
+		appendI18n(options) {
+			// i18n包
+			return this;
+		},
 		addNavItem(options) {
 			store.workbench.nav.items.push(navItemNormalize(options));
 
@@ -64,16 +68,6 @@ function Decorator() {
 			store.global.home = routerPath;
 		
 			return this;
-		},
-		getItems(type) {
-			return store.workbench[type].items.map(item => {
-				return { path: item.path, label: item.label.sub };
-			});
-		},
-		getTopics() {
-			return store.workbench.project.topics.map(topic => {
-				return { path: topic.path, label: topic.label.sub };
-			});
 		},
 		setOrder(type, order) {
 			store.workbench[type].order = orderNormalize(order);
