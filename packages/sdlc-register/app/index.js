@@ -1,18 +1,18 @@
 import SDLC from 'sdlc';
-import Git from '../app/components/Git';
+import Register from '../app/components/Register';
 
 SDLC.install('oc.com.or-change.cn', extend => {
 	extend
 		.appendRoutes([
 			{
-				path: 'git',
-				component: Git
+				path: 'register',
+				component: Register
 			}
 		])
 		.addTopicItem({
-			id: 'Git-topic',
-			component: Git,
-			label: 'git',
+			id: 'register-topic',
+			component: Register,
+			label: 'register',
 			install(extend) {
 				extend('add slots');
 			}

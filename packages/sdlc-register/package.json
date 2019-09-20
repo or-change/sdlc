@@ -19,7 +19,8 @@
     "url": "https://github.com/or-change/sdlc/issues"
   },
   "dependencies": {
-    "@or-change/sdlc": "^0.0.1"
+    "@or-change/sdlc": "^0.0.1",
+    "axios": "^0.19.0"
   },
   "devDependencies": {
     "mocha": "^6.2.0"
