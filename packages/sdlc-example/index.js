@@ -55,7 +55,7 @@ module.exports = SDLC({
 		register(),
 		poster
 	],
-	app: {
-		extend: path.resolve(__dirname, './app1/SDLCFactory.js')
-	}
+	// app: {
+	// 	extend: path.resolve(__dirname, './app1/SDLCFactory.js')
+	// }
 });

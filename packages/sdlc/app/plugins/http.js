@@ -1,10 +1,6 @@
-import axios from 'axios';
+import agent from 'http-agent';
 
 export default function install(Vue) {
-	const agent = axios.create({
-		baseURL: '/api'
-	});
-
 	Vue.prototype.$http = {
 		product: {
 			async get() {

@@ -2,7 +2,6 @@
 
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-// const normalize = require('./normalize');
 
 const BABEL_OPTIONS = {
 	presets: [
@@ -40,9 +39,10 @@ module.exports = function ({ Plugin }, options) {
 		resolve: {
 			extensions: ['.js', '.vue'],
 			alias: {
-				'sdlc': path.join(__dirname, './modules/SDLC.js'),
-				'sdlc-product-factory': options.app && options.app.extend ?
-					options.app.extend : path.join(__dirname, 'modules/DefaultFactory.js')
+				'http-agent': path.join(__dirname, './modules/axios.js'),
+				'sdlc-product-factory': options.app.extend ?
+					options.app.extend : path.join(__dirname, 'modules/DefaultFactory.js'),
+				'sdlc': path.join(__dirname, './modules/sdlc')
 			}
 		},
 		module: {
@@ -92,6 +92,10 @@ module.exports = function ({ Plugin }, options) {
 						'vue-style-loader',
 						'css-loader'
 					]
+				},
+				{
+					test: /\.yaml$/,
+					loader: 'yaml',
 				}
 			]
 		},
