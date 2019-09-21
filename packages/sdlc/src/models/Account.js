@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Account(store, { product, ModelLog }) {
+	Account(store, { product, Log }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -17,17 +17,17 @@ module.exports = {
 			methods: {
 				async create(payload) {
 					const account = await store.createAccount(payload);
-					product.emit('account-created', account);
 
-					ModelLog({ type: 'create account', info: account});
+					product.emit('account-created', account);
+					Log.model({ type: 'create account', info: account});
 
 					return account;
 				},
 				async update(payload) {
 					const account = await store.updateAccount(this.id, payload);
-					product.emit('account-updated', account);
 
-					ModelLog({ type: 'update account', info: account});
+					product.emit('account-updated', account);
+					Log.model({ type: 'update account', info: account});
 
 					return account;
 				},
@@ -36,9 +36,9 @@ module.exports = {
 				},
 				async delete() {
 					const account = await store.deleteAccount(this.id);
-					product.emit('account-deleted', account);
 
-					ModelLog({ type: 'delete account', info: account});
+					product.emit('account-deleted', account);
+					Log.model({ type: 'delete account', info: account});
 
 					return account;
 				}
@@ -46,6 +46,11 @@ module.exports = {
 		};
 	},
 	AccountList(store) {
+		const selector = {
+			all: store.queryAccountAll,
+			name: store.queryAccountByName
+		};
+
 		return {
 			schemas: {
 				type: 'array',
@@ -53,11 +58,6 @@ module.exports = {
 			},
 			methods: {
 				async query(query) {
-					const selector = {
-						all: store.queryAccountAll,
-						name: store.queryAccountByName
-					};
-
 					return await selector[query.selector](query.args);
 				}
 			}

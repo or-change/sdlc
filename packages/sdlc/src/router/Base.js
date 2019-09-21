@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = function (router,
-	{ AccessControl }, { product, Model, Plugin, authenticate, injection, AuthenticationLog }) {
-
+module.exports = function BaseRouter(router, { AccessControl }, {
+	product, Model, Plugin, authenticate, injection, Log
+}) {
 	router
 		.get('/product', AccessControl('product.query'), ctx => {
 			ctx.body = Object.assign({}, product.meta, {
@@ -14,7 +14,7 @@ module.exports = function (router,
 
 			if (!authentication) {
 				product.emit('authentication-failed');
-				AuthenticationLog.error(`Authentication failed. body: ${JSON.stringify(ctx.request.body)}`);
+				Log.authentication.error(`Authentication failed. body: ${JSON.stringify(ctx.request.body)}`);
 
 				return;
 			}
@@ -30,19 +30,9 @@ module.exports = function (router,
 			const principal = { authedAt, credential, account };
 
 			product.emit('authentication-succeed', principal);
-			AuthenticationLog(`Authentication succeed. principal: ${JSON.stringify(principal)}`);
-
+			Log.authentication.info(`Authentication succeed. principal: ${JSON.stringify(principal)}`);
 			ctx.state.session.principal = principal;
 			ctx.body = principal;
-		})
-		.use(async (ctx, next) => {
-			const principal = await ctx.state.session.principal;
-
-			if (!principal) {
-				return ctx.throw(403, 'Unauthenticated.');
-			}
-
-			return next();
 		})
 		.del('/session/principal', AccessControl('session.principal.delete'), async ctx => {
 			ctx.body = ctx.state.session.principal;

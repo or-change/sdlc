@@ -19,7 +19,7 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 		.post('/',Validator.Body(schema), AccessControl('trace.create'), async ctx => {
 			const { parentId, stageId, versionId, flowId, abstract } = ctx.request.body;
 			const projectId = ctx.state.project.id;
-			
+
 			const existedTrace = await Model.TraceList.query({
 				selector: 'projectId',
 				args: {
@@ -77,26 +77,30 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 			const projectId = ctx.state.project.id;
 
 			const query = {
-				selector: 'projectId', args: { projectId }
+				selector: 'projectId',
+				args: { projectId }
 			};
 
 			if (flowId) {
-				query.selector = 'flowId'; query.args = { projectId, flowId };
+				query.selector = 'flowId';
+				query.args = { projectId, flowId };
 			}
 
 			if (stageId) {
-				query.selector = 'stageId'; query.args = { projectId, stageId: Number(stageId) };
+				query.selector = 'stageId';
+				query.args = { projectId, stageId: Number(stageId) };
 			}
 
 			if (versionId) {
-				query.selector = 'versionId'; query.args = { projectId, versionId };
+				query.selector = 'versionId';
+				query.args = { projectId, versionId };
 			}
 
 			ctx.body = await Model.TraceList.query(query);
 		});
 
 	mountRouter('Trace', router);
-	
+
 	router
 		.param('traceId', async (tranceId, ctx, next) => {
 			const trace = await Model.Trace.query(tranceId);

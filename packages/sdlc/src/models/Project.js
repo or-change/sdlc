@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Project(store, { product, ModelLog }) {
+	Project(store, { product, Log }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -19,7 +19,7 @@ module.exports = {
 					const project = await store.createProject(payload);
 
 					product.emit('project-created', project);
-					ModelLog({ type: 'create project', info: project});
+					Log.model({ type: 'create project', info: project});
 
 					return project;
 				},
@@ -27,7 +27,7 @@ module.exports = {
 					const project = await store.updateProject(this.id, payload);
 
 					product.emit('project-updated', project);
-					ModelLog({ type: 'update project', info: project});
+					Log.model({ type: 'update project', info: project});
 
 					return project;
 				},
@@ -36,9 +36,9 @@ module.exports = {
 				},
 				async delete() {
 					const project = await store.deleteProject(this.id);
-					
+
 					product.emit('project-deleted', project);
-					ModelLog({ type: 'delete project', info: project});
+					Log.model({ type: 'delete project', info: project});
 
 					return project;
 				}
@@ -46,6 +46,12 @@ module.exports = {
 		};
 	},
 	ProjectList(store) {
+		const selector = {
+			all: store.queryProjectAll,
+			ownerId: store.queryProjectByOwnerId,
+			memberOf: store.queryProjectByMember
+		};
+
 		return {
 			schemas: {
 				type: 'array',
@@ -53,18 +59,12 @@ module.exports = {
 			},
 			methods: {
 				async query(query) {
-					const selector = {
-						all: store.queryProjectAll,
-						ownerId: store.queryProjectByOwnerId,
-						memberOf: store.queryProjectByMember
-					};
-
 					return await selector[query.selector](query.args);
 				}
 			}
 		};
 	},
-	Member(store, { ModelLog }) {
+	Member(store, { Log }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -82,14 +82,14 @@ module.exports = {
 				async create(payload) {
 					const member = await store.createMember(payload);
 
-					ModelLog({ type: 'create member', info: member});
+					Log.model({ type: 'create member', info: member});
 
 					return member;
 				},
 				async update(payload) {
 					const member = await store.updateMember(this.id, payload);
 
-					ModelLog({ type: 'delete member', info: member});
+					Log.model({ type: 'delete member', info: member});
 
 					return member;
 				},
@@ -100,6 +100,11 @@ module.exports = {
 		};
 	},
 	MemberList(store) {
+		const selector = {
+			projectId: store.queryMemberByProjecyId,
+			accountId: store.queryMemberByAccountId
+		};
+
 		return {
 			schemas: {
 				type: 'array',
@@ -110,11 +115,6 @@ module.exports = {
 			},
 			methods: {
 				async query(query) {
-					const selector = {
-						projectId: store.queryMemberByProjecyId,
-						accountId: store.queryMemberByAccountId
-					};
-
 					return await selector[query.selector](query.args);
 				}
 			}
