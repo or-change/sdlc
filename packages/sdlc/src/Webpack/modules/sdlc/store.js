@@ -7,22 +7,20 @@ export const store = window.store = {
 		Footer: null,
 		home: '/',
 		routes: [],
-		i18n: []
+		i18n: {
+			zh: [],
+			en: []
+		}
 	},
 	workbench: {
 		routes: [],
 		nav: {
 			order: [],
-			items: [
-				{ path: 'overview', label: '概览' },
-				{ path: 'project', label: '我的项目' }
-			]
+			items: []
 		},
 		account: {
 			order: [],
-			items: [
-				{ path: 'profile', label: '用户信息' }
-			]
+			items: []
 		},
 		admin: {
 			order: [],
@@ -30,49 +28,73 @@ export const store = window.store = {
 		},
 		project: {
 			order: [],
-			topics: [
-				{ path: 'property', label: '项目属性' },
-				{ path: 'member', label: '项目成员' },
-				{ path: 'version', label: '版本信息' },
-				{ path: 'track', label: '阶段追踪' },
-			],
+			topics: [],
 			installers: []
 		}
 	}
 };
 
-function sort(items, order) {
+function sort(allItems, order) {
 	const result = [];
-	const unOrder = [];
 
-	items.forEach((item, index) => {
-		const position = order.indexOf(index);
+	order.forEach(orderItem => {
+		const { id, items } = orderItem;
+		const targetItem = allItems.find(item => item.id === id);
 
-		if (position !== -1) {
-			result[position] = item;
-		} else {
-			unOrder.push(item);
+		if (items) {
+			const subItems = [];
+
+			items.forEach(subItemId => {
+				const targetSubItem = targetItem.items.find(item => item.id === subItemId);
+
+				subItems.push(targetSubItem);
+			});
+
+			targetItem.items = subItems;
 		}
+
+		result.push(targetItem);
 	});
 
-	return result.concat(unOrder);
+	return result;
 }
 
-function compile(items) {
+function compile(allItems) {
 	const routes = [];
 	const options = [];
 
-	items.forEach(item => {
-		const { path, component, label } = item;
+	allItems.forEach(item => {
+		const { id, pluginId, component, label, items } = item;
 
 		if (component) {
+			const path = `${pluginId}/${id}`;
+
 			routes.push({
 				path, component
 			});
+
+			options.push({
+				path, label
+			});
+
+			return;
 		}
 
+		const subItems = items.forEach(item => {
+			const { id, component, label } = item;
+			const path = `${pluginId}/${id}`;
+
+			routes.push({
+				path, component
+			});
+
+			return {
+				path, label
+			};
+		});
+
 		options.push({
-			path, label
+			label, items: subItems
 		});
 	});
 
@@ -84,7 +106,7 @@ export function generateResult() {
 		routes: workbenchRoutes, nav, account, admin, project
 	} = store.workbench;
 	const {
-		routes: globalRoutes, AuthenticationPage, Footer, home
+		routes: globalRoutes, AuthenticationPage, Footer, home, i18n
 	} = store.global;
 
 	const accountOptions = compile(sort(account.items, account.order));
@@ -102,6 +124,7 @@ export function generateResult() {
 		AuthenticationPage: AuthenticationPage,
 		Footer: Footer,
 		home: home,
+		i18n,
 		workbench: {
 			nav: sort(nav.items, nav.order),
 			account: accountOptions.options,

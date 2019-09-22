@@ -3,9 +3,13 @@ import SDLCProductFactory from 'sdlc-product-factory';
 
 import { store, generateResult } from './store';
 import {
-	routerNormalize, navItemNormalize, itemNormalize,
+	routerNormalize, navNormalize, itemNormalize,
 	topicNormalize, orderNormalize
 } from './normalize';
+
+const DEFAULT_PLUGINID = [
+	'oc.com.sdlc.core', 'oc.com.sdlc.assemble'
+];
 
 function PluginExtender(pluginId) {
 	return {
@@ -15,32 +19,49 @@ function PluginExtender(pluginId) {
 			return this;
 		},
 		appendI18n(options) {
-			// i18n包
+			Object.keys(options).forEach(key => {
+				store.global.i18n[key] ?
+					store.global.i18n[key].concat(options[key]) : options[key];
+			});
+
 			return this;
 		},
 		addNavItem(options) {
-			store.workbench.nav.items.push(navItemNormalize(options));
+			const navItem = navNormalize(options);
+			navItem.pluginId = pluginId;
+
+			store.workbench.nav.items.push(navItem);
 
 			return this;
 		},
 		addAccountItem(options) {
-			store.workbench.account.items.push(itemNormalize(options));
+			const accountItem = itemNormalize(options);
+			accountItem.pluginId = pluginId;
+
+			store.workbench.account.items.push(accountItem);
 
 			return this;
 		},
 		addAdminItem(options) {
-			store.workbench.admin.items.push(itemNormalize(options));
+			const adminItem = itemNormalize(options);
+			adminItem.pluginId = pluginId;
+
+			store.workbench.admin.items.push(adminItem);
 
 			return this;
 		},
 		addTopicItem(options) {
-			const { id, path, component, label, extend, target } = topicNormalize(options);
+			const {
+				id, component, label, extend, target, items, ownerOnly
+			} = topicNormalize(options);
 
 			if (target) {
 				store.workbench.project.installers.push(target);
 			}
 
-			store.workbench.project.topics.push({ id, pluginId, path, label, component, extend });
+			store.workbench.project.topics.push({
+				id, pluginId, label, component, extend, items, ownerOnly
+			});
 
 			return this;
 		}
@@ -73,7 +94,8 @@ function Decorator() {
 			store.workbench[type].order = orderNormalize(order);
 
 			return this;
-		}
+		},
+		pluginExtender: PluginExtender(DEFAULT_PLUGINID[1])
 	};
 }
 
@@ -94,7 +116,7 @@ export default {
 		store.compiled = true;
 
 		const { data } = await agent.get('/product');
-		const plugins = data.plugins.map(plugin => plugin.id);
+		const plugins = data.plugins.map(plugin => plugin.id).concat(DEFAULT_PLUGINID);
 
 		Object.keys(store.plugins).forEach(pluginId => {
 			if (plugins.indexOf(pluginId) === -1) {

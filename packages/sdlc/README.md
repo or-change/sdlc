@@ -146,6 +146,7 @@ argument Object
 
 src:
 可以扩展模型层，插件管理器添加接口，给addModel；
+事件注册表
 exceptionLog 是否抛，判断环境
 
 app:

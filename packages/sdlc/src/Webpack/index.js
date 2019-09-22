@@ -26,6 +26,7 @@ module.exports = function ({ Plugin }, options) {
 			bundle: [
 				'@babel/polyfill/dist/polyfill.min.js'
 			].concat(Plugin.entrys).concat([
+				path.resolve(__dirname, '../../app/extend'),
 				path.resolve(__dirname, '../../app/index.js')
 			])
 		},
