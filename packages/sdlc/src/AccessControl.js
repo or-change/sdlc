@@ -15,10 +15,11 @@ module.exports = {
 			return ctx.state.session.principal.account.administrator;
 		},
 		function memberOfProject(ctx) {
-			return ctx.state.session.principal.account.id === ctx.state.project.ownerId || 
-				ctx.state.memberList.find(member => {
-					return ctx.state.session.principal.account.id === member.accountId;
-				});
+			const { principal } = ctx.state.session;
+			const { project, memberList } = ctx.state;
+
+			return principal.account.id === project.ownerId ||
+				memberList.find(member => principal.account.id === member.accountId);
 		},
 		function projectOwnerOnly(ctx) {
 			return ctx.state.session.principal.account.id === ctx.state.project.ownerId;

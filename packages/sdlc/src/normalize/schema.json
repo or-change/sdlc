@@ -1,7 +1,9 @@
 {
 	"type": "object",
 	"additionalProperties": false,
-	"required": ["store"],
+	"required": [
+		"store"
+	],
 	"properties": {
 		"plugins": {
 			"type": "array"
@@ -144,15 +146,38 @@
 			},
 			"additionalProperties": false,
 			"required": [
-				"createAccount", "queryAccountAll", "queryAccountByName",
-				"getAccount", "updateAccount", "deleteAccount", "createProject",
-				"queryProjectAll", "queryProjectByOwnerId", "queryProjectByMember",
-				"getProject", "updateProject", "deleteProject", "createMember",
-				"queryMemberByProjecyId", "queryMemberByAccountId", "getMember",
-				"updateMember", "createVersion", "queryVersionByProjectId",
-				"getVersion", "updateVersion", "createFlow", "queryFlowByProjectId",
-				"getFlow", "createTrace", "queryTraceByProjectId", "queryTraceByFlowId",
-				"queryTraceByStageId", "queryTraceByVersionId", "getTrace", "updateTrace",
+				"createAccount",
+				"queryAccountAll",
+				"queryAccountByName",
+				"getAccount",
+				"updateAccount",
+				"deleteAccount",
+				"createProject",
+				"queryProjectAll",
+				"queryProjectByOwnerId",
+				"queryProjectByMember",
+				"getProject",
+				"updateProject",
+				"deleteProject",
+				"createMember",
+				"queryMemberByProjecyId",
+				"queryMemberByAccountId",
+				"getMember",
+				"updateMember",
+				"createVersion",
+				"queryVersionByProjectId",
+				"getVersion",
+				"updateVersion",
+				"createFlow",
+				"queryFlowByProjectId",
+				"getFlow",
+				"createTrace",
+				"queryTraceByProjectId",
+				"queryTraceByFlowId",
+				"queryTraceByStageId",
+				"queryTraceByVersionId",
+				"getTrace",
+				"updateTrace",
 				"deleteTrace"
 			]
 		},

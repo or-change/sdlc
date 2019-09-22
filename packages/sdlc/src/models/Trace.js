@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Trace(store, { ModelLog }) {
+	Trace(store, { Log }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -27,7 +27,7 @@ module.exports = {
 				async create(payload) {
 					const trace = await store.createTrace(payload);
 
-					ModelLog({ type: 'create trace', info: trace});
+					Log.model({ type: 'create trace', info: trace});
 
 					return trace;
 				},
@@ -37,21 +37,28 @@ module.exports = {
 				async update(payload) {
 					const trace = await store.updateTrace(this.id, payload);
 
-					ModelLog({ type: 'update trace', info: trace});
+					Log.model({ type: 'update trace', info: trace});
 
 					return trace;
 				},
 				async delete() {
 					const trace = await store.deleteTrace(this.id);
 
-					ModelLog({ type: 'delete trace', info: trace});
-					
+					Log.model({ type: 'delete trace', info: trace});
+
 					return trace;
 				}
 			}
 		};
 	},
 	TraceList(store) {
+		const selector = {
+			projectId: store.queryTraceByProjectId,
+			flowId: store.queryTraceByFlowId,
+			stageId: store.queryTraceByStageId,
+			versionId: store.queryTraceByVersionId
+		};
+
 		return {
 			schemas: {
 				type: 'array',
@@ -62,13 +69,6 @@ module.exports = {
 			},
 			methods: {
 				async query(query) {
-					const selector = {
-						projectId: store.queryTraceByProjectId,
-						flowId: store.queryTraceByFlowId,
-						stageId: store.queryTraceByStageId,
-						versionId: store.queryTraceByVersionId
-					};
-
 					return await selector[query.selector](query.args);
 				}
 			}

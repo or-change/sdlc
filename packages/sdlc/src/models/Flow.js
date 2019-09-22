@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Flow(store, { ModelLog }) {
+	Flow(store, { Log }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -46,7 +46,7 @@ module.exports = {
 				async create(payload) {
 					const flow = await store.createFlow(payload);
 
-					ModelLog({ type: 'create flow', info: flow});
+					Log.model({ type: 'create flow', info: flow});
 
 					return flow;
 				},
@@ -57,6 +57,10 @@ module.exports = {
 		};
 	},
 	FlowList(store) {
+		const selector = {
+			projectId: store.queryFlowByProjectId
+		};
+
 		return {
 			schemas: {
 				type: 'array',
@@ -74,14 +78,10 @@ module.exports = {
 			},
 			methods: {
 				async query(query) {
-					const selector = {
-						projectId: store.queryFlowByProjectId
-					};
-
 					return await selector[query.selector](query.args);
 				}
 			}
 		};
-	} 
+	}
 };
 // flow template 有emit必要??

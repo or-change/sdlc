@@ -70,7 +70,7 @@ module.exports = function (router, { AccessControl, mountRouter, Validator  }, {
 		});
 
 	mountRouter('Flow', router);
-	
+
 	router
 		.param('flowId', async (flowId, ctx, next) => {
 			const flow = await Model.Flow.query(flowId);
@@ -93,5 +93,5 @@ module.exports = function (router, { AccessControl, mountRouter, Validator  }, {
 			ctx.body = await flow.$update(Object.assign({}, flow, { stageList }));
 		});
 
-	mountRouter('Flow', router, '/:flowId');
+	mountRouter('$flow', router, '/:flowId');
 };

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Version(store, { ModelLog }) {
+	Version(store, { Log }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -17,15 +17,21 @@ module.exports = {
 				async create(payload) {
 					const version = await store.createVersion(payload);
 
-					ModelLog({ type: 'create version', info: version });
+					Log.model({
+						type: 'create version',
+						info: version
+					});
 
 					return version;
 				},
 				async update(payload) {
 					const version = await store.updateVersion(this.id, payload);
 
-					ModelLog({ type: 'update version', info: version });
-					
+					Log.model({
+						type: 'update version',
+						info: version
+					});
+
 					return version;
 				},
 				async query(versionId) {
@@ -35,6 +41,10 @@ module.exports = {
 		};
 	},
 	VersionList(store) {
+		const selector = {
+			projectId: store.queryVersionByProjectId
+		};
+
 		return {
 			schemas: {
 				type: 'array',
@@ -45,10 +55,6 @@ module.exports = {
 			},
 			methods: {
 				async query(query) {
-					const selector = {
-						projectId: store.queryVersionByProjectId
-					};
-					
 					return await selector[query.selector](query.args);
 				}
 			}

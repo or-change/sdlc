@@ -1,4 +1,4 @@
-
+'use strict';
 
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
@@ -21,7 +21,6 @@ const BABEL_OPTIONS = {
 };
 
 module.exports = function ({ Plugin }, options) {
-
 	return {
 		entry: {
 			bundle: [
@@ -39,7 +38,6 @@ module.exports = function ({ Plugin }, options) {
 		resolve: {
 			extensions: ['.js', '.vue'],
 			alias: {
-				'http-agent': path.join(__dirname, './modules/axios.js'),
 				'sdlc-product-factory': options.app.extend ?
 					options.app.extend : path.join(__dirname, 'modules/DefaultFactory.js'),
 				'sdlc': path.join(__dirname, './modules/sdlc')

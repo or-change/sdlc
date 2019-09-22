@@ -41,10 +41,13 @@ function normalize(options) {
 			routers: {},
 			install: () => {}
 		};
-	
+
 		const {
-			id: _id, name: _name, description: _description,
-			entry: _entry, routers: _routers = finalOptions.routers,
+			id: _id,
+			name: _name,
+			description: _description,
+			entry: _entry,
+			routers: _routers = finalOptions.routers,
 			install: _install = finalOptions.install
 		} = option;
 
@@ -54,7 +57,7 @@ function normalize(options) {
 		finalOptions.entry = _entry;
 		finalOptions.routers = _routers;
 		finalOptions.install = _install;
-	
+
 		return finalOptions;
 	});
 }
@@ -81,9 +84,11 @@ function validate(plugins) {
 
 module.exports = function (plugins) {
 	const store = { routers: {} };
+
 	mountPoints.forEach(mountPoint => store.routers[mountPoint] = []);
 
 	const finalPlugins = normalize(plugins);
+
 	validate(finalPlugins);
 
 	finalPlugins.forEach(({ routers }) => {
@@ -111,8 +116,11 @@ module.exports = function (plugins) {
 			},
 			get entrys() {
 				const webpackEntrys = [];
+
 				finalPlugins.forEach(({ entry }) => {
-					if (entry) { webpackEntrys.push(entry); }
+					if (entry) {
+						webpackEntrys.push(entry);
+					}
 				});
 
 				return webpackEntrys;

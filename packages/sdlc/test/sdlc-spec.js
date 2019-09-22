@@ -7,7 +7,7 @@ const models = [
 	require('../src/models/Account'),
 	require('../src/models/Project'),
 	require('../src/models/Version'),
-	require('../src/models/Flow'),  
+	require('../src/models/Flow'),
 	require('../src/models/Trace')
 ].reduce((all, group) => Object.assign(all, group), {});
 
@@ -22,7 +22,7 @@ const Model = Datahub.create({
 			modelOptions[key] = Object.assign({}, models[key](store, {
 				product: {
 					emit: () => {}
-				}, 
+				},
 				ModelLog: () => {}
 			}), {
 				symbol: key
