@@ -16,7 +16,7 @@ module.exports = function gitPlugin() {
 			Plugin: (router, context) => {
 				const { Validator } = context;
 				
-				router.post('/git/clone', async ctx => {
+				router.get('/git/clone', async ctx => {
 					// const validate = Validator({
 					// 	type: 'object',
 					// 	properties: {
@@ -32,7 +32,7 @@ module.exports = function gitPlugin() {
 					// 	return ctx.throw(400, 'Invalid parameter: missing parameter `url`');
 					// }
 
-					const { url } = ctx.request.body;
+					const { url } = ctx.request.query;
 
 					if (!url) {
 						return ctx.throw(400, 'Invalid parameter: missing parameter `url`');
@@ -95,7 +95,10 @@ module.exports = function gitPlugin() {
 							}
 						}
 
-						return ctx.body = 'download successfully';
+						ctx.set('Content-disposition', `attachment; filename=${projectName}.zip`);
+						ctx.set('Content-type', 'application/octet-stream');
+
+						return ctx.body = fs.createReadStream(finalPath);
 					}
 				});
 			}

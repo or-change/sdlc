@@ -7,7 +7,8 @@ const store = {
 	member: require('./store/member.json'),
 	flow: require('./store/flow.json'),
 	stage: require('./store/stage.json'),
-	trace: require('./store/trace.json')
+	trace: require('./store/trace.json'),
+	accountInfo: require('./store/accountInfo.json')
 };
 
 function filterDate(arr) {
@@ -26,6 +27,7 @@ module.exports = function Store(data = {
 	flow: filterDate(store.flow),
 	stage: filterDate(store.stage),
 	trace: filterDate(store.trace),
+	accountInfo: filterDate(store.accountInfo)
 }) {
 	const store = {
 		createAccount({
@@ -296,6 +298,17 @@ module.exports = function Store(data = {
 			const index = data.trace.findIndex(trace => trace.id === traceId);
 
 			return data.trace.splice(index, 1)[0];
+		},
+		createAccountInfo({ id, email }) {
+			const accountInfo = {
+				id, 
+				email,
+				createdAt: new Date()
+			};
+
+			data.accountInfo.push(accountInfo);
+
+			return accountInfo;
 		}
 	};
 
