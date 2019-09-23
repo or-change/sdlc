@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Account(store, { product, Log }) {
+	Account(store, { channel, Log }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -18,7 +18,7 @@ module.exports = {
 				async create(payload) {
 					const account = await store.createAccount(payload);
 
-					product.emit('account-created', account);
+					channel.emit('account-created', account);
 					Log.model({ type: 'create account', info: account});
 
 					return account;
@@ -26,7 +26,7 @@ module.exports = {
 				async update(payload) {
 					const account = await store.updateAccount(this.id, payload);
 
-					product.emit('account-updated', account);
+					channel.emit('account-updated', account);
 					Log.model({ type: 'update account', info: account});
 
 					return account;
@@ -37,7 +37,7 @@ module.exports = {
 				async delete() {
 					const account = await store.deleteAccount(this.id);
 
-					product.emit('account-deleted', account);
+					channel.emit('account-deleted', account);
 					Log.model({ type: 'delete account', info: account});
 
 					return account;

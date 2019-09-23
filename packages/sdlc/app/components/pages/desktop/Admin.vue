@@ -10,7 +10,7 @@
 							:to="`/desktop/admin/${nav.path}`"
 							exact
 							exact-active-class="active"
-						>{{ nav.label.main ? $t(nav.label.main) : nav.label.sub }}</b-nav-item>
+						>{{ $t(nav.label) }}</b-nav-item>
 					</b-nav>
 				</b-card>
 			</b-col>

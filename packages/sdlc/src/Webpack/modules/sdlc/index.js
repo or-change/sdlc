@@ -24,7 +24,7 @@ function PluginExtender(pluginId) {
 		},
 		appendI18n(options) {
 			Object.keys(options).forEach(key => {
-				store.global.i18n[key] ?
+				store.global.i18n[key] = store.global.i18n[key] ?
 					store.global.i18n[key].concat(options[key]) : options[key];
 			});
 

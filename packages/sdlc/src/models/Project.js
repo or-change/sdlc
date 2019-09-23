@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	Project(store, { product, Log }) {
+	Project(store, { channel, Log }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -18,7 +18,7 @@ module.exports = {
 				async create(payload) {
 					const project = await store.createProject(payload);
 
-					product.emit('project-created', project);
+					channel.emit('project-created', project);
 					Log.model({ type: 'create project', info: project});
 
 					return project;
@@ -26,7 +26,7 @@ module.exports = {
 				async update(payload) {
 					const project = await store.updateProject(this.id, payload);
 
-					product.emit('project-updated', project);
+					channel.emit('project-updated', project);
 					Log.model({ type: 'update project', info: project});
 
 					return project;
@@ -37,7 +37,7 @@ module.exports = {
 				async delete() {
 					const project = await store.deleteProject(this.id);
 
-					product.emit('project-deleted', project);
+					channel.emit('project-deleted', project);
 					Log.model({ type: 'delete project', info: project});
 
 					return project;
@@ -64,7 +64,7 @@ module.exports = {
 			}
 		};
 	},
-	Member(store, { Log }) {
+	Member(store, { Log, channel }) {
 		return {
 			schemas: {
 				type: 'object',
@@ -82,6 +82,7 @@ module.exports = {
 				async create(payload) {
 					const member = await store.createMember(payload);
 
+					channel.emit('member-created', member);
 					Log.model({ type: 'create member', info: member});
 
 					return member;
@@ -89,6 +90,7 @@ module.exports = {
 				async update(payload) {
 					const member = await store.updateMember(this.id, payload);
 
+					channel.emit('member-deleted', member);
 					Log.model({ type: 'delete member', info: member});
 
 					return member;

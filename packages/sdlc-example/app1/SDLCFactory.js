@@ -5,4 +5,11 @@ export default function (Decorator) {
 		path: '/welcome',
 		component: Welcome
 	}]);
+
+	Decorator.setOrder('project', [
+		{ id: 'project.property'},
+		{ id: 'project.member'},
+		{ id: 'project.version'},
+		{ id: 'project.track'}
+	]);
 }

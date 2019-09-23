@@ -6,10 +6,21 @@ import en from './langs/en.yaml';
 
 Vue.use(VueI18n);
 
-const messages = { zh, en };
+export default function (extension) {
+	const messages = {};
 
-export default new VueI18n({
-	locale: 'zh',
-	messages
-});
+	extension.zh = extension.zh.concat(zh);
+	extension.en = extension.en.concat(en);
+
+	Object.keys(extension).forEach(lang => {
+		messages[lang] = Object.assign({}, ...extension[lang]);
+	});
+
+	console.log(extension);
+
+	return new VueI18n({
+		locale: 'zh',
+		messages
+	});
+}
 

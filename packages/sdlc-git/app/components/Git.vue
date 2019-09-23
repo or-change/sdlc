@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import agent from 'http-agent';
+import axios from 'axios';
 
 export default {
 	data() {
@@ -67,7 +67,7 @@ export default {
 			this.loading = true;
 		
 			try {
-				await agent.post('/plugin/git/clone', { url: this.url });
+				await axios.post('/api/plugin/git/clone', { url: this.url });
 
 				this.loading = false;
 				this.downloadState.success = true;

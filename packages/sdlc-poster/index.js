@@ -4,43 +4,15 @@ module.exports = {
 	id: 'com.test.poster',
 	name: 'poster',
 	install(injection) {
+		const channel = injection.channel;
+
+		Object.keys(channel.list).forEach(channelName => {
+			channel.on(channelName, function (a) {
+				console.log(a);
+			});
+		});
 	},
 	models: {
-		Account(store, { product, Log }) {
-			return {
-				schemas: {
-					type: 'object',
-					properties: {
-						id: { type: 'string' },
-						name: { type: 'string' },
-						avatarHash: { type: 'string' },
-						administrator: { type: 'boolean'},
-						createdAt: { type: 'date'}
-					},
-					allowNull: ['avatarHash']
-				},
-				methods: {
-					async create(payload) {
-						const account = await store.createAccount(payload);
-	
-						return account;
-					},
-					async update(payload) {
-						const account = await store.updateAccount(this.id, payload);
-	
-						return account;
-					},
-					async query(accountId) {
-						return await store.getAccount(accountId);
-					},
-					async delete() {
-						const account = await store.deleteAccount(this.id);
-	
-						return account;
-					}
-				}
-			};
-		},
 		AccountInfo(store) {
 			return {
 				schemas: {

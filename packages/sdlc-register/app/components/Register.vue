@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import agent from 'http-agent';
+import axios from 'axios';
 
 function defaultAccount() {
 	return {
@@ -91,7 +91,7 @@ export default {
 		async create() {
 
 			try {
-				const newAccount = await agent.post('/account/register', this.account);
+				const newAccount = await axios.post('/api/account/register', this.account);
 	
 				if (newAccount) {
 					this.createState.success = true;

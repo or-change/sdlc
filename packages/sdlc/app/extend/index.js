@@ -57,7 +57,7 @@ const topicItems = [
 ];
 
 SDLC.install('oc.com.sdlc.core', (extender) => {
-	routes.forEach(router => extender.appendRoutes(router));
+	extender.appendRoutes(routes);
 	navItems.forEach(navItem => extender.addNavItem(navItem));
 	topicItems.forEach(topic => extender.addTopicItem(topic));
 

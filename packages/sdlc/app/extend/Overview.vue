@@ -43,8 +43,6 @@ export default {
 	},
 	mounted() {
 		this.queryProjectList();
-		console.log(this.sdlc);
-		
 	},
 	methods: {
 		async queryProjectList() {

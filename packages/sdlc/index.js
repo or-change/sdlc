@@ -30,6 +30,8 @@ const EVENTS = {
 	'project-created': [],
 	'project-updated': [],
 	'project-deleted': [],
+	'member-created': [],
+	'member-deleted': [],
 	'authentication-failed': [],
 	'authentication-succeed': []
 };
@@ -123,7 +125,7 @@ module.exports = function SDLC(options) {
 			const eventEmitter = new EventEmitter();
 
 			injection.channel = {
-				get channels() {
+				get list() {
 					const channels = {};
 
 					Object.keys(EVENTS).forEach(eventName => {

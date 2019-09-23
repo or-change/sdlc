@@ -46,7 +46,6 @@ module.exports = function registerPlugin() {
 					return ctx.body = account;
 				});
 			}
-		},
-		entry: path.join(__dirname, '/app/index.js')
+		}
 	};
 };

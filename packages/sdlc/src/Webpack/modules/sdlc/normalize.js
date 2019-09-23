@@ -43,11 +43,11 @@ export function i18nNormalize(options) {
 export function navNormalize(options) {
 	navItemnormalize(options);
 
-	const { path, label, items } = options;
+	const { id, path, label, items } = options;
 
 	if (path) {
 		return {
-			path, label,
+			id, path, label,
 		};
 	}
 
@@ -66,7 +66,7 @@ export function navNormalize(options) {
 	});
 
 	return {
-		label, items: subNav
+		id, label, items: subNav
 	};
 }
 

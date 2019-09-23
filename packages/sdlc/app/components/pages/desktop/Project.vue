@@ -17,8 +17,8 @@
 						exact
 						exact-active-class="active"
 						:to="`/desktop/project/${projectId}/${nav.path}`"
-						:title="nav.label.main ? $t(nav.label.main) : nav.label.sub"
-					>{{ nav.label.main ? $t(nav.label.main) : nav.label.sub }}</b-nav-item>
+						:title="$t(nav.label)"
+					>{{ $t(nav.label) }}</b-nav-item>
 				</b-nav>
 			</b-container>
 		</div>

@@ -17,7 +17,7 @@
 					:key="index"
 					:href="`#/desktop/${nav.path}`" 
 					class="ml-2"
-				>{{ nav.label.main ? $t(nav.label.main) : nav.label.sub }}</b-nav-item>
+				>{{ $t(nav.label) }}</b-nav-item>
 			</b-navbar-nav>
 
 			<!-- Right aligned nav items -->
@@ -34,7 +34,7 @@
 					>{{principalName}}</template>
 
 					<b-dropdown-item
-						href="#/desktop/account"
+						:href="`#/desktop/account/${sdlc.routes.account[0].path}`"
 					>{{ $t('desktop.account') }}</b-dropdown-item>
 					<b-dropdown-item
 						href="#/desktop/admin"

@@ -18,7 +18,7 @@ Vue.mixin(mixin);
 import App from './components/App';
 import store from './store';
 import Router from './router';
-import i18n from './i18n';
+import I18n from './i18n';
 
 import SDLC from 'sdlc';
 import SDLCProductFactory from 'sdlc-product-factory';
@@ -56,7 +56,7 @@ async function bootstrap() {
 		});
 	});
 
-	const app = new Vue({ store, router, i18n, render: h => h(App) });
+	const app = new Vue({ store, router, i18n: I18n(options.i18n), render: h => h(App) });
 
 	app.$mount('#app');
 }
