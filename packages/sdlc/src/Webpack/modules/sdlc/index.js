@@ -1,4 +1,4 @@
-import agent from 'http-agent';
+import axios from 'axios';
 import SDLCProductFactory from 'sdlc-product-factory';
 
 import { store, generateResult } from './store';
@@ -10,6 +10,10 @@ import {
 const DEFAULT_PLUGINID = [
 	'oc.com.sdlc.core', 'oc.com.sdlc.assemble'
 ];
+
+const agent = axios.create({
+	baseURL: '/api'
+});
 
 function PluginExtender(pluginId) {
 	return {

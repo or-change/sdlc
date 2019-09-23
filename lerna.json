@@ -2,9 +2,14 @@
   "packages": [
     "packages/*"
   ],
-  "bootstrap": {
-    "ignore": "component-*",
-    "npmClientArgs": ["--no-package-lock"]
+  "npmClient": "npm",
+  "command": {
+    "bootstrap": {
+      "npmClientArgs": [
+        "--no-package-lock",
+        "--registry=https://registry.npm.taobao.org"
+      ]
+    }
   },
   "version": "independent"
 }

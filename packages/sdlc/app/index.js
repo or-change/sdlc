@@ -1,7 +1,5 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.min.css';
-import './style.css';
+import './style.scss';
 
 import Vue from 'vue';
 

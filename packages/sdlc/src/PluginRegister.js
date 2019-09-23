@@ -29,6 +29,9 @@ function normalize(options) {
 				routers: {
 					type: 'object'
 				},
+				models: {
+					type: 'object'
+				},
 				install: {
 					instanceof: 'Function'
 				}
@@ -39,6 +42,7 @@ function normalize(options) {
 	return options.map(option => {
 		const finalOptions = {
 			routers: {},
+			models: {},
 			install: () => {}
 		};
 
@@ -48,6 +52,7 @@ function normalize(options) {
 			description: _description,
 			entry: _entry,
 			routers: _routers = finalOptions.routers,
+			models: _models = finalOptions.models,
 			install: _install = finalOptions.install
 		} = option;
 
@@ -56,34 +61,54 @@ function normalize(options) {
 		finalOptions.description = _description;
 		finalOptions.entry = _entry;
 		finalOptions.routers = _routers;
+		finalOptions.models = _models;
 		finalOptions.install = _install;
 
 		return finalOptions;
 	});
 }
 
-function validate(plugins) {
-	const pluginStore = [];
-
-	plugins.forEach(plugin => {
-		const { id, routers} = plugin;
-
-		if (pluginStore.indexOf(id) !== -1) {
-			throw new Error('The id of plugin is EXISTED.');
-		}
-
-		pluginStore.push(id);
-
-		Object.keys(routers).forEach(mountPoint => {
-			if (mountPoint.indexOf(mountPoint) === -1) {
-				throw new Error(`The '${mountPoint}' mountPoint of router is NOT existed.`);
-			}
-		});
-	});
-}
-
 module.exports = function (plugins) {
-	const store = { routers: {} };
+	const store = {
+		routers: {}
+	};
+
+	const registeredModel = [
+		'Account', 'AccountList', 'Flow', 'FlowList', 'Project', 'ProjectList',
+		'Trace', 'TraceList', 'Version', 'VersionList'
+	];
+
+	function validate(plugins) {
+		const pluginStore = [];
+	
+		plugins.forEach(plugin => {
+			const { id, routers, models } = plugin;
+	
+			if (pluginStore.indexOf(id) !== -1) {
+				throw new Error('The id of plugin is EXISTED.');
+			}
+	
+			pluginStore.push(id);
+	
+			Object.keys(routers).forEach(mountPoint => {
+				if (mountPoint.indexOf(mountPoint) === -1) {
+					throw new Error(`The '${mountPoint}' mountPoint of router is NOT existed.`);
+				}
+			});
+
+			Object.keys(models).forEach(modelName => {
+				if (registeredModel.indexOf(modelName) !== -1) {
+					throw new Error(`The model named '${modelName}' has registed.`);
+				}
+
+				if (typeof models[modelName] !== 'function') {
+					throw new Error(`The model named '${modelName}' should be a function.`);
+				}
+
+				registeredModel.push(modelName);
+			});
+		});
+	}
 
 	mountPoints.forEach(mountPoint => store.routers[mountPoint] = []);
 
@@ -97,39 +122,46 @@ module.exports = function (plugins) {
 		}
 	});
 
-	return function PluginAccessor() {
-		return {
-			RouterMounter(context, injection) {
-				const { KoaRouter } = context;
+	return {
+		RouterMounter(context, injection) {
+			const { KoaRouter } = context;
 
-				return function mountRouter(mountName, router, path) {
-					store.routers[mountName].forEach(Router => {
-						const childRouter = new KoaRouter();
+			return function mountRouter(mountName, router, path) {
+				store.routers[mountName].forEach(Router => {
+					const childRouter = new KoaRouter();
 
-						Router(childRouter, context, injection);
-						router.use(path ? path : '', childRouter.routes());
-					});
-				};
-			},
-			inject(injection) {
-				finalPlugins.forEach(({ install }) => install(injection));
-			},
-			get entrys() {
-				const webpackEntrys = [];
-
-				finalPlugins.forEach(({ entry }) => {
-					if (entry) {
-						webpackEntrys.push(entry);
-					}
+					Router(childRouter, context, injection);
+					router.use(path ? path : '', childRouter.routes());
 				});
+			};
+		},
+		inject(injection) {
+			finalPlugins.forEach(({ install }) => install(injection));
+		},
+		get models() {
+			const registeredModels = [];
 
-				return webpackEntrys;
-			},
-			get plugins() {
-				return finalPlugins.map(({ id, name, description }) => {
-					return { id, name, description };
-				});
-			}
-		};
+			finalPlugins.forEach(({ models }) => {
+				registeredModels.push(models);
+			});
+
+			return registeredModels;
+		},
+		get entrys() {
+			const webpackEntrys = [];
+
+			finalPlugins.forEach(({ entry }) => {
+				if (entry) {
+					webpackEntrys.push(entry);
+				}
+			});
+
+			return webpackEntrys;
+		},
+		get plugins() {
+			return finalPlugins.map(({ id, name, description }) => {
+				return { id, name, description };
+			});
+		}
 	};
 };

@@ -11,7 +11,8 @@ module.exports = Normalizer(
 				server: {
 					authenticate: () => {},
 					installed: () => {}	,
-					log: {}
+					log: {},
+					events: {}
 				},
 				app: {}
 			};
@@ -26,14 +27,16 @@ module.exports = Normalizer(
 			const {
 				authenticate: _authenticate = finalOptions.server.authenticate,
 				installed: _installed = finalOptions.server.installed,
-				log: _log = finalOptions.server.log
+				log: _log = finalOptions.server.log,
+				events: _events = finalOptions.server.events
 			} = _server;
 
 			finalOptions.plugins = _plugins;
 			finalOptions.server = {
 				authenticate: _authenticate,
 				installed: _installed,
-				log: _log
+				log: _log,
+				events: _events
 			};
 			finalOptions.store = _store;
 			finalOptions.app = _app;

@@ -11,6 +11,7 @@ const DuckKoaAcl = require('@or-change/duck-web-koa-acl');
 const DuckWebKoaRouter = require('@or-change/duck-web-koa-router');
 const DuckWebKoaValidator = require('@or-change/duck-web-koa-validator');
 const koaBody = require('koa-body');
+const EventEmitter = require('events');
 
 const AccessControl = require('./src/AccessControl');
 const router = require('./src/router');
@@ -22,11 +23,34 @@ const meta = require('./package.json');
 const normalize = require('./src/normalize');
 
 const APP_ID = 'com.orchange.sdlc';
+const EVENTS = {
+	'account-created': [],
+	'account-updated': [],
+	'account-deleted': [],
+	'project-created': [],
+	'project-updated': [],
+	'project-deleted': [],
+	'authentication-failed': [],
+	'authentication-succeed': []
+};
 
 module.exports = function SDLC(options) {
 	const sdlc = {};
 	const finalOptions = normalize(options);
-	const PluginAccessor = PluginRegister(finalOptions.plugins);
+
+	Object.keys(finalOptions.server.events).forEach(eventName => {
+		if (EVENTS[eventName]) {
+			throw new Error(`Event ${eventName} has been registered.`);
+		}
+
+		if (Array.isArray(EVENTS[eventName])) {
+			throw new Error(`The value of event ${eventName} should be an Array.`);
+		}
+
+		EVENTS[eventName] = options.server.events[eventName];
+	});
+
+	const pluginAccessor = PluginRegister(finalOptions.plugins);
 	const SDLCApplicationBackend = DuckWebKoa((app, { AppRouter, Session }, { Log }) => {
 		app.use(async (ctx, next) => {
 			try {
@@ -34,6 +58,10 @@ module.exports = function SDLC(options) {
 				Log.access.info('');
 			} catch (error) {
 				Log.access.error('');
+
+				if (error.status) {
+					throw error;
+				}
 			}
 		});
 
@@ -59,7 +87,7 @@ module.exports = function SDLC(options) {
 		description: meta.description,
 		injection: {
 			authenticate: finalOptions.server.authenticate,
-			Plugin: PluginAccessor()
+			Plugin: pluginAccessor
 		},
 		components: [
 			DuckWeb([
@@ -71,24 +99,13 @@ module.exports = function SDLC(options) {
 			DuckDatahub([
 				{
 					id: APP_ID,
-					models: models.reduce((all, group) => Object.assign(all, group), {})
+					models: models.concat(pluginAccessor.models).reduce((all, group) => Object.assign(all, group), {})
 				}
 			]),
 			DuckWebpack({ sdlc: Webpack }),
 			DuckLog()
 		],
 		installed({ Datahub, injection, Logger }) {
-			// const Logger = LoggerFactory(injection);
-			// const { access, model, authentication } = finalOptions.server.log;
-
-			// [
-			// 	{ type: 'AccessLog', options: access },
-			// 	{ type: 'ModelLog', options: model },
-			// 	{ type: 'AuthenticationLog', options: authentication },
-			// ].forEach(({ type, options }) => {
-			// 	injection[type] = Logger(type, options);
-			// });
-
 			injection.Log = {
 				access: Logger({
 					format() {
@@ -102,6 +119,31 @@ module.exports = function SDLC(options) {
 
 				})
 			};
+
+			const eventEmitter = new EventEmitter();
+
+			injection.channel = {
+				get channels() {
+					const channels = {};
+
+					Object.keys(EVENTS).forEach(eventName => {
+						channels[eventName] = EVENTS[eventName].map(item => item);
+					});
+
+					return channels;
+				},
+				emit(eventName, arg) {
+					if (!EVENTS[eventName]) {
+						throw new Error(`Event ${eventName} is not registered.`);
+					}
+
+					eventEmitter.emit(eventName, arg);
+				},
+				on(eventName, callback) {
+					eventEmitter.on(eventName, callback);
+				}
+			};
+
 			injection.Model = Datahub(APP_ID, finalOptions.store).model;
 			injection.Plugin.inject(injection);
 

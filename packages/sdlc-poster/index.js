@@ -5,6 +5,78 @@ module.exports = {
 	name: 'poster',
 	install(injection) {
 	},
+	models: {
+		Account(store, { product, Log }) {
+			return {
+				schemas: {
+					type: 'object',
+					properties: {
+						id: { type: 'string' },
+						name: { type: 'string' },
+						avatarHash: { type: 'string' },
+						administrator: { type: 'boolean'},
+						createdAt: { type: 'date'}
+					},
+					allowNull: ['avatarHash']
+				},
+				methods: {
+					async create(payload) {
+						const account = await store.createAccount(payload);
+	
+						return account;
+					},
+					async update(payload) {
+						const account = await store.updateAccount(this.id, payload);
+	
+						return account;
+					},
+					async query(accountId) {
+						return await store.getAccount(accountId);
+					},
+					async delete() {
+						const account = await store.deleteAccount(this.id);
+	
+						return account;
+					}
+				}
+			};
+		},
+		AccountInfo(store) {
+			return {
+				schemas: {
+					type: 'object',
+					properties: {
+						id: { type: 'string' },
+						name: { type: 'string' },
+						avatarHash: { type: 'string' },
+						administrator: { type: 'boolean'},
+						createdAt: { type: 'date'}
+					},
+					allowNull: ['avatarHash']
+				},
+				methods: {
+					async create(payload) {
+						const account = await store.createAccount(payload);
+	
+						return account;
+					},
+					async update(payload) {
+						const account = await store.updateAccount(this.id, payload);
+	
+						return account;
+					},
+					async query(accountId) {
+						return await store.getAccount(accountId);
+					},
+					async delete() {
+						const account = await store.deleteAccount(this.id);
+	
+						return account;
+					}
+				}
+			};
+		}
+	},
 	routers: {
 		Account: (router) => {
 			router.get('/test', ctx => {
@@ -17,8 +89,10 @@ module.exports = {
 				ctx.body = ctx.state.project;
 			});
 		},
-		Plugin: (router) => {
+		Plugin: (router, context, { Model }) => {
 			router.get('/test', ctx => {
+				Model.AccountInfo.query();
+
 				ctx.body = 'add success!!';
 			});
 		}
