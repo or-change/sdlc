@@ -1,8 +1,11 @@
 const path = require('path');
+const Model = require('./src/model');
 
 module.exports = {
-	id: 'com.test.poster',
+
+	id: 'com.orchange.sdlc.poster',
 	name: 'poster',
+	description: 'Monitor events and send mail',
 	install(injection) {
 		const channel = injection.channel;
 
@@ -12,62 +15,31 @@ module.exports = {
 			});
 		});
 	},
-	models: {
-		AccountInfo(store) {
-			return {
-				schemas: {
-					type: 'object',
-					properties: {
-						id: { type: 'string' },
-						name: { type: 'string' },
-						avatarHash: { type: 'string' },
-						administrator: { type: 'boolean'},
-						createdAt: { type: 'date'}
-					},
-					allowNull: ['avatarHash']
-				},
-				methods: {
-					async create(payload) {
-						const account = await store.createAccount(payload);
-	
-						return account;
-					},
-					async update(payload) {
-						const account = await store.updateAccount(this.id, payload);
-	
-						return account;
-					},
-					async query(accountId) {
-						return await store.getAccount(accountId);
-					},
-					async delete() {
-						const account = await store.deleteAccount(this.id);
-	
-						return account;
+	models: Model,
+	routers: {
+		Principal: (router, context) => {
+			const { Validator } = context;
+
+			router.post('/:accountId/email', async ctx => {
+				const { email } = ctx.request.body;
+				const { accountId } = ctx.params; 
+
+				if (accountId != ctx.state.session.principal.id) {
+					return ctx.throw(403, 'Invalid request: the user `accountId` not authenticated.');
+				}
+
+				try {
+					const accountInfo = await accountInfo.create({
+						id: accountId,
+						email
+					});
+
+					return ctx.body = accountInfo;
+				} catch (error) {
+					if (error) {
+						return ctx.throw(500, 'Create accountInfo failed!');
 					}
 				}
-			};
-		}
-	},
-	routers: {
-		Account: (router) => {
-			router.get('/test', ctx => {
-				ctx.body = 'add success!!';
-			});
-		},
-		$project: (router, context, injection) => {
-			router.get('/test', ctx => {
-				console.log(context, injection);
-				ctx.body = ctx.state.project;
-			});
-		},
-		Plugin: (router, context, { Model }) => {
-			router.get('/test', ctx => {
-				Model.AccountInfo.query();
-
-				ctx.body = 'add success!!';
-			});
-		}
 	},
 	entry: path.join(__dirname, './app/index.js')
 };
