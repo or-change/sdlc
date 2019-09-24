@@ -2,15 +2,9 @@
 	<div>
 		<div class="detail-header">
 			<b-container class="pt-3">
-				<b-breadcrumb class="detail-breadcrumb">
-					<b-breadcrumb-item to="/">
-						<i class="fas fa-home"></i>
-					</b-breadcrumb-item>
-					<b-breadcrumb-item to="/desktop/project">{{ $t('project.breadcrumb') }}</b-breadcrumb-item>
-					<b-breadcrumb-item active>{{ projectName }}</b-breadcrumb-item>
-				</b-breadcrumb>
+				<h4 class="mb-5">{{ projectName }}</h4>
 
-				<b-nav tabs small class="detail-nav">
+				<b-nav tabs class="detail-nav">
 					<b-nav-item
 						v-for="(nav, index) in navExtend"
 						:key="index"
@@ -61,14 +55,6 @@ export default {
 	background-color:#FAFBFC;
 	border-bottom: 1px solid #e1e4e8;
 
-	.detail-breadcrumb {
-		background-color:#FAFBFC;
-
-		.active {
-			background-color: #FAFBFC;
-		}
-	}
-
 	.detail-nav {
 		border-bottom:none;
 
@@ -79,6 +65,16 @@ export default {
 				overflow: hidden;
 				white-space: nowrap;
 				text-overflow: ellipsis;
+				position: relative;
+			}
+
+			.nav-link.active::after {
+				content: "";
+				width: 100%;
+				position: absolute;
+				top: 0;
+				left: 0;
+				border-top: 3px solid #FF7903;
 			}
 		}
 	}

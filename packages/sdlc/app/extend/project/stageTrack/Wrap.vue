@@ -87,25 +87,56 @@
 								'wrap-cell-hover': true,
 								'wrap-table-body-cell-full': stageList.length < 4,
 								'own-trace': trace.hash !== '',
-								'trace-active': trace.hash === active && trace.hash !== ''
+								'trace-active': trace.hash === active.traceActive && trace.hash !== ''
 							}"
 							@click="setTraceActive(trace.hash, 'wrap')"
-						></td>
+							:id="`wrap-body-cell-${trace.hash}`"
+						>
+							<b-popover ref="popover" :target="`wrap-body-cell-${trace.hash}`" triggers="hover" title="详情:">
+								<b-form-textarea
+									rows="5" no-resize size="sm"
+									readonly class="mb-2"
+									:value="trace.abstract"
+								></b-form-textarea>
+								<b-button
+									block
+									size="sm"
+									variant="primary"
+									@click="showModal('evolution-modal')"
+								><i
+									class="fas fa-plus mr-2"
+								/>演进</b-button>
+							</b-popover>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
+		<b-modal ref="evolution-modal" hide-footer scrollable title="演进">
+			<!-- <TraceEvolution
+				:traceList="traceList"
+				:traceActive="traceActive"
+				:flowSelected="flowSelected"
+				:versionSelector="versionSelector"
+				:promoted="versionDetail.promoted"
+				:evolutionStageSelector="evolutionStageSelector"
+				@queryTraceList="queryTraceList"
+			></TraceEvolution> -->
+		</b-modal>
 	</div>
 </template>
 
 <script>
 export default {
+	model: {
+		prop: 'active',
+		event: 'change'
+	},
 	props: {
 		traceData: Array,
 		stageList: Array,
 		versionList: Array,
-		active: String,
-		traceChanger: String
+		active: Object,
 	},
 	data() {
 		return {
@@ -120,8 +151,8 @@ export default {
 		versionList() {
 			this.wrapDataSort();
 		},
-		active(val) {
-			if (this.traceChanger === 'tree') {
+		'active.traceActive'(val) {
+			if (this.active.traceChanger === 'tree') {
 				const trace = this.traceData.find(ele => {
 					return ele.hash === val;
 				});
@@ -217,9 +248,14 @@ export default {
 		},
 		setTraceActive(hash, name) {
 			if (hash !== '') {
-				this.$emit('update:active', hash);
-				this.$emit('update:traceChanger', name);
+				this.$emit('change', {
+					traceActive: hash,
+					traceChanger: name
+				});
 			}
+		},
+		showModal(modalId) {
+			this.$refs[modalId].show();
 		}
 	},
 };

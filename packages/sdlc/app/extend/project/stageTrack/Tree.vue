@@ -20,7 +20,7 @@
 					:key="index" 
 					:class="{
 						'tree-table-body-row': true,
-						'trace-active': data.hash === active
+						'trace-active': data.hash === active.traceActive
 					}"
 					@click="setTraceActive(data.hash, 'tree')"
 				>
@@ -69,12 +69,15 @@
 
 <script>
 export default {
+	model: {
+		prop: 'active',
+		event: 'change'
+	},
 	props: {
 		traceData: Array,
 		versionList: Array,
 		flowList: Array,
-		active: String,
-		traceChanger: String
+		active: Object,
 	},
 	data() {
 		return {
@@ -82,8 +85,8 @@ export default {
 		};
 	},
 	watch: {
-		active(val) {
-			if (this.traceChanger === 'wrap') {
+		'active.traceActive'(val) {
+			if (this.active.traceChanger === 'wrap') {
 				const treeRow = this.treeDataList.findIndex(ele => {
 					return ele.hash === val;
 				});
@@ -101,8 +104,10 @@ export default {
 	methods: {
 		setTraceActive(hash, name) {
 			if (hash !== '') {
-				this.$emit('update:active', hash);
-				this.$emit('update:traceChanger', name);
+				this.$emit('change', {
+					traceActive: hash,
+					traceChanger: name
+				});
 			}
 		},
 		getDataList() {

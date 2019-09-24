@@ -1,7 +1,8 @@
 <template>
-	<div>
+	<div class="detail-member">
 		<h5 class="mb-3">已加入:</h5>
 		<b-table
+			v-if="accountList.length !== 0"
 			small
 			striped
 			hover
@@ -35,7 +36,7 @@
 
 		<h5 class="mb-3">未加入:</h5>
 		<b-row>
-			<b-col cols="6">
+			<b-col cols="4">
 				<b-form-group
 					label="搜索:"
 					label-cols-sm="3"
@@ -76,18 +77,18 @@
 
 <script>
 export default {
-	props: {
-		projectId: String,
-		memberList: Array,
-		accountList: Array,
-		projectOwner: String
-	},
 	data() {
 		return {
-			accountFilter: null,
+			projectOwner: null,
+			accountList: [],
+			memberList: [],
+			accountFilter: null
 		};
 	},
 	computed: {
+		projectId() {
+			return this.$route.params.projectId;
+		},
 		principalId() {
 			return this.$store.state.principal.id;
 		},
@@ -98,14 +99,29 @@ export default {
 			});
 		}
 	},
+	mounted() {
+		this.queryMemberList();
+		this.queryAccountList();
+		this.getProjectById();
+	},
 	methods: {
+		async queryMemberList() {
+			this.memberList = await this.$http.project.member(this.projectId).query();
+		},
+		async queryAccountList() {
+			this.accountList = await this.$http.account.query();
+		},
+		async getProjectById() {
+			const project = await this.$http.project.get(this.projectId);
+			this.projectOwner = project.ownerId;
+		},
 		async createMember(id) {
 			try {
 				await this.$http.project.member(this.projectId).create({
 					accountId: id,
 					inviter: this.principalId
 				});
-				this.$emit('queryMemberList');
+				this.queryMemberList();
 				this.showToast('success', '添加成功');
 			} catch (error) {
 				console.log(error);
@@ -115,17 +131,34 @@ export default {
 		async deleteMember(id) {
 			try {
 				await this.$http.project.member(this.projectId).delete(id);
-				this.$emit('queryMemberList');
+				this.queryMemberList();
 				this.showToast('success', '移除成功');
 			} catch (error) {
 				console.log(error);
 				this.showToast('danger', '移除失败');
 			}
-		},
+		}
 	}
 };
 </script>
 
-<style>
-
+<style lang="scss">
+.detail-member {
+	.member-list {
+		th {
+			width: 25%;
+		}
+		td {
+			width: 25%;
+		}
+	}
+	.account-list {
+		th {
+			width: 50%;
+		}
+		td {
+			width: 50%;
+		}
+	}
+}
 </style>

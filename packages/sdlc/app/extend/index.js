@@ -5,8 +5,8 @@ import DesktopProjectAll from './project/All';
 
 import AccountProfile from './Account';
 import ProjectDetailProperty from './project/Property';
-import ProjectDetailMember from './project/member/Member';
-import ProjectDetailVersion from './project/version/Version';
+import ProjectDetailMember from './project/Member';
+import ProjectDetailVersion from './project/Version';
 import ProjectStageTrack from './project/stageTrack/StageTrack';
 
 const routes = [

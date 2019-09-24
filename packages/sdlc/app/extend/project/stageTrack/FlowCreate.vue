@@ -88,7 +88,6 @@
 <script>
 export default {
 	props: {
-		projectId: String,
 		flowSelector: Array,
 	},
 	data() {
@@ -100,6 +99,11 @@ export default {
 				evolution: []
 			},
 		};
+	},
+	computed: {
+		projectId() {
+			return this.$route.params.projectId;
+		},
 	},
 	watch: {
 		'newFlow.stageList'() {

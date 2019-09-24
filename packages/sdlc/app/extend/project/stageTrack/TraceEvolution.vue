@@ -32,7 +32,6 @@
 <script>
 export default {
 	props: {
-		projectId: String,
 		evolutionStageSelector: Array,
 		versionSelector: Array,
 		promoted: Boolean,
@@ -50,6 +49,11 @@ export default {
 				abstract: ''
 			},
 		};
+	},
+	computed: {
+		projectId() {
+			return this.$route.params.projectId;
+		},
 	},
 	methods: {
 		async createTrace() {

@@ -11,44 +11,46 @@
 				{{ $t('desktop.title') }}
 			</b-navbar-brand>
 
-			<b-navbar-nav>
-				<b-nav-item 
-					v-for="(nav, index) in navExtend"
-					:key="index"
-					:href="`#/desktop/${nav.path}`" 
-					class="ml-2"
-				>{{ $t(nav.label) }}</b-nav-item>
-			</b-navbar-nav>
+			<b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-			<!-- Right aligned nav items -->
-			<b-navbar-nav class="ml-auto">
-				<b-nav-item-dropdown  :text="$t('desktop.lang')" right>
-					<b-dropdown-item @click="$i18n.locale='zh'">中文</b-dropdown-item>
-					<b-dropdown-item @click="$i18n.locale='en'">English</b-dropdown-item>
-				</b-nav-item-dropdown>
+			<b-collapse id="nav-collapse" is-nav>
+				<b-navbar-nav>
+					<b-nav-item 
+						v-for="(nav, index) in navExtend"
+						:key="index"
+						:href="`#/desktop/${nav.path}`" 
+					>{{ $t(nav.label) }}</b-nav-item>
+				</b-navbar-nav>
 
-				<b-nav-item-dropdown right>
-					<!-- Using 'button-content' slot -->
-					<template
-						slot="button-content"
-					>{{principalName}}</template>
+				<!-- Right aligned nav items -->
+				<b-navbar-nav class="ml-auto">
+					<b-nav-item-dropdown  :text="$t('desktop.lang')" right>
+						<b-dropdown-item @click="$i18n.locale='zh'">中文</b-dropdown-item>
+						<b-dropdown-item @click="$i18n.locale='en'">English</b-dropdown-item>
+					</b-nav-item-dropdown>
 
-					<b-dropdown-item
-						:href="`#/desktop/account/${sdlc.routes.account[0].path}`"
-					>{{ $t('desktop.account') }}</b-dropdown-item>
-					<b-dropdown-item
-						href="#/desktop/admin"
-					>{{ $t('desktop.admin') }}</b-dropdown-item>
-					<b-dropdown-divider></b-dropdown-divider>
-					<b-dropdown-item @click="signout">{{ $t('desktop.signout') }}</b-dropdown-item>
-				</b-nav-item-dropdown>
-			</b-navbar-nav> 
+					<b-nav-item-dropdown right>
+						<!-- Using 'button-content' slot -->
+						<template
+							slot="button-content"
+						>{{principalName}}</template>
+
+						<b-dropdown-item
+							:href="`#/desktop/account/${sdlc.routes.account[0].path}`"
+						>{{ $t('desktop.account') }}</b-dropdown-item>
+						<b-dropdown-item
+							href="#/desktop/admin"
+						>{{ $t('desktop.admin') }}</b-dropdown-item>
+						<b-dropdown-divider></b-dropdown-divider>
+						<b-dropdown-item @click="signout">{{ $t('desktop.signout') }}</b-dropdown-item>
+					</b-nav-item-dropdown>
+				</b-navbar-nav> 
+			</b-collapse>
 		</b-navbar>
 
 		<div 
 			id="app-desktop-container"
-			style="width: 100%; top: 56px; bottom: 0; overflow: auto;"
-			class="position-absolute"
+			style="width: 100%; overflow: auto;"
 		>
 			<router-view>桌面路由框架</router-view>
 		</div>

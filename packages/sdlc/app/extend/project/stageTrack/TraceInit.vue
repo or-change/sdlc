@@ -30,7 +30,6 @@
 <script>
 export default {
 	props: {
-		projectId: String,
 		initStageSelector: Array,
 		versionSelector: Array,
 		flowSelected: String
@@ -46,8 +45,10 @@ export default {
 			},
 		};
 	},
-	watch: {
-
+	computed: {
+		projectId() {
+			return this.$route.params.projectId;
+		},
 	},
 	methods: {
 		async traceInit() {

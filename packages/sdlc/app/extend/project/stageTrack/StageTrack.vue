@@ -10,9 +10,7 @@
 			</b-col>
 			<b-col cols="2">
 				<b-button
-					class="w-100"
-					size="sm"
-					variant="info"
+					class="w-100" size="sm" variant="info"
 					@click="showModal('create-flow-modal')"
 				><i
 					class="fas fa-plus mr-2"
@@ -20,9 +18,7 @@
 			</b-col>
 			<b-col cols="2">
 				<b-button
-					class="w-100"
-					size="sm"
-					variant="primary"
+					class="w-100" size="sm" variant="primary"
 					@click="showModal('init-flow-modal')"
 				><i
 					class="fas fa-plus mr-2"
@@ -35,17 +31,15 @@
 					:traceData="trackTraceList"
 					:stageList="trackStageList"
 					:versionList="versionList"
-					:active.sync="traceActive"
-					:traceChanger.sync="traceChanger"
+					v-model="active"
 				></stageTrackWrap>
 			</b-col>
 			<b-col cols="6" v-if="trackTraceList.length !== 0">
 				<stageTrackTree
 					:flowList="flowList"
 					:versionList="versionList"
-					:active.sync="traceActive"
 					:traceData="trackTraceList"
-					:traceChanger.sync="traceChanger"
+					v-model="active"
 				></stageTrackTree>
 			</b-col>
 		</b-row>
@@ -53,9 +47,8 @@
 		<h4 class="mb-3">详情</h4>
 		<TraceDetail
 			:flowList="flowList"
-			:projectId="projectId"
 			:traceList="traceList"
-			:traceActive="traceActive"
+			:traceActive="active.traceActive"
 			:flowSelected="flowSelected"
 			:trackStageList="trackStageList"
 			:versionSelector="versionSelector"
@@ -64,7 +57,6 @@
 
 		<b-modal ref="create-flow-modal" hide-footer scrollable title="创建新流程">
 			<FlowCreate
-				:projectId="projectId"
 				:flowSelector="flowSelector"
 				@queryFlowList="queryFlowList"
 			></FlowCreate>
@@ -72,7 +64,6 @@
 
 		<b-modal ref="init-flow-modal" hide-footer scrollable title="初始化">
 			<TraceInit
-				:projectId="projectId"
 				:flowSelected="flowSelected"
 				:versionSelector="versionSelector"
 				:initStageSelector="initStageSelector"
@@ -114,8 +105,10 @@ export default {
 			flowSelector: [],
 			flowSelected: '',
 
-			traceActive: null,
-			traceChanger: '',
+			active: {
+				traceActive: null,
+				traceChanger: null
+			}
 		};
 	},
 	computed: {
@@ -149,7 +142,7 @@ export default {
 						return null;
 					}
 				}).filter(stage => stage !== null);
-			this.traceActive = null;
+			this.active.traceActive = null;
 		},
 		versionList() {
 			this.versionSelector = this.versionList.map(version => {
@@ -184,7 +177,6 @@ export default {
 					return { value: flow.id, text: flow.name };
 				});
 			}
-			// console.log(flowList);
 		},
 		async queryTraceList() {
 			const traceList = await this.$http.project.trace(this.projectId).query();
@@ -203,7 +195,6 @@ export default {
 						};
 					});
 			}
-			// console.log(traceList);
 		},
 		async queryVersionList() {
 			this.versionList = await this.$http.project.version(this.projectId).query();

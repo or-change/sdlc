@@ -38,7 +38,6 @@
 
 		<b-modal ref="evolution-modal" hide-footer scrollable title="演进">
 			<TraceEvolution
-				:projectId="projectId"
 				:traceList="traceList"
 				:traceActive="traceActive"
 				:flowSelected="flowSelected"
@@ -56,7 +55,6 @@ import TraceEvolution from './TraceEvolution';
 
 export default {
 	props: {
-		projectId: String,
 		traceActive: String,
 		traceList: Array,
 		flowList: Array,
@@ -75,6 +73,11 @@ export default {
 				abstract: ''
 			}
 		};
+	},
+	computed: {
+		projectId() {
+			return this.$route.params.projectId;
+		},
 	},
 	watch: {
 		traceActive(val) {

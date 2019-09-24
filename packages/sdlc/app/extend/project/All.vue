@@ -7,7 +7,7 @@
 			<b-breadcrumb-item active>{{ $t('projectAll.breadcrumb') }}</b-breadcrumb-item>
 		</b-breadcrumb>
 
-		<div class="mb-3" style="position:relative;">
+		<div class="mb-3 position-relative">
 			<b-form-checkbox-group
 				v-model="projectOwnerDisplay"
 				:options="[
@@ -30,12 +30,13 @@
 			/>创建新项目</b-button>
 
 			<b-pagination
-				style="position:absolute;top:0;right:100px;"
 				size="sm" 
 				aria-controls="project-all"
 				v-model="currentPage" 
 				:total-rows="rows" 
 				:per-page="perPage"
+				class="position-absolute"
+				style="top:0;right:0;"
 			></b-pagination>
 		</div>
 

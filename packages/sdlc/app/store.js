@@ -16,11 +16,12 @@ export default new Vuex.Store({
 	actions: {
 		async authenticate(context) {
 			// get principle
-			context.commit('initPrincipal');
-
-			const principal = await Vue.prototype.$http.principal.get();
-
-			context.commit('assignPrincipal', principal);
+			try {
+				const principal = await Vue.prototype.$http.principal.get();
+				context.commit('assignPrincipal', principal);
+			} catch (error) {
+				context.commit('initPrincipal');
+			}
 		}
 	},
 	mutations: {
