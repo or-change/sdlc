@@ -1,0 +1,6 @@
+overview:
+  label: 'Overview'
+  projectTitle: 'Project'
+  projectSum: 'Project Count'
+  projectOwn: 'Project Owned'
+  projectMember: 'Project Joined'

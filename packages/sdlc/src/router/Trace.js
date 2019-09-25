@@ -4,7 +4,7 @@ const schema = {
 	type: 'object',
 	properties: {
 		parentId: { type: 'string' },
-		stageId: { type: 'string' },
+		stageId: { type: 'number' },
 		versionId: { type: 'string' },
 		flowId: { type: 'string' },
 		abstract: { type: 'string' }

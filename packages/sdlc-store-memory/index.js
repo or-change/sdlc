@@ -67,11 +67,11 @@ module.exports = function Store(data = {
 			return data.account.splice(index, 1)[0];
 		},
 		createProject({
-			name, ownerId, language, abstract
+			name, ownerId, abstract
 		}) {
 			const project = {
 				id: Math.random().toString(16).substr(2, 8),
-				name, ownerId, language, abstract,
+				name, ownerId, abstract,
 				createdAt: new Date()
 			};
 

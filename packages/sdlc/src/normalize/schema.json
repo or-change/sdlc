@@ -5,6 +5,9 @@
 		"store"
 	],
 	"properties": {
+		"namespace": {
+			"type": "string"
+		},
 		"plugins": {
 			"type": "array"
 		},

@@ -7,6 +7,7 @@ module.exports = Normalizer(
 	{
 		handler: options => {
 			const finalOptions = {
+				namespace: 'sdlc',
 				plugins: [],
 				server: {
 					authenticate: () => {},
@@ -18,6 +19,7 @@ module.exports = Normalizer(
 			};
 
 			const {
+				namespace: _namespace = finalOptions.namespace,
 				plugins: _plugins = finalOptions.plugins,
 				server: _server = finalOptions.server,
 				app: _app = finalOptions.app,
@@ -31,6 +33,7 @@ module.exports = Normalizer(
 				events: _events = finalOptions.server.events
 			} = _server;
 
+			finalOptions.namespace = _namespace;
 			finalOptions.plugins = _plugins;
 			finalOptions.server = {
 				authenticate: _authenticate,

@@ -1,0 +1,14 @@
+profile:
+  breadAccount: 'Account'
+  breadProfile: 'Profile'
+  username: 'Username'
+  administrator: 'Administrator'
+  update: 'Update'
+  adminYes: 'Yes'
+  adminNo: 'No'
+
+project:
+  property: 'Property'
+  member: 'Member'
+  version: 'Version'
+  track: 'Track'

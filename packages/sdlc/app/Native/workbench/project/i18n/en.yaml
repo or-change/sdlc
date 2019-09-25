@@ -1,0 +1,6 @@
+signin:
+  title: 'SDLC'
+  username: 'Username'
+  password: 'Password'
+  submit: 'SignIn'
+  footer: 'Or-Change'

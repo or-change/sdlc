@@ -1,0 +1,15 @@
+profile:
+  breadAccount: '用户'
+  breadProfile: '基本信息'
+  username: '用户名'
+  administrator: '管理员'
+  update: '更新'
+  adminYes: '是'
+  adminNo: '否'
+
+project:
+  breadcrumb: '我的项目'
+  property: '项目属性'
+  member: '项目成员'
+  version: '版本信息'
+  track: '阶段追踪'

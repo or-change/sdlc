@@ -4,10 +4,9 @@ const schema = {
 	type: 'object',
 	properties: {
 		name: { type: 'string' },
-		language: { type: 'string' },
 		abstract: { type: 'string' }
 	},
-	required: ['name', 'language', 'abstract'],
+	required: ['name', 'abstract'],
 	additionalProperties: false
 };
 
@@ -16,10 +15,10 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 
 	router
 		.post('/', validate, AccessControl('project.create'), async ctx => {
-			const { name, language, abstract } = ctx.request.body;
+			const { name, abstract } = ctx.request.body;
 
 			ctx.body = await Model.Project.create({
-				name, language, abstract,
+				name, abstract,
 				ownerId: ctx.state.session.principal.account.id
 			});
 		})
@@ -56,10 +55,10 @@ module.exports = function (router, { AccessControl, mountRouter, Validator }, { 
 			ctx.body = ctx.state.project;
 		})
 		.put('/:projectId', AccessControl('project.update'), validate, async ctx => {
-			const { name, language, abstract } = ctx.request.body;
+			const { name, abstract } = ctx.request.body;
 			const { project } = ctx.state;
 
-			ctx.body = await project.$update(Object.assign({}, project, { name, language, abstract}));
+			ctx.body = await project.$update(Object.assign({}, project, { name, abstract}));
 		})
 		.del('/:projectId', AccessControl('project.delete'), async ctx => {
 			ctx.body = await ctx.state.project.$delete();

@@ -2,6 +2,8 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './style.scss';
 
 import Vue from 'vue';
+import VueRouter from 'vue-router';
+
 
 import BootstrapVue from 'bootstrap-vue';
 import http from './plugins/http';
@@ -9,6 +11,7 @@ import dateFormat from './plugins/dateFormat';
 import customComponents from './components/utils';
 import mixin from './components/mixin';
 
+Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 Vue.use(http);
 Vue.use(dateFormat);
@@ -17,7 +20,6 @@ Vue.mixin(mixin);
 
 import App from './components/App';
 import store from './store';
-import Router from './router';
 import I18n from './i18n';
 
 import SDLC from 'sdlc';
@@ -26,12 +28,10 @@ import SDLCProductFactory from 'sdlc-product-factory';
 async function bootstrap() {
 	const options = await SDLC.compile(SDLCProductFactory);
 	
-	Vue.prototype.sdlc = options;
+	Vue.prototype.state = options.state;
 
-	const router = Router({
-		routes: options.routes,
-		AuthenticationPage: options.AuthenticationPage,
-		home: options.home
+	const router = new VueRouter({
+		routes: options.routes
 	});
 	
 	router.beforeEach((to, from, next) => {
@@ -44,11 +44,11 @@ async function bootstrap() {
 		
 			if (signedIn) {
 				if (to.matched.find(match => match.meta.unauthencated === true)) {
-					return next('/desktop');
+					return next(options.home);
 				}
 			} else {
 				if (to.matched.find(match => match.meta.authencated === true)) {
-					return next('/signin');
+					return next(options.authentication);
 				}
 			}
 			

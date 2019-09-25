@@ -157,3 +157,6 @@ extend i18n;
 给组装层plugin扩展实例；
 改变normalize
 topics add ownerOnly
+
+
+topic 图标 badge {label, icon badge}

@@ -53,20 +53,7 @@ module.exports = function SDLC(options) {
 	});
 
 	const pluginAccessor = PluginRegister(finalOptions.plugins);
-	const SDLCApplicationBackend = DuckWebKoa((app, { AppRouter, Session }, { Log }) => {
-		app.use(async (ctx, next) => {
-			try {
-				await next();
-				Log.access.info('');
-			} catch (error) {
-				Log.access.error('');
-
-				if (error.status) {
-					throw error;
-				}
-			}
-		});
-
+	const SDLCApplicationBackend = DuckWebKoa((app, { AppRouter, Session }) => {
 		app.use(koaBody({ multipart: true }));
 		Session(app);
 		app.use(AppRouter().routes());
@@ -86,6 +73,7 @@ module.exports = function SDLC(options) {
 		id: APP_ID,
 		name: 'sdlc',
 		version: meta.version,
+		namespace: finalOptions.namespace,
 		description: meta.description,
 		injection: {
 			authenticate: finalOptions.server.authenticate,
@@ -105,23 +93,19 @@ module.exports = function SDLC(options) {
 				}
 			]),
 			DuckWebpack({ sdlc: Webpack }),
-			DuckLog()
+			DuckLog({
+				access: {
+					format: DuckLog.Format.ApacheCLF()
+				},
+				model: {
+					format: DuckLog.Format.General()
+				},
+				authenticate: {
+					format: DuckLog.Format.General()
+				}
+			})
 		],
-		installed({ Datahub, injection, Logger }) {
-			injection.Log = {
-				access: Logger({
-					format() {
-
-					}
-				}),
-				model: Logger({
-
-				}),
-				authenticate: Logger({
-
-				})
-			};
-
+		installed({ Datahub, injection }) {
 			const eventEmitter = new EventEmitter();
 
 			injection.channel = {
@@ -147,12 +131,27 @@ module.exports = function SDLC(options) {
 			};
 
 			injection.Model = Datahub(APP_ID, finalOptions.store).model;
-			injection.Plugin.inject(injection);
+			injection.Plugin.inject(injection); //原型链继承injection
+
+			injection.options = {
+				get namesapce() {
+					return finalOptions.namesapce;
+				},
+				get store() {
+					return Object.assign({}, finalOptions.store);
+				}
+			};
 
 			finalOptions.server.installed(injection);
 		}
-	}, ({ Web, Webpack }) => {
-		sdlc.server = Web.Http.createServer(Web.Application('Default'));
+	}, ({ Web, Webpack, Log }) => {
+		const adapter = DuckLog.Adapter.HttpServer((req, res) => {
+			const requestListener = Web.Application('Default');
+
+			requestListener(req, res);
+		});
+
+		sdlc.server = Web.Http.createServer(adapter, abstract => Log.access(abstract));
 		sdlc.webpack = Webpack('sdlc', { app: finalOptions.app });
 	});
 

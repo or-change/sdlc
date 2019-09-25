@@ -14,7 +14,7 @@ module.exports = function BaseRouter(router, { AccessControl }, {
 
 			if (!authentication) {
 				channel.emit('authentication-failed');
-				Log.authentication.error(`Authentication failed. body: ${JSON.stringify(ctx.request.body)}`);
+				Log.authentication.error('Authentication failed.');
 
 				return;
 			}
@@ -30,7 +30,7 @@ module.exports = function BaseRouter(router, { AccessControl }, {
 			const principal = { authedAt, credential, account };
 
 			channel.emit('authentication-succeed', principal);
-			Log.authenticate.info(`Authentication succeed. principal: ${JSON.stringify(principal)}`);
+			Log.authenticate.info(`Authentication succeed. credentia: ${principal.credential}, accountId: ${principal.account.id}`);
 			ctx.state.session.principal = principal;
 			ctx.body = principal;
 		})

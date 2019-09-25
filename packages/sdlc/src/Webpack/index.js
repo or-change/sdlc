@@ -20,13 +20,24 @@ const BABEL_OPTIONS = {
 	sourceType: 'unambiguous'
 };
 
+const POSTCSS_OPTIONS = {
+	loader: 'postcss-loader',
+	options: {
+		plugins: {
+			autoprefixer: {
+				cascade: false
+			}
+		}
+	}
+};
+
 module.exports = function ({ Plugin }, options) {
 	return {
 		entry: {
 			bundle: [
 				'@babel/polyfill/dist/polyfill.min.js'
 			].concat(Plugin.entrys).concat([
-				path.resolve(__dirname, '../../app/extend'),
+				path.resolve(__dirname, '../../app/Native'),
 				path.resolve(__dirname, '../../app/index.js')
 			])
 		},
@@ -41,7 +52,7 @@ module.exports = function ({ Plugin }, options) {
 			alias: {
 				'sdlc-product-factory': options.app.extend ?
 					options.app.extend : path.join(__dirname, 'modules/DefaultFactory.js'),
-				'sdlc': path.join(__dirname, './modules/sdlc')
+				'sdlc': path.join(__dirname, './modules/SDLC')
 			}
 		},
 		module: {
@@ -82,6 +93,7 @@ module.exports = function ({ Plugin }, options) {
 					use: [
 						'vue-style-loader',
 						'css-loader',
+						POSTCSS_OPTIONS,
 						'sass-loader'
 					]
 				},
@@ -89,7 +101,8 @@ module.exports = function ({ Plugin }, options) {
 					test: /\.css$/,
 					use: [
 						'vue-style-loader',
-						'css-loader'
+						'css-loader',
+						POSTCSS_OPTIONS
 					]
 				},
 				{
