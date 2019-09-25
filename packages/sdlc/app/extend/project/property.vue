@@ -1,12 +1,13 @@
 <template>
 	<div>
+		<h4 class="my-3">基本属性</h4>
 		<b-row>
-			<b-col>
+			<b-col cols="3">
 				<b-form-group label="项目名称:">
 					<b-form-input trim size="sm" v-model="project.name"></b-form-input>
 				</b-form-group>
 			</b-col>
-			<b-col>
+			<!-- <b-col>
 				<b-form-group label="开发语言:">
 					<b-form-input v-model="project.language" size="sm"></b-form-input>
 				</b-form-group>
@@ -21,24 +22,17 @@
 					></b-form-input>
 				</b-form-group>
 			</b-col>
-			<b-col>
-				<b-form-group label="创建时间:">
-					<b-form-input :value="project.createdAt | dateFormat" size="sm" readonly></b-form-input>
-				</b-form-group>
-			</b-col>
-		</b-row>
-		<b-row>
+			-->
 			<b-col>
 				<b-form-group label="项目简介:">
-					<b-form-textarea
-						rows="3"
-						no-resize
+					<b-form-input
 						size="sm"
 						v-model="project.abstract"
-					></b-form-textarea>
+					></b-form-input>
 				</b-form-group>
 			</b-col>
 		</b-row>
+		
 		<b-row class="mb-3">
 			<b-col cols="2">
 				<b-button
@@ -51,7 +45,7 @@
 					class="fas fa-check mr-2"
 				/>更新项目属性</b-button>
 			</b-col>
-			<b-col cols="2">
+			<!-- <b-col cols="2">
 				<b-button
 					class="w-100"
 					size="sm"
@@ -60,12 +54,26 @@
 				><i
 					class="fas fa-times mr-2"
 				/>删除此项目</b-button>
-			</b-col>
+			</b-col> -->
 		</b-row>
+
+		<h4 class="my-3">项目成员</h4>
+		<projectMember></projectMember>
+
+		<h4 class="my-3">版本信息</h4>
+		<projectVersion></projectVersion>
+
+		<h4 class="my-3">阶段追踪</h4>
+		<stageTrack></stageTrack>
+
 	</div>
 </template>
 
 <script>
+import projectMember from './Member';
+import projectVersion from './Version';
+import stageTrack from './stageTrack/StageTrack';
+
 export default {
 	data() {
 		return {
@@ -78,6 +86,11 @@ export default {
 			},
 			accountList: [],
 		};
+	},
+	components: {
+		projectMember,
+		projectVersion,
+		stageTrack
 	},
 	computed: {
 		projectId() {

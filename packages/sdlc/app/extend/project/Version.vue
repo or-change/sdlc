@@ -1,67 +1,72 @@
 <template>
 	<div>
 		<b-row>
-			<b-col cols="3">
-				<b-form-group label="版本号: (格式: 1.0.0):">
-					<b-form-input 
-						v-model="versionSelected.semver" 
-						size="sm" 
-						:readonly="versionSelected.id !== ''"
-					></b-form-input>
-				</b-form-group>
-			</b-col>
-		</b-row>
-		<b-row>
 			<b-col>
-				<b-form-group label="版本简介:">
-					<b-form-textarea 
-						rows="3"
-						no-resize
-						size="sm" 
-						v-model="versionSelected.abstract"
-					></b-form-textarea>
-				</b-form-group>
+				<b-row>
+					<b-col cols="6">
+						<b-form-group label="版本号: (格式: 1.0.0):">
+							<b-form-input 
+								v-model="versionSelected.semver" 
+								size="sm" 
+								:readonly="versionSelected.id !== ''"
+							></b-form-input>
+						</b-form-group>
+					</b-col>
+				</b-row>
+				<b-row>
+					<b-col>
+						<b-form-group label="版本简介:">
+							<b-form-textarea 
+								rows="3"
+								no-resize
+								size="sm" 
+								v-model="versionSelected.abstract"
+							></b-form-textarea>
+						</b-form-group>
+					</b-col>
+				</b-row>
+				<b-row>
+					<b-col v-if="versionSelected.id === ''" cols="4">
+						<b-button
+							class="w-100" size="sm" variant="info"
+							@click="createVersion()"
+						><i
+							class="fas fa-plus mr-2"
+						/>添加新版本</b-button>
+					</b-col>
+					<b-col v-if="versionSelected.id !== ''" cols="4">
+						<b-button
+							class="w-100" size="sm" variant="success"
+							@click="updateVersion()"
+						><i
+							class="fas fa-check mr-2"
+						/>更新版本信息</b-button>
+					</b-col>
+				</b-row>
 			</b-col>
-		</b-row>
-		<b-row>
-			<b-col v-if="versionSelected.id === ''" cols="2">
-				<b-button
-					class="w-100" size="sm" variant="info"
-					@click="createVersion()"
-				><i
-					class="fas fa-plus mr-2"
-				/>添加新版本</b-button>
-			</b-col>
-			<b-col v-if="versionSelected.id !== ''" cols="2">
-				<b-button
-					class="w-100" size="sm" variant="success"
-					@click="updateVersion()"
-				><i
-					class="fas fa-check mr-2"
-				/>更新版本信息</b-button>
+			<b-col>
+				<b-table
+					small
+					hover
+					sticky-header
+					selectable
+					select-mode="single"
+					selected-variant="active"
+					@row-selected="onRowSelected"
+					:fields="[
+						{ key: 'semver', label: '版本号' },
+						{ key: 'createdAt', label: '创建时间' }
+					]"
+					:items="versionList"
+					class="version-list text-center"
+				>
+					<template
+						v-slot:cell(createdAt)="data"
+					>{{ data.item.createdAt | dateFormat }}</template>
+				</b-table>
 			</b-col>
 		</b-row>
 
-		<h5 class="my-3">版本列表:</h5>
-		<b-table
-			small
-			hover
-			sticky-header
-			selectable
-			select-mode="single"
-			selected-variant="active"
-			@row-selected="onRowSelected"
-			:fields="[
-				{ key: 'semver', label: '版本号' },
-				{ key: 'createdAt', label: '创建时间' }
-			]"
-			:items="versionList"
-			class="version-list text-center"
-		>
-			<template
-				v-slot:cell(createdAt)="data"
-			>{{ data.item.createdAt | dateFormat }}</template>
-		</b-table>
 	</div>
 </template>
 
@@ -95,7 +100,7 @@ export default {
 					return versionA.semver.replace(/\./g, '') - versionB.semver.replace(/\./g, '');
 				});
 			}
-			console.log(this.versionList);
+			// console.log(this.versionList);
 		},
 		async updateVersion() {
 			try {

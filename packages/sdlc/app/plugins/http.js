@@ -195,8 +195,25 @@ export default function install(Vue) {
 						const { data: flowList} = await agent.get(`/project/${projectId}/flow`, {
 							params: filter
 						});
-
-						return flowList;
+						
+						return flowList.map(flow => {
+							return {
+								id: flow.id,
+								name: flow.name,
+								parentId: flow.parentId,
+								projectId: flow.projectId,
+								evolution: flow.evolution,
+								createdAt: flow.createdAt,
+								stageList: flow.stageList.map((stage, index) => {
+									return {
+										name: stage.name,
+										initializable: flow.initializable[index],
+										promoted: flow.promoted[index],
+										plugins: stage.plugins
+									};
+								})
+							};
+						});
 					},
 					async get(flowId) {
 						const { data: flow} = await agent.get(`/project/${projectId}/flow/${flowId}`);

@@ -28,13 +28,13 @@
 						<b-form-checkbox switch v-model="stage.initializable">是否可初始化</b-form-checkbox>
 					</b-form-group>
 
-					<b-form-group label-size="sm" label="可用工具:">
-						<!-- <b-form-checkbox-group
+					<!-- <b-form-group label-size="sm" label="可用工具:">
+						<b-form-checkbox-group
 							v-model="stage.plugins"
 							:options="pluginList"
 							size="sm"
-						></b-form-checkbox-group> -->
-					</b-form-group>
+						></b-form-checkbox-group>
+					</b-form-group> -->
 
 					<b-button
 						class="w-100"
@@ -143,9 +143,22 @@ export default {
 			if (this.flowSelector.length === 0) {
 				this.newFlow.parentId = null;
 			}
+			// console.log(this.newFlow);
 			
 			try {
-				await this.$http.project.flow(this.projectId).create(this.newFlow);
+				await this.$http.project.flow(this.projectId).create({
+					name: this.newFlow.name,
+					parentId: this.newFlow.parentId,
+					evolution: this.newFlow.evolution,
+					promoted: this.newFlow.stageList.map(stage => stage.promoted),
+					initializable: this.newFlow.stageList.map(stage => stage.initializable),
+					stageList: this.newFlow.stageList.map(stage => {
+						return {
+							name: stage.name,
+							plugins: stage.plugins
+						};
+					})
+				});
 				this.showToast('success', '添加成功');
 				this.$emit('queryFlowList');
 			} catch (error) {

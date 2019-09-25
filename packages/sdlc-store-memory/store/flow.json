@@ -6,11 +6,17 @@
     "projectId": "76a1d62d",
     "evolution": [
         [
-            true
+            false, true, true
+        ],
+        [
+            true, true, true
+        ],
+        [
+            true, true, true
         ]
     ],
-    "promoted": [true],
-    "initializable": [true],
+    "promoted": [false, true, true],
+    "initializable": [true, false, false],
     "createdAt": "2019-09-11T07:04:47.370Z"
 	}
 ]

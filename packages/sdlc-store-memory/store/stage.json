@@ -6,5 +6,21 @@
 		"name": "stage 1",
 		"plugins": [],
 		"createdAt": "2019-09-11T07:04:47.370Z"
+	},
+	{
+		"id": "230f3111",
+		"flowId": "230f3110",
+		"index": 1,
+		"name": "stage 2",
+		"plugins": [],
+		"createdAt": "2019-09-11T07:04:47.370Z"
+	},
+	{
+		"id": "230f3112",
+		"flowId": "230f3110",
+		"index": 2,
+		"name": "stage 3",
+		"plugins": [],
+		"createdAt": "2019-09-11T07:04:47.370Z"
 	}
 ]

@@ -7,10 +7,9 @@ $col-width-fixed: 80px;
 .stage-track-wrap {
 	width: 100%;
 	position: relative;
+	height: $wrap-height;
 	background-color:#ffffff;
-	border-right: 1px solid #bbbbbb;
-	border-top: 1px solid #bbbbbb;
-	border-bottom: 1px solid #bbbbbb;
+	border: 1px solid #bbbbbb;
 
 	.wrap-header {
 		overflow: hidden;
@@ -31,9 +30,14 @@ $col-width-fixed: 80px;
 
 		.wrap-table-header-cell {
 			border-top: none !important;
+			border-left: none !important;
+		}
+
+		.wrap-table-body-cell {
+			border-left: none !important;
 		}
 		.wrap-side-body {
-			max-height: calc(#{$wrap-height} - (#{$header-row-height} + 5px));
+			max-height: calc(#{$wrap-height} - #{$header-row-height});
 			overflow: hidden;
 		}
 
@@ -49,7 +53,7 @@ $col-width-fixed: 80px;
 	}
 	
 	.wrap-body {
-		max-height: calc(#{$wrap-height} - (#{$header-row-height} + 5px));
+		// max-height: calc(#{$wrap-height} - (#{$header-row-height} + 5px));
 		overflow: hidden;
 
 		.wrap-table-body-cell:nth-last-child(1) {
@@ -99,11 +103,11 @@ $col-width-fixed: 80px;
 					}
 				}
 
-				&:nth-last-child(1) {
-					.wrap-table-body-cell {
-						border-bottom: none;
-					}
-				}
+				// &:nth-last-child(1) {
+				// 	.wrap-table-body-cell {
+				// 		border-bottom: none;
+				// 	}
+				// }
 			}
 
 			.wrap-table-body-cell {

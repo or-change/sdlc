@@ -1,77 +1,93 @@
 <template>
 	<div class="detail-member">
-		<h5 class="mb-3">已加入:</h5>
-		<b-table
-			v-if="accountList.length !== 0"
-			small
-			striped
-			hover
-			sticky-header
-			:fields="[
-				{ key: 'name', label: '姓名' },
-				{ key: 'inviter', label: '邀请者' },
-				{ key: 'joinedAt', label: '加入时间' },
-				{ key: 'action', label: '操作' }
-			]"
-			:items="memberList"
-			class="member-list text-center"
-		>
-			<template
-				v-slot:cell(name)="data"
-			>{{ accountList.find(account => account.id === data.item.accountId).name }}</template>
-			<template
-				v-slot:cell(inviter)="data"
-			>{{ accountList.find(account => account.id === data.item.inviter).name }}</template>
-			<template
-				v-slot:cell(joinedAt)="data"
-			>{{ data.item.joinedAt | dateFormat }}</template>
-			<template v-slot:cell(action)="data">
-				<b-button
-					size="sm"
-					variant="link"
-					@click="deleteMember(data.item.id)"
-				>移除</b-button>
-			</template>
-		</b-table>
-
-		<h5 class="mb-3">未加入:</h5>
 		<b-row>
-			<b-col cols="4">
-				<b-form-group
-					label="搜索:"
-					label-cols-sm="3"
-					label-size="sm"
+			<b-col>
+				<h5 class="mb-3">已加入:</h5>
+				<b-row>
+					<b-col cols="5">
+						<b-form-group
+							label="搜索:"
+							label-cols-sm="3"
+							label-size="sm"
+						>
+							<b-form-input
+								size="sm"
+								v-model="memberFilter"
+								type="search"
+							></b-form-input>
+						</b-form-group>
+					</b-col>
+				</b-row>
+				<b-table
+					v-if="accountList.length !== 0"
+					small
+					striped
+					hover
+					sticky-header
+					:fields="[
+						{ key: 'name', label: '姓名' },
+						{ key: 'inviter', label: '邀请者' },
+						{ key: 'joinedAt', label: '加入时间' },
+						{ key: 'action', label: '操作' }
+					]"
+					:items="memberRenderList"
+					:filter="memberFilter"
+					class="member-list text-center"
 				>
-					<b-form-input
-						size="sm"
-						v-model="accountFilter"
-						type="search"
-						placeholder="姓名"
-					></b-form-input>
-				</b-form-group>
+					<template
+						v-slot:cell(joinedAt)="data"
+					>{{ data.item.joinedAt | dateFormat }}</template>
+					<template v-slot:cell(action)="data">
+						<b-button
+							size="sm"
+							variant="link"
+							@click="deleteMember(data.item.id)"
+						>移除</b-button>
+					</template>
+				</b-table>
+			</b-col>
+			<b-col>
+
+				<h5 class="mb-3">未加入:</h5>
+				<b-row>
+					<b-col cols="5">
+						<b-form-group
+							label="搜索:"
+							label-cols-sm="3"
+							label-size="sm"
+						>
+							<b-form-input
+								size="sm"
+								v-model="accountFilter"
+								type="search"
+							></b-form-input>
+						</b-form-group>
+					</b-col>
+				</b-row>
+				<b-table
+					small
+					striped
+					hover
+					sticky-header
+					:fields="[
+						{ key: 'name', label: '姓名' },
+						{ key: 'action', label: '操作' }
+					]"
+					:items="accountNotMember"
+					:filter="accountFilter"
+					class="account-list text-center"
+				>
+					<template v-slot:cell(action)="data">
+						<b-button
+							size="sm"
+							variant="link"
+							@click="createMember(data.item.id)"
+						>添加</b-button>
+					</template>
+				</b-table>
 			</b-col>
 		</b-row>
-		<b-table
-			small
-			striped
-			hover
-			sticky-header
-			:fields="[
-				{ key: 'name', label: '姓名' },
-				{ key: 'action', label: '操作' }
-			]"
-			:items="accountNotMember"
-			:filter="accountFilter"
-			class="account-list text-center"
-		>
-			<template v-slot:cell(action)="data">
-				<b-button
-					size="sm"
-					variant="link"
-					@click="createMember(data.item.id)"
-				>添加</b-button>
-			</template>
-		</b-table>
+
 	</div>
 </template>
 
@@ -82,6 +98,7 @@ export default {
 			projectOwner: null,
 			accountList: [],
 			memberList: [],
+			memberFilter: null,
 			accountFilter: null
 		};
 	},
@@ -97,6 +114,17 @@ export default {
 				return !(this.memberList.find(member => account.id === member.accountId)
 					|| account.id === this.projectOwner);
 			});
+		},
+		memberRenderList() {
+			return this.memberList.map(member => {
+				return {
+					id: member.id,
+					name: this.accountList.find(account => account.id === member.accountId).name,
+					inviter: this.accountList.find(account => account.id === member.inviter).name,
+					joinedAt: member.joinedAt,
+					exitedAt: member.exitedAt
+				};
+			});
 		}
 	},
 	mounted() {
@@ -106,7 +134,9 @@ export default {
 	},
 	methods: {
 		async queryMemberList() {
-			this.memberList = await this.$http.project.member(this.projectId).query();
+			const memberList = await this.$http.project.member(this.projectId).query();
+			this.memberList = memberList.reverse();
+			// console.log(this.memberList);
 		},
 		async queryAccountList() {
 			this.accountList = await this.$http.account.query();

@@ -90,9 +90,14 @@
 								'trace-active': trace.hash === active.traceActive && trace.hash !== ''
 							}"
 							@click="setTraceActive(trace.hash, 'wrap')"
+							@contextmenu.prevent="showPopover(trace.hash)"
 							:id="`wrap-body-cell-${trace.hash}`"
 						>
-							<b-popover ref="popover" :target="`wrap-body-cell-${trace.hash}`" triggers="hover" title="详情:">
+							<b-popover
+								v-if="trace.hash !== ''"
+								:ref="`popover-${trace.hash}`" :target="`wrap-body-cell-${trace.hash}`" 
+								title="详情:" disabled
+							>
 								<b-form-textarea
 									rows="5" no-resize size="sm"
 									readonly class="mb-2"
@@ -102,7 +107,7 @@
 									block
 									size="sm"
 									variant="primary"
-									@click="showModal('evolution-modal')"
+									@click="showEvolutionModal(trace.hash)"
 								><i
 									class="fas fa-plus mr-2"
 								/>演进</b-button>
@@ -113,35 +118,50 @@
 			</table>
 		</div>
 		<b-modal ref="evolution-modal" hide-footer scrollable title="演进">
-			<!-- <TraceEvolution
+			<TraceEvolution
 				:traceList="traceList"
 				:traceActive="traceActive"
 				:flowSelected="flowSelected"
 				:versionSelector="versionSelector"
-				:promoted="versionDetail.promoted"
+				:promoted="tracePromoted"
 				:evolutionStageSelector="evolutionStageSelector"
 				@queryTraceList="queryTraceList"
-			></TraceEvolution> -->
+			></TraceEvolution>
 		</b-modal>
 	</div>
 </template>
 
 <script>
+import TraceEvolution from './TraceEvolution';
+
 export default {
 	model: {
 		prop: 'active',
 		event: 'change'
 	},
 	props: {
+		traceList: Array,
+		flowList: Array,
+		flowSelected: String,
+		versionSelector: Array,
+		trackStageList: Array,
+
 		traceData: Array,
 		stageList: Array,
+
 		versionList: Array,
 		active: Object,
+	},
+	components: {
+		TraceEvolution
 	},
 	data() {
 		return {
 			wrapDataList: [],
 			mousePosition: {},
+			traceActive: null,
+			evolutionStageSelector: [],
+			tracePromoted: true
 		};
 	},
 	watch: {
@@ -204,11 +224,13 @@ export default {
 				});
 				
 				if (stageVersionIndex !== -1) {
-					this.wrapDataList[stageVersionIndex].traceList[
+					const traceRow = this.wrapDataList[stageVersionIndex].traceList[
 						this.stageList.findIndex(wrapStage => {
 							return wrapStage === trace.stage;
 						})
-					].hash = trace.hash;
+					];
+					traceRow.hash = trace.hash;
+					traceRow.abstract = trace.abstract;
 				} else {
 					this.wrapDataList.push({
 						version: trace.version,
@@ -216,11 +238,13 @@ export default {
 							if (stage === trace.stage) {
 								return {
 									hash: trace.hash,
+									abstract: trace.abstract,
 									stage: stage
 								};
 							} else {
 								return {
 									hash: '',
+									abstract: trace.abstract,
 									stage: stage
 								};
 							}
@@ -254,8 +278,37 @@ export default {
 				});
 			}
 		},
-		showModal(modalId) {
-			this.$refs[modalId].show();
+		showEvolutionModal(traceId) {
+			this.traceActive = traceId;
+			const activeTrace = this.traceList.find(trace => trace.id === traceId);
+			const selectedFlow = this.flowList.find(flow => flow.id === this.flowSelected);
+
+			this.evolutionStageSelector = selectedFlow.evolution[activeTrace.stageId]
+				.map((evo, index) => {
+					if (evo) {
+						return {
+							value: index,
+							text: this.trackStageList[index]
+						};
+					} else {
+						return null;
+					}
+				}).filter(evo => evo !== null);
+			this.$refs[`popover-${traceId}`][0].doClose();
+			this.tracePromoted = selectedFlow.stageList[activeTrace.stageId].promoted;
+
+			this.$refs['evolution-modal'].show();
+		},
+		queryTraceList() {
+			this.$refs['evolution-modal'].hide();
+			this.$emit('queryTraceList');
+		},
+		showPopover(id) {
+			this.traceList.forEach(trace => {
+				this.$refs[`popover-${trace.id}`][0].doClose();
+			});
+			const ref = this.$refs[`popover-${id}`][0];
+			ref.localShow ? ref.doClose() : ref.doOpen();
 		}
 	},
 };

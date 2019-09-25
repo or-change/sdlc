@@ -12,7 +12,7 @@
 				v-model="projectOwnerDisplay"
 				:options="[
 					{ text: $t('projectAll.owned'), value: 'owner' },
-					{ text: $t('projectAll.joined'), value: 'member' }
+					{ text: $t('projectAll.joined'), value: 'member' },
 				]"
 				name="project-owner"
 				button-variant="primary"
@@ -47,11 +47,13 @@
 			:fields="[
 				{ key: 'name', label: '名称' },
 				{ key: 'language', label: '开发语言' },
+				{ key: 'owner', label: '负责人' },
 				{ key: 'createdAt', label: '创建时间' },
+				{ key: 'action', label: '操作' }
 			]"
 			id="project-all"
 			:items="projectRenderList"
-			:busy="isBusy"
+			:busy="projectIsBusy || accountIsBusy"
 			:per-page="perPage"
 			:current-page="currentPage"
 			class="text-center project-list"
@@ -60,8 +62,20 @@
 				<b-link :href='`#/desktop/project/${data.item.id}/${sdlc.routes.project[0].path}`'>{{ data.item.name }}</b-link>
 			</template>
 
+			<template v-slot:cell(owner)="data">
+				{{ accountList.find(account => account.id === data.item.ownerId).name }}
+			</template>
+
 			<template v-slot:cell(createdAt)="data">
 				{{ data.item.createdAt | dateFormat }}
+			</template>
+
+			<template v-slot:cell(action)="data">
+				<b-button
+					size="sm"
+					variant="link"
+					@click="deleteProject(data.item.id)"
+				>移除</b-button>
 			</template>
 
 			<template v-slot:table-busy>
@@ -121,7 +135,9 @@ export default {
 	data() {
 		return {
 			projectList: [],
-			isBusy: false,
+			accountList: [],
+			projectIsBusy: false,
+			accountIsBusy: false,
 			perPage: 15,
 			currentPage: 1,
 			projectOwnerDisplay: ['owner', 'member'],
@@ -173,12 +189,18 @@ export default {
 	},
 	mounted() {
 		this.queryProjectList();
+		this.queryAccountList();
 	},
 	methods: {
 		async queryProjectList() {
-			this.isBusy = true;
+			this.projectIsBusy = true;
 			this.projectList = await this.$http.project.query();
-			this.isBusy = false;
+			this.projectIsBusy = false;
+		},
+		async queryAccountList() {
+			this.accountIsBusy = true;
+			this.accountList = await this.$http.account.query();
+			this.accountIsBusy = false;
 		},
 		async createProject() {
 			this.newProject.ownerId =  this.principalId;
@@ -189,7 +211,17 @@ export default {
 				this.queryProjectList();
 			} catch (error) {
 				console.log(error);
-				this.showToast('danger', '创建失败');				
+				this.showToast('danger', '创建失败');
+			}
+		},
+		async deleteProject(projectId) {
+			try {
+				await this.$http.project.delete(projectId);
+				this.showToast('success', '删除成功');
+				this.queryProjectList();
+			} catch (error) {
+				console.log(error);
+				this.showToast('danger', '删除失败');
 			}
 		},
 		showCreateProjectModal() {
@@ -210,8 +242,11 @@ export default {
 
 <style lang="scss">
 .project-list {
+	th {
+		width: 20%;
+	}
 	td {
-		width: 33.33%;
+		width: 20%;
 	}
 }
 </style>

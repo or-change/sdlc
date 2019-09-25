@@ -5,10 +5,11 @@ $body-row-height: 30px;
 .stage-track-tree {
   max-height: $tree-height;
   width: 100%;
+  height: $tree-height;
   overflow: auto;
   position: relative;
   background-color:#ffffff;
-	border-top: 1px solid #bbbbbb;
+  border: 1px solid #bbbbbb;
 
   .tree-table {
     width: auto;
@@ -18,6 +19,7 @@ $body-row-height: 30px;
       height: $header-row-height;
       line-height: $header-row-height;
       border: 1px solid #bbbbbb;
+      border-left: none;
       border-top: none;
       white-space: nowrap;
       font-size: 14px;
@@ -30,7 +32,8 @@ $body-row-height: 30px;
         .tree-table-body-cell {
           min-width: 110px;
           white-space: nowrap;
-          border: 1px solid #bbbbbb;			
+          border: 1px solid #bbbbbb;
+          border-left: none;
           font-size: 12px;
           text-align: center;
           color: #605e5c;

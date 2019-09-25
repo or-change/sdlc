@@ -28,10 +28,16 @@
 		<b-row v-if="flowList.length !== 0">
 			<b-col cols="6">
 				<stageTrackWrap
+					:flowList="flowList"
+					:traceList="traceList"
+					:flowSelected="flowSelected"
+					:versionSelector="versionSelector"
 					:traceData="trackTraceList"
 					:stageList="trackStageList"
 					:versionList="versionList"
+					:trackStageList="trackStageList"
 					v-model="active"
+					@queryTraceList="queryTraceList"
 				></stageTrackWrap>
 			</b-col>
 			<b-col cols="6" v-if="trackTraceList.length !== 0">
@@ -43,17 +49,6 @@
 				></stageTrackTree>
 			</b-col>
 		</b-row>
-
-		<h4 class="mb-3">详情</h4>
-		<TraceDetail
-			:flowList="flowList"
-			:traceList="traceList"
-			:traceActive="active.traceActive"
-			:flowSelected="flowSelected"
-			:trackStageList="trackStageList"
-			:versionSelector="versionSelector"
-			@queryTraceList="queryTraceList"
-		></TraceDetail>
 
 		<b-modal ref="create-flow-modal" hide-footer scrollable title="创建新流程">
 			<FlowCreate
@@ -82,7 +77,6 @@ import StageTrackWrap from './Wrap';
 import StageTrackTree from './Tree';
 import FlowCreate from './FlowCreate';
 import TraceInit from './TraceInit';
-import TraceDetail from './TraceDetail';
 
 export default {
 	components: {
@@ -90,7 +84,6 @@ export default {
 		StageTrackTree,
 		FlowCreate,
 		TraceInit,
-		TraceDetail
 	},
 	data() {
 		return {
@@ -118,8 +111,9 @@ export default {
 	},
 	watch: {
 		flowSelected() {
-			this.trackStageList = this.flowList.find(flow => flow.id === this.flowSelected).stageList
-				.map(stage => stage.name);
+			const flowSelected = this.flowList.find(flow => flow.id === this.flowSelected);
+
+			this.trackStageList = flowSelected.stageList.map(stage => stage.name);
 			this.trackTraceList = this.traceList.filter(trace => trace.flowId === this.flowSelected)
 				.map(trace => {
 					return {
@@ -128,20 +122,20 @@ export default {
 						flow: trace.flowId,
 						stage: this.trackStageList[trace.stageId],
 						version: trace.versionId,
-						date: trace.createdAt
+						date: trace.createdAt,
+						abstract: trace.abstract
 					};
 				});
-			this.initStageSelector = this.flowList.find(flow => flow.id === this.flowSelected).stageList
-				.map((stage, index) => {
-					if (stage.initializable) {
-						return {
-							value: index,
-							text: stage.name
-						};
-					} else {
-						return null;
-					}
-				}).filter(stage => stage !== null);
+			this.initStageSelector = flowSelected.stageList.map((stage, index) => {
+				if (stage.initializable) {
+					return {
+						value: index,
+						text: stage.name
+					};
+				} else {
+					return null;
+				}
+			}).filter(stage => stage !== null);
 			this.active.traceActive = null;
 		},
 		versionList() {
@@ -177,6 +171,8 @@ export default {
 					return { value: flow.id, text: flow.name };
 				});
 			}
+			this.$refs['create-flow-modal'].hide();
+			// console.log(this.flowList);
 		},
 		async queryTraceList() {
 			const traceList = await this.$http.project.trace(this.projectId).query();
@@ -191,10 +187,13 @@ export default {
 							flow: trace.flowId,
 							stage: this.trackStageList[trace.stageId],
 							version: trace.versionId,
-							date: trace.createdAt
+							date: trace.createdAt,
+							abstract: trace.abstract
 						};
 					});
 			}
+			this.$refs['init-flow-modal'].hide();
+			// console.log(this.traceList);
 		},
 		async queryVersionList() {
 			this.versionList = await this.$http.project.version(this.projectId).query();
