@@ -4,6 +4,7 @@ import DesktopOverview from './Overview';
 import DesktopProjectAll from './project/All';
 
 import AccountProfile from './Account';
+import AdminProduct from './Admin';
 import ProjectDetailProperty from './project/Property';
 import ProjectDetailMember from './project/Member';
 import ProjectDetailVersion from './project/Version';
@@ -65,5 +66,11 @@ SDLC.install('oc.com.sdlc.core', (extender) => {
 		id: 'account.profile',
 		component: AccountProfile,
 		label: 'account.profile'
+	});
+
+	extender.addAdminItem({
+		id: 'admin.product',
+		component: AdminProduct,
+		label: 'admin.product'
 	});
 });

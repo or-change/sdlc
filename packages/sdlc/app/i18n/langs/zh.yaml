@@ -1,9 +1,10 @@
 signin:
-  title: 'SDLC安全开发管控平台'
+  title: 'SDLC 安全开发管控平台'
   username: '用户名'
   password: '密码'
   submit: '登录'
   footer: '天津橙子科技有限公司'
+  language: 'Change Language'
 
 desktop:
   title: 'SDLC安全开发管控平台'
@@ -33,6 +34,11 @@ profile:
   adminNo: '否'
 
 admin:
+  product: '产品'
+
+product: 
+  breadAccount: '管理员'
+  breadProduct: '产品'
 
 projectAll:
   breadcrumb: '我的项目'

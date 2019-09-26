@@ -143,7 +143,6 @@ export default {
 			projectOwnerDisplay: ['owner', 'member'],
 			newProject: {
 				name: '',
-				ownerId: '',
 				language: '',
 				abstract: ''
 			}
@@ -203,7 +202,6 @@ export default {
 			this.accountIsBusy = false;
 		},
 		async createProject() {
-			this.newProject.ownerId =  this.principalId;
 			try {
 				await this.$http.project.create(this.newProject);
 				this.showToast('success', '创建成功');

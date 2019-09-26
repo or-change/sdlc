@@ -7,22 +7,6 @@
 					<b-form-input trim size="sm" v-model="project.name"></b-form-input>
 				</b-form-group>
 			</b-col>
-			<!-- <b-col>
-				<b-form-group label="开发语言:">
-					<b-form-input v-model="project.language" size="sm"></b-form-input>
-				</b-form-group>
-			</b-col>
-			<b-col>
-				<b-form-group label="负责人:">
-					<b-form-input
-						v-if="accountList.length !== 0 && project.owner.length !== 0"
-						readonly
-						size="sm"
-						:value="accountList.find(account => account.id === project.owner).name "
-					></b-form-input>
-				</b-form-group>
-			</b-col>
-			-->
 			<b-col>
 				<b-form-group label="项目简介:">
 					<b-form-input

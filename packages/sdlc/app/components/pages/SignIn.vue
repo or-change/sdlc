@@ -1,56 +1,54 @@
 <template>
 	<div class="signin">
-		<b-container>
+		<b-container class="center">
+			<div style="margin-bottom:150px;">
+				<h1 class="text-center text-white">{{ $t('signin.title') }}</h1>
+			</div> 
+
 			<b-row>
-				<b-col
-					cols="4"
-					offset="4"
-					class="py-5"
-				>
-					<b-card no-body>
-						<b-card-header><center>SDLC安全管控平台</center></b-card-header>
+				<b-col cols="4" offset="4">
+					<b-card no-body class="signin-body"> 
+						<b-card-header style="border-bottom:2px solid #FF7903;">
+							<center>{{ $t('signin.submit') }}</center>
+						</b-card-header>
 						<b-card-body>
 							<b-form
 								@submit.prevent="signin"
 							>
-								<b-form-group
-									label="用户名:"
-									label-for="certificate-name"
-								>
-									<b-form-input
-										id="certificate-name"
-										v-model="certificate.body.name"
-										placeholder="请输入用户名"
-										size="sm"
-										autocomplete="off"
-									/>
-								</b-form-group>
-								<b-form-group
-									label="密码:"
-									label-for="certificate-password"
-								>
-									<b-form-input
-										id="certificate-password"
-										v-model="certificate.body.password"
-										placeholder="请输入密码"
-										size="sm"
-										type="password"
-										autocomplete="off"
-									/>
-								</b-form-group>
+								<b-form-input
+									id="certificate-name"
+									v-model="certificate.body.name"
+									:placeholder="`${$t('signin.username')}...`"
+									autocomplete="off"
+								/>
+								<b-form-input
+									id="certificate-password"
+									v-model="certificate.body.password"
+									:placeholder="`${$t('signin.password')}...`"
+									type="password"
+									autocomplete="off"
+									class="my-3"
+									@keyup.native.enter="signin"
+								/>
+								<p class="text-right">
+									<b-link
+										@click="$i18n.locale = ($i18n.locale === 'zh' ? 'en' : 'zh')"
+									>{{ $t('signin.language') }}</b-link>
+								</p>
 								<b-button
 									:disabled="!certificate.body.name || !certificate.body.password"
 									class="w-100"
-									size="sm"
-									variant="primary"
+									variant="success"
 									type="submit"
-								>登录</b-button>
+								>{{ $t('signin.submit') }}</b-button>
 							</b-form>
 						</b-card-body>
-						<b-card-footer><center><small>天津橙子科技有限公司</small></center></b-card-footer>
 					</b-card>
 				</b-col>
 			</b-row>
+			<div style="margin-top:250px;">
+				<p class="text-center text-white">Copyright&nbsp;©&nbsp;2019&nbsp;{{ $t('signin.footer') }}</p>
+			</div>
 		</b-container>
 	</div>
 </template>
@@ -86,5 +84,16 @@ export default {
 </script>
 
 <style lang="scss">
+.signin {
+	height: 100%;
+	background-image: url('../../assets/bg.jpg');
+	position: relative;
 
+	.center {
+		position: absolute;
+		top: 55%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+}
 </style>

@@ -1,9 +1,10 @@
 signin:
-  title: 'SDLC'
+  title: 'Security Development Life Control'
   username: 'Username'
   password: 'Password'
   submit: 'SignIn'
   footer: 'Or-Change'
+  language: '切换语言'
 
 desktop:
   title: 'Security Development Life Control'
@@ -33,6 +34,11 @@ profile:
   adminNo: 'No'
 
 admin:
+  product: 'Product'
+
+product: 
+  breadAccount: 'Admin'
+  breadProduct: 'Product'
 
 projectAll:
   breadcrumb: 'Project'

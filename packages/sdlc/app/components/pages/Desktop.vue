@@ -39,7 +39,7 @@
 							:href="`#/desktop/account/${sdlc.routes.account[0].path}`"
 						>{{ $t('desktop.account') }}</b-dropdown-item>
 						<b-dropdown-item
-							href="#/desktop/admin"
+							:href="`#/desktop/admin/${sdlc.routes.admin[0].path}`"
 						>{{ $t('desktop.admin') }}</b-dropdown-item>
 						<b-dropdown-divider></b-dropdown-divider>
 						<b-dropdown-item @click="signout">{{ $t('desktop.signout') }}</b-dropdown-item>
