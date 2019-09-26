@@ -1,6 +1,8 @@
+'use strict';
+
 const DuckLog  = require('@or-change/duck-log');
 
-module.exports = function Log(path) {
+module.exports = function Logger(path) {
 	const appenders = [
 		DuckLog.Appender.Console()
 	];

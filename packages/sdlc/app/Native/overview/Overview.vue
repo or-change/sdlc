@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import CustomNumber from './CustomNumber';
+
 export default {
 	data() {
 		return {
@@ -35,6 +37,9 @@ export default {
 				member: { header: 'overview.projectMember', color: '#72B422', count: 0 }
 			}
 		};
+	},
+	components: {
+		CustomNumber
 	},
 	computed: {
 		accountId() {

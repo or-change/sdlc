@@ -18,7 +18,7 @@ const Webpack = require('./src/webpack');
 const models = require('./src/models');
 const PluginRegister = require('./src/PluginRegister');
 const Channel = require('./src/Channel');
-const Log = require('./src/Log');
+const Logger = require('./src/Logger');
 
 const meta = require('./package.json');
 const normalize = require('./src/normalize');
@@ -103,7 +103,7 @@ module.exports = function SDLC(options) {
 				}
 			]),
 			DuckWebpack({ sdlc: Webpack }),
-			DuckLog(Log(finalOptions.server.log))
+			DuckLog(Logger(finalOptions.server.log))
 		],
 		installed({ Datahub, injection }) {
 			injection.Model = Datahub(APP_ID, finalOptions.store).model;

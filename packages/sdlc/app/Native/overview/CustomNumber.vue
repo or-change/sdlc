@@ -8,7 +8,7 @@
 export default {
 	name: 'custom-number',
 	props: ['value'],
-}
+};
 </script>
 
 <style lang="scss">

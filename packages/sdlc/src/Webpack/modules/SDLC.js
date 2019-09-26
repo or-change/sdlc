@@ -26,6 +26,7 @@ const DEFAULT_PLUGINID = [
 	'oc.com.sdlc.core.workbench.account',
 	'oc.com.sdlc.core.workbench.account.item',
 	'oc.com.sdlc.core.workbench.admin',
+	'oc.com.sdlc.core.workbench.admin.item',
 	'oc.com.sdlc.core.workbench.project.retrive',
 	'oc.com.sdlc.core.workbench.project.retrive.item',
 	'oc.com.sdlc.core.workbench.project',

@@ -1,8 +1,8 @@
 import SDLC from 'sdlc';
 
 import ProjectDetailProperty from './Property';
-import ProjectDetailMember from './member/Member';
-import ProjectDetailVersion from './version/Version';
+import ProjectDetailMember from './Member';
+import ProjectDetailVersion from './Version';
 import ProjectStageTrack from './stageTrack/StageTrack';
 
 import zh from './i18n/zh.yaml';

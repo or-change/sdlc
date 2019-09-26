@@ -10,7 +10,7 @@
 						:key="index"
 						exact
 						exact-active-class="active"
-						:to="`/desktop/project/${projectId}/${nav.path}`"
+						:to="`/workbench/project/${projectId}/${nav.path}`"
 						:title="$t(nav.label)"
 					>{{ $t(nav.label) }}</b-nav-item>
 				</b-nav>
@@ -35,7 +35,7 @@ export default {
 			return this.$route.params.projectId;
 		},
 		navExtend() {
-			return this.sdlc.workbench.project;
+			return this.state['project.topics'];
 		}
 	},
 	mounted() {

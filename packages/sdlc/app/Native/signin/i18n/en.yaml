@@ -1,4 +1,7 @@
-workbench:
+signin:
   title: 'Security Development Life Control'
-  lang: 'Language'
-  signout: 'SignOut'
+  username: 'Username'
+  password: 'Password'
+  submit: 'SignIn'
+  footer: 'Or-Change'
+  language: 'Change Language'

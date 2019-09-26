@@ -1,6 +1,6 @@
 <template>
 
-	<div class="desktop">
+	<div class="workbench">
 		<b-navbar toggleable="lg" type="dark" variant="dark">
 			<b-navbar-brand href="#/">
 				<img 
@@ -8,7 +8,7 @@
 					style="width:30px;height:30px;" 
 					class="inline-block align-top"
 				/>
-				{{ $t('desktop.title') }}
+				{{ $t('workbench.title') }}
 			</b-navbar-brand>
 
 			<b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -16,15 +16,15 @@
 			<b-collapse id="nav-collapse" is-nav>
 				<b-navbar-nav>
 					<b-nav-item 
-						v-for="(nav, index) in navExtend"
+						v-for="(nav, index) in extension.nav"
 						:key="index"
-						:href="`#/desktop/${nav.path}`" 
+						:href="`#/workbench/${nav.path}`" 
 					>{{ $t(nav.label) }}</b-nav-item>
 				</b-navbar-nav>
 
 				<!-- Right aligned nav items -->
 				<b-navbar-nav class="ml-auto">
-					<b-nav-item-dropdown  :text="$t('desktop.lang')" right>
+					<b-nav-item-dropdown  :text="$t('workbench.lang')" right>
 						<b-dropdown-item @click="$i18n.locale='zh'">中文</b-dropdown-item>
 						<b-dropdown-item @click="$i18n.locale='en'">English</b-dropdown-item>
 					</b-nav-item-dropdown>
@@ -36,20 +36,19 @@
 						>{{principalName}}</template>
 
 						<b-dropdown-item
-							:href="`#/desktop/account/${sdlc.routes.account[0].path}`"
-						>{{ $t('desktop.account') }}</b-dropdown-item>
-						<b-dropdown-item
-							:href="`#/desktop/admin/${sdlc.routes.admin[0].path}`"
-						>{{ $t('desktop.admin') }}</b-dropdown-item>
+							v-for="(dropdownItem, index) in extension.dropdown"
+							:key="index"
+							:href="`#/workbench/${dropdownItem.path}`" 
+						>{{ $t(dropdownItem.label) }}</b-dropdown-item>
 						<b-dropdown-divider></b-dropdown-divider>
-						<b-dropdown-item @click="signout">{{ $t('desktop.signout') }}</b-dropdown-item>
+						<b-dropdown-item @click="signout">{{ $t('workbench.signout') }}</b-dropdown-item>
 					</b-nav-item-dropdown>
 				</b-navbar-nav> 
 			</b-collapse>
 		</b-navbar>
 
 		<div 
-			id="app-desktop-container"
+			id="app-workbench-container"
 			style="width: 100%; overflow: auto;"
 		>
 			<router-view>桌面路由框架</router-view>
@@ -60,13 +59,13 @@
 
 <script>
 export default {
-	name: 'desktop-framework',
+	name: 'workbench-framework',
 	computed: {
 		principalName() {
 			return this.$store.state.principal.name;
 		},
-		navExtend() {
-			return this.sdlc.workbench.nav;
+		extension() {
+			return this.state;
 		}
 	},
 	methods: {

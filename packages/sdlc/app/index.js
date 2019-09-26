@@ -8,17 +8,15 @@ import VueRouter from 'vue-router';
 import BootstrapVue from 'bootstrap-vue';
 import http from './plugins/http';
 import dateFormat from './plugins/dateFormat';
-import customComponents from './components/utils';
-import mixin from './components/mixin';
+import showToast from './plugins/showToast';
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 Vue.use(http);
 Vue.use(dateFormat);
-Vue.use(customComponents);
-Vue.mixin(mixin);
+Vue.use(showToast);
 
-import App from './components/App';
+import App from './App';
 import store from './store';
 import I18n from './i18n';
 

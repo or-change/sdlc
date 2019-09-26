@@ -67,7 +67,6 @@ export default {
 	methods: {
 		async getProduct() {
 			this.product = await this.$http.product.get();
-			console.log(this.product);
 		}
 	}
 };

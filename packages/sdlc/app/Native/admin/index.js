@@ -22,7 +22,7 @@ const store = {
 
 SDLC.install('oc.com.sdlc.core.workbench.admin', {
 	Plugin({ appendState, appendI18n }) {
-		appendState('admin.topics', sort(store.topics.items, store.topics.order));
+		appendState('admin.topics', store.topics.items);
 
 		appendI18n({
 			zh, en
@@ -57,6 +57,8 @@ SDLC.install('oc.com.sdlc.core.workbench.admin', {
 	decorator: {
 		setOrder(options) {
 			store.topics.order = orderNormalize(options);
+
+			store.topics.items = sort(store.topics.items, store.topics.order);
 		}
 	}
 });
