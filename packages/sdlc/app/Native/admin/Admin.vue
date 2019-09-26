@@ -1,5 +1,5 @@
 <template>
-  <b-container class="desktop-admin pt-3 pb-5">
+  <b-container class="workbench-admin pt-3 pb-5">
 		<b-row>
 			<b-col cols="3">
 				<b-card no-body>
@@ -7,7 +7,7 @@
 						<b-nav-item
 							v-for="(nav, index) in navExtend"
 							:key="index"
-							:to="`/desktop/admin/${nav.path}`"
+							:to="`/workbench/admin/${nav.path}`"
 							exact
 							exact-active-class="active"
 						>{{ $t(nav.label) }}</b-nav-item>
@@ -32,7 +32,7 @@ export default {
 	},
 	computed: {
 		navExtend() {
-			return this.sdlc.workbench.admin;
+			return this.state['admin.topics'];
 		}
 	},
 	mounted() {
@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang="scss">
-.desktop-admin {
+.workbench-admin {
 	.active {
 		background-color: #E9ECEF;
 		a {

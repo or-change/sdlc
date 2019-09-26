@@ -11,13 +11,14 @@ const DuckKoaAcl = require('@or-change/duck-web-koa-acl');
 const DuckWebKoaRouter = require('@or-change/duck-web-koa-router');
 const DuckWebKoaValidator = require('@or-change/duck-web-koa-validator');
 const koaBody = require('koa-body');
-const EventEmitter = require('events');
 
 const AccessControl = require('./src/AccessControl');
 const router = require('./src/router');
 const Webpack = require('./src/webpack');
 const models = require('./src/models');
 const PluginRegister = require('./src/PluginRegister');
+const Channel = require('./src/Channel');
+const Log = require('./src/Log');
 
 const meta = require('./package.json');
 const normalize = require('./src/normalize');
@@ -77,7 +78,16 @@ module.exports = function SDLC(options) {
 		description: meta.description,
 		injection: {
 			authenticate: finalOptions.server.authenticate,
-			Plugin: pluginAccessor
+			Plugin: pluginAccessor,
+			channel: Channel(EVENTS),
+			options: {
+				get namesapce() {
+					return finalOptions.namesapce;
+				},
+				get store() {
+					return Object.assign({}, finalOptions.store);
+				}
+			}
 		},
 		components: [
 			DuckWeb([
@@ -93,65 +103,19 @@ module.exports = function SDLC(options) {
 				}
 			]),
 			DuckWebpack({ sdlc: Webpack }),
-			DuckLog({
-				access: {
-					format: DuckLog.Format.ApacheCLF()
-				},
-				model: {
-					format: DuckLog.Format.General()
-				},
-				authenticate: {
-					format: DuckLog.Format.General()
-				}
-			})
+			DuckLog(Log(finalOptions.server.log))
 		],
 		installed({ Datahub, injection }) {
-			const eventEmitter = new EventEmitter();
-
-			injection.channel = {
-				get list() {
-					const channels = {};
-
-					Object.keys(EVENTS).forEach(eventName => {
-						channels[eventName] = EVENTS[eventName].map(item => item);
-					});
-
-					return channels;
-				},
-				emit(eventName, arg) {
-					if (!EVENTS[eventName]) {
-						throw new Error(`Event ${eventName} is not registered.`);
-					}
-
-					eventEmitter.emit(eventName, arg);
-				},
-				on(eventName, callback) {
-					eventEmitter.on(eventName, callback);
-				}
-			};
-
 			injection.Model = Datahub(APP_ID, finalOptions.store).model;
-			injection.Plugin.inject(injection); //原型链继承injection
-
-			injection.options = {
-				get namesapce() {
-					return finalOptions.namesapce;
-				},
-				get store() {
-					return Object.assign({}, finalOptions.store);
-				}
-			};
+			injection.Plugin.inject(injection);
 
 			finalOptions.server.installed(injection);
 		}
 	}, ({ Web, Webpack, Log }) => {
-		const adapter = DuckLog.Adapter.HttpServer((req, res) => {
-			const requestListener = Web.Application('Default');
+		const application = Web.Application('Default');
+		const adapter = DuckLog.Adapter.HttpServer(application, abstract => Log.access(abstract));
 
-			requestListener(req, res);
-		});
-
-		sdlc.server = Web.Http.createServer(adapter, abstract => Log.access(abstract));
+		sdlc.server = Web.Http.createServer(adapter);
 		sdlc.webpack = Webpack('sdlc', { app: finalOptions.app });
 	});
 

@@ -4,7 +4,7 @@ const schema = {
 	type: 'object',
 	properties: {
 		name: { type: 'string' },
-		parentId: { type: ['string' | 'null'] },
+		parentId: { type: ['string', 'null'] },
 		stageList: {
 			type: 'array',
 			items: {

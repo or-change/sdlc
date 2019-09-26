@@ -18,7 +18,7 @@ module.exports = {
 					const project = await store.createProject(payload);
 
 					channel.emit('project-created', project);
-					Log.model({ type: 'create project', info: project});
+					Log.model({ type: 'create project', info: project.id});
 
 					return project;
 				},
@@ -26,7 +26,7 @@ module.exports = {
 					const project = await store.updateProject(this.id, payload);
 
 					channel.emit('project-updated', project);
-					Log.model({ type: 'update project', info: project});
+					Log.model({ type: 'update project', info: project.id});
 
 					return project;
 				},
@@ -37,7 +37,7 @@ module.exports = {
 					const project = await store.deleteProject(this.id);
 
 					channel.emit('project-deleted', project);
-					Log.model({ type: 'delete project', info: project});
+					Log.model({ type: 'delete project', info: project.id});
 
 					return project;
 				}

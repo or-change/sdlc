@@ -11,21 +11,23 @@ SDLC.install('oc.com.sdlc.core.workbench.account.item', {
 			zh, en
 		});
 	},
-	installer: {
-		id: 'oc.com.sdlc.core.workbench.account',
-		install({ appendRoutes, appendTopics }) {
-			appendRoutes([
-				{
-					path: 'profile',
-					component: AccountProfile
-				}
-			]);
-
-			appendTopics({
-				id: 'account.profile',
-				label: 'account.profile',
-				path: 'profile'
-			});
+	installers: [
+		{
+			id: 'oc.com.sdlc.core.workbench.account',
+			install({ appendRoutes, appendTopics }) {
+				appendRoutes([
+					{
+						path: 'profile',
+						component: AccountProfile
+					}
+				]);
+	
+				appendTopics({
+					id: 'account.profile',
+					label: 'accountItem.profile',
+					path: 'profile'
+				});
+			}
 		}
-	}
+	]
 });

@@ -59,7 +59,7 @@
 			class="text-center project-list"
 		>
 			<template v-slot:cell(name)="data">
-				<b-link :href='`#/desktop/project/${data.item.id}/${sdlc.routes.project[0].path}`'>{{ data.item.name }}</b-link>
+				<b-link :href='`#/workbench/project/${data.item.id}`'>{{ data.item.name }}</b-link>
 			</template>
 
 			<template v-slot:cell(owner)="data">

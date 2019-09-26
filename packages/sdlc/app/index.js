@@ -31,7 +31,12 @@ async function bootstrap() {
 	Vue.prototype.state = options.state;
 
 	const router = new VueRouter({
-		routes: options.routes
+		routes: [
+			{
+				path: options.home,
+				redirect: '/workbench' // test
+			}
+		].concat(options.routes)
 	});
 	
 	router.beforeEach((to, from, next) => {

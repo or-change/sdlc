@@ -23,11 +23,9 @@ const BABEL_OPTIONS = {
 const POSTCSS_OPTIONS = {
 	loader: 'postcss-loader',
 	options: {
-		plugins: {
-			autoprefixer: {
-				cascade: false
-			}
-		}
+		plugins: [
+			require('autoprefixer')({ overrideBrowserslist: ['last 2 versions'] })
+		]
 	}
 };
 

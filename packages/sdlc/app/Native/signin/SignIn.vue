@@ -73,7 +73,7 @@ export default {
 				await this.$http.principal.signin(this.certificate);
 
 				this.$router.push({
-					path: '/desktop'
+					path: '/workbench'
 				});
 			} catch (error) {
 				console.log(error);

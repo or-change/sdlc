@@ -1,5 +1,5 @@
 export function itemNormalize(options) {
-	const { id, path, label } = options;
+	const { id, path, label, icon, badge } = options;
 
 	if (!id) {
 		throw new Error('options.id is need.');
@@ -13,8 +13,16 @@ export function itemNormalize(options) {
 		throw new Error('options.path is Expected be a string.');
 	}
 
+	if (icon && typeof icon !== 'string') {
+		throw new Error('options.icon is Expected be a string.');
+	}
+
+	if (badge && typeof badge !== 'string') {
+		throw new Error('options.badge is Expected be a string.');
+	}
+
 	return {
-		id, path, label
+		id, path, label, icon, badge
 	};
 }
 
@@ -32,32 +40,4 @@ export function routerNormalize(options) {
 	}
 
 	return options;
-}
-
-export function topicNormalize(options) {
-	const { id, path, label, icon, badge } = options;
-
-	if (!id) {
-		throw new Error('options.id is need.');
-	}
-
-	if (typeof path !== 'string') {
-		throw new Error('options.path is Expected be a string.');
-	}
-
-	if (typeof label !== 'string') {
-		throw new Error('options.path is Expected be a string.');
-	}
-
-	if (typeof icon !== 'string') {
-		throw new Error('options.path is Expected be a string.');
-	}
-
-	if (typeof badge !== 'string') {
-		throw new Error('options.path is Expected be a string.');
-	}
-
-	return {
-		id, path, label, icon, badge
-	};
 }

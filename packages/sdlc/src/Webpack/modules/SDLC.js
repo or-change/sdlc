@@ -19,7 +19,17 @@ const store = window.store = {
 };
 
 const DEFAULT_PLUGINID = [
-	'oc.com.sdlc.core.workbench'
+	'oc.com.sdlc.core.workbench',
+	'oc.com.sdlc.core.signin',
+	'oc.com.sdlc.core.workbench.overview',
+	'oc.com.sdlc.core.workbench.project',
+	'oc.com.sdlc.core.workbench.account',
+	'oc.com.sdlc.core.workbench.account.item',
+	'oc.com.sdlc.core.workbench.admin',
+	'oc.com.sdlc.core.workbench.project.retrive',
+	'oc.com.sdlc.core.workbench.project.retrive.item',
+	'oc.com.sdlc.core.workbench.project',
+
 ];
 
 function PluginExtender() {
@@ -34,6 +44,10 @@ function PluginExtender() {
 			return this;
 		},
 		appendI18n(options) {
+			if (typeof options !== 'object') {
+				throw new Error('Object is Expected for extend i18n.');
+			}
+
 			Object.keys(options).forEach(key => {
 				store.i18n[key] = store.i18n[key] ?
 					store.i18n[key].concat(options[key]) : [options[key]];
@@ -46,7 +60,7 @@ function PluginExtender() {
 				throw new Error('String is Expected.');
 			}
 
-			store.state.name = options;
+			store.state[name] = options;
 		}
 	};
 }
@@ -76,7 +90,7 @@ function Decorator() {
 }
 
 function normalize(options) {
-	const { Plugin, extender, installer, decorator } = options;
+	const { Plugin, extender, installers, decorator } = options;
 
 	if (Plugin && typeof Plugin !== 'function') {
 		throw new Error('Plugin must be a Function.');
@@ -86,19 +100,25 @@ function normalize(options) {
 		throw new Error('extender must be a Function.');
 	}
 
-	if (installer) {
+	if (installers) {
 
-		if (typeof installer !== 'object') {
-			throw new Error('installer must be a Function.');
+		if (!Array.isArray(installers)) {
+			throw new Error('installers must be an Array.');
 		}
 
-		if (!installer.id) {
-			throw new Error('installer.id is need.');
-		}
-
-		if (typeof installer.install !== 'function') {
-			throw new Error('installer.install must be a Function.');
-		}
+		installers.forEach(installer => {
+			if (typeof installer !== 'object') {
+				throw new Error('installer must be a Function.');
+			}
+	
+			if (!installer.id) {
+				throw new Error('installer.id is need.');
+			}
+	
+			if (typeof installer.install !== 'function') {
+				throw new Error('installer.install must be a Function.');
+			}
+		});
 	}
 
 	if (decorator && typeof decorator !== 'object') {
@@ -106,7 +126,7 @@ function normalize(options) {
 	}
 
 	return {
-		Plugin, extender, installer, decorator
+		Plugin, extender, installers, decorator
 	};
 }
 
@@ -115,8 +135,7 @@ export default {
 		if (store.installed) {
 			throw new Error('Can NOT install after installed.');
 		}
-		//installer Array??
-		const { Plugin, extender, installer, decorator } = normalize(options);
+		const { Plugin, extender, installers, decorator } = normalize(options);
 
 		store.plugins[id] = Plugin;
 
@@ -124,8 +143,8 @@ export default {
 			store.extenders[id] = extender;
 		}
 
-		if (installer) {
-			store.installers.push(installer);
+		if (installers) {
+			store.installers = store.installers.concat(installers);
 		}
 
 		if (decorator) {

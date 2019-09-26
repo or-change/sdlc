@@ -19,7 +19,7 @@ module.exports = {
 					const account = await store.createAccount(payload);
 
 					channel.emit('account-created', account);
-					Log.model({ type: 'create account', info: account});
+					Log.model({ type: 'create account', info: account.id});
 
 					return account;
 				},
@@ -27,7 +27,7 @@ module.exports = {
 					const account = await store.updateAccount(this.id, payload);
 
 					channel.emit('account-updated', account);
-					Log.model({ type: 'update account', info: account});
+					Log.model({ type: 'update account', info: account.id});
 
 					return account;
 				},
@@ -38,7 +38,7 @@ module.exports = {
 					const account = await store.deleteAccount(this.id);
 
 					channel.emit('account-deleted', account);
-					Log.model({ type: 'delete account', info: account});
+					Log.model({ type: 'delete account', info: account.id});
 
 					return account;
 				}

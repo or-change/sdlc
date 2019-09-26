@@ -9,16 +9,14 @@ import zh from './i18n/zh.yaml';
 import en from './i18n/en.yaml';
 
 const store = {
-	router: [
-		{
-			path: '/workbench',
-			component: Workbench,
-			meta: {
-				authencated: true
-			},
-			children: []
-		}
-	],
+	router: {
+		path: '/workbench',
+		component: Workbench,
+		meta: {
+			authencated: true
+		},
+		children: []
+	},
 	nav: {
 		items: [],
 		order: []
@@ -31,21 +29,21 @@ const store = {
 
 SDLC.install('oc.com.sdlc.core.workbench', {
 	Plugin({ appendRoutes, appendI18n, appendState }) {
-		appendRoutes(store.router);
+		appendRoutes([store.router]);
 
 		appendI18n({
 			zh, en
 		});
-
-		appendState('nav', sort(store.nav.items, store.nav.order));
-		appendState('dropdown', sort(store.dropdown.items, store.dropdown.order));
+		
+		appendState('nav', store.nav.items);
+		appendState('dropdown', store.dropdown.items);
 	},
 	extender() {
 		return {
 			appendRoutes(newRoutes) {
 				store.router.children =
 					store.router.children.concat(routerNormalize(newRoutes));
-			
+
 				return this;
 			},
 			addNavItem(options) {
@@ -71,9 +69,13 @@ SDLC.install('oc.com.sdlc.core.workbench', {
 	decorator: {
 		setNavOrder(options) {
 			store.nav.order = orderNormalize(options);
+
+			store.nav.items = sort(store.nav.items, store.nav.order);
 		},
 		setDropdownOrder(options) {
 			store.dropdown.order = orderNormalize(options);
+
+			store.dropdown.items = sort(store.nav.items, store.nav.order);
 		}
 	}
 });

@@ -46,7 +46,7 @@ module.exports = {
 				async create(payload) {
 					const flow = await store.createFlow(payload);
 
-					Log.model({ type: 'create flow', info: flow});
+					Log.model({ type: 'create flow', info: flow.id});
 
 					return flow;
 				},

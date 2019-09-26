@@ -10,8 +10,6 @@ export default function (extension) {
 		messages[lang] = Object.assign({}, ...extension[lang]);
 	});
 
-	console.log(extension);
-
 	return new VueI18n({
 		locale: 'zh',
 		messages

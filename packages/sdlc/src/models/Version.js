@@ -19,7 +19,7 @@ module.exports = {
 
 					Log.model({
 						type: 'create version',
-						info: version
+						info: version.id
 					});
 
 					return version;
@@ -29,7 +29,7 @@ module.exports = {
 
 					Log.model({
 						type: 'update version',
-						info: version
+						info: version.id
 					});
 
 					return version;

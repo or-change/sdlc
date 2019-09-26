@@ -1,5 +1,5 @@
 <template>
-  <b-container class="desktop-account pt-3 pb-5">
+  <b-container class="workbench-account pt-3 pb-5">
 		<b-row>
 			<b-col cols="3">
 				<b-card no-body>
@@ -7,7 +7,7 @@
 						<b-nav-item
 							v-for="(nav, index) in navExtend"
 							:key="index" 
-							:to="`/desktop/account/${nav.path}`"
+							:to="`/workbench/account/${nav.path}`"
 							exact
 							exact-active-class="active"
 						>{{ $t(nav.label) }}</b-nav-item>
@@ -30,14 +30,14 @@ export default {
 	},
 	computed: {
 		navExtend() {
-			return this.sdlc.workbench.account;
+			return this.state['account.topics'];
 		}
 	}
 };
 </script>
 
 <style lang="scss">
-.desktop-account {
+.workbench-account {
 	.active {
 		background-color: #E9ECEF;
 		a {

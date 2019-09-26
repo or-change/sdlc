@@ -24,7 +24,7 @@
 					size="sm"
 					variant="success"
 					@click="updateProject"
-					:disabled="!projectNameState || !projectLanguageState || !projectAbstractState"
+					:disabled="!projectNameState || !projectAbstractState"
 				><i
 					class="fas fa-check mr-2"
 				/>更新项目属性</b-button>
@@ -83,9 +83,6 @@ export default {
 		projectNameState() {
 			return this.project.name.length > 0;
 		},
-		projectLanguageState() {
-			return this.project.language.length > 0;
-		},
 		projectAbstractState() {
 			return this.project.abstract.length > 0;
 		}
@@ -120,7 +117,7 @@ export default {
 		},
 		async deleteProject() {
 			await this.$http.project.delete(this.projectId);
-			this.$router.push('/desktop/project');
+			this.$router.push('/workbench/project');
 		},
 		async queryAccountList() {
 			this.accountList = await this.$http.account.query();

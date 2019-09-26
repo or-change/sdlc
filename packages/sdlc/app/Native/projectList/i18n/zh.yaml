@@ -1,0 +1,12 @@
+projectAll:
+  label: '我的项目'
+  breadcrumb: '我的项目'
+  owned: '我负责的'
+  joined: '我参与的'
+  newProject:
+    title: '创建新项目'
+    name: '项目名称'
+    language: '开发语言'
+    abstract: '项目描述'
+    submit: '确认'
+    close: '关闭'

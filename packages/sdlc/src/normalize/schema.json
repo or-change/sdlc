@@ -25,8 +25,7 @@
 					"type": "object"
 				},
 				"log": {
-					"type": "object",
-					"additionalProperties": false
+					"type": "string"
 				},
 				"events": {
 					"type": "object",

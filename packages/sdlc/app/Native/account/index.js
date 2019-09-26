@@ -1,18 +1,19 @@
 import SDLC from 'sdlc';
 
-import { orderNormalize, routerNormalize, topicNormalize } from '../normalize';
+import { orderNormalize, routerNormalize, itemNormalize } from '../normalize';
 import { sort } from '../utils';
 
 import Account from './Account';
 
+import zh from './i18n/zh.yaml';
+import en from './i18n/en.yaml';
+
 const store = {
-	router: [
-		{
-			path: 'account',
-			component: Account,
-			children: []
-		}
-	],
+	router: {
+		path: 'account',
+		component: Account,
+		children: []
+	},
 	topics: {
 		items: [],
 		order: []
@@ -20,8 +21,12 @@ const store = {
 };
 
 SDLC.install('oc.com.sdlc.core.workbench.account', {
-	Plugin({ appendState }) {
-		appendState('account.topics', sort(store.topics.items, store.topics.order));
+	Plugin({ appendState, appendI18n }) {
+		appendState('account.topics', store.topics.items);
+
+		appendI18n({
+			zh, en
+		});
 	},
 	extender() {
 		return {
@@ -32,24 +37,28 @@ SDLC.install('oc.com.sdlc.core.workbench.account', {
 				return this;
 			},
 			appendTopics(options) {
-				store.topics.items.push(topicNormalize(options));
+				store.topics.items.push(itemNormalize(options));
 			}
 		};
 	},
-	installer: {
-		id: 'oc.com.sdlc.core.workbench',
-		install({ appendRoutes, addDropdownItem }) {
-			appendRoutes(store.router);
-			addDropdownItem({
-				id: 'account',
-				path: `account/${sort(store.topics.items, store.topics.order)[0]}`,
-				label: ''
-			});
+	installers: [
+		{
+			id: 'oc.com.sdlc.core.workbench',
+			install({ appendRoutes, addDropdownItem }) {
+				appendRoutes([store.router]);
+				addDropdownItem({
+					id: 'account',
+					path: 'account',
+					label: 'account.label'
+				});
+			}
 		}
-	},
+	],
 	decorator: {
 		setOrder(options) {
 			store.topics.order = orderNormalize(options);
+
+			store.topics.items = sort(store.topics.items, store.topics.order);
 		}
 	}
 });

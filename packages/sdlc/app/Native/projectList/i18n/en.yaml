@@ -1,0 +1,12 @@
+projectAll:
+  label: 'Project'
+  breadcrumb: 'Project'
+  owned: 'Owned'
+  joined: 'Joined'
+  newProject:
+    title: 'New Project'
+    name: 'Name'
+    language: 'Language'
+    abstract: 'Abstract'
+    submit: 'Create'
+    close: 'Close'
