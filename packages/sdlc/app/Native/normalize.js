@@ -1,16 +1,12 @@
-export function itemNormalize(options) {
-	const { id, path, label, icon, badge } = options;
+function normalize(options) {
+	const { id, label, icon, badge } = options;
 
 	if (!id) {
 		throw new Error('options.id is need.');
 	}
 
-	if (typeof path !== 'string') {
-		throw new Error('options.path is Expected be a string.');
-	}
-
 	if (typeof label !== 'string') {
-		throw new Error('options.path is Expected be a string.');
+		throw new Error('options.label is Expected be a string.');
 	}
 
 	if (icon && typeof icon !== 'string') {
@@ -19,6 +15,34 @@ export function itemNormalize(options) {
 
 	if (badge && typeof badge !== 'string') {
 		throw new Error('options.badge is Expected be a string.');
+	}
+}
+
+export function itemNormalize(options) {
+	const { id, path, label, icon, badge, items } = options;
+
+	normalize(options);
+
+	if (items) {
+		if (!Array.isArray(items)) {
+			throw new Error('options.items is Expected be an Array.');
+		}
+
+		items.forEach(item => {
+			if (typeof item.path !== 'string') {
+				throw new Error('options.path is Expected be a String.');
+			}
+
+			normalize(item);
+		});
+
+		return {
+			id, label, icon, badge, items
+		};
+	}
+	
+	if (typeof path !== 'string') {
+		throw new Error('options.path is Expected be a String.');
 	}
 
 	return {

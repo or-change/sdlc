@@ -12,17 +12,19 @@ const store = {
 	router: {
 		path: 'admin',
 		component: Admin,
-		children: []
+		children: [
+			{
+				path: '',
+				redirect: ''
+			}
+		]
 	},
-	topics: {
-		items: [],
-		order: []
-	}
+	topics: []
 };
 
 SDLC.install('oc.com.sdlc.core.workbench.admin', {
 	Plugin({ appendState, appendI18n }) {
-		appendState('admin.topics', store.topics.items);
+		appendState('admin.topics', store.topics);
 
 		appendI18n({
 			zh, en
@@ -37,7 +39,11 @@ SDLC.install('oc.com.sdlc.core.workbench.admin', {
 				return this;
 			},
 			appendTopics(options) {
-				store.topics.items.push(itemNormalize(options));
+				store.topics.push(itemNormalize(options));
+
+				if (!store.router.children[0].redirect) {
+					store.router.children[0].redirect = options.path;
+				}
 			}
 		};
 	},
@@ -56,9 +62,9 @@ SDLC.install('oc.com.sdlc.core.workbench.admin', {
 	],
 	decorator: {
 		setOrder(options) {
-			store.topics.order = orderNormalize(options);
+			store.topics = sort(store.topics, orderNormalize(options));
 
-			store.topics.items = sort(store.topics.items, store.topics.order);
+			store.router.children[0].redirect = store.topics[0];
 		}
 	}
 });

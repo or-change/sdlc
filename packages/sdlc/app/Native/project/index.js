@@ -12,12 +12,14 @@ const store = {
 	router: {
 		path: 'project/:projectId',
 		component: Project,
-		children: []
+		children: [
+			{
+				path: '',
+				redirect: ''
+			}
+		]
 	},
-	topics: {
-		items: [],
-		order: []
-	}
+	topics: []
 };
 
 SDLC.install('oc.com.sdlc.core.workbench.project.retrive', {
@@ -26,7 +28,7 @@ SDLC.install('oc.com.sdlc.core.workbench.project.retrive', {
 			zh, en
 		});
 
-		appendState('project.topics', store.topics.items);
+		appendState('project.topics', store.topics);
 	},
 	extender() {
 		return {
@@ -37,7 +39,11 @@ SDLC.install('oc.com.sdlc.core.workbench.project.retrive', {
 				return this;
 			},
 			appendTopics(options) {
-				store.topics.items.push(itemNormalize(options));
+				store.topics.push(itemNormalize(options));
+
+				if (!store.router.children[0].redirect) {
+					store.router.children[0].redirect = options.path;
+				}
 			}
 		};
 	},
@@ -51,7 +57,9 @@ SDLC.install('oc.com.sdlc.core.workbench.project.retrive', {
 	],
 	decorator: {
 		setOrder(options) {
-			store.topics.order = orderNormalize(options);
+			store.topics = sort(store.topics, orderNormalize(options));
+
+			store.router.children[0].redirect = store.topics[0];
 		}
 	}
 });

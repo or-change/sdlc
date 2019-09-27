@@ -3,7 +3,7 @@
 const schema = {
 	type: 'object',
 	properties: {
-		parentId: { type: 'string' },
+		parentId: { type: ['string', 'null'] },
 		stageId: { type: 'number' },
 		versionId: { type: 'string' },
 		flowId: { type: 'string' },
