@@ -12,6 +12,7 @@ module.exports = function gitPlugin() {
 	return {
 		id: 'com.orchage.sdlc.git',
 		name: 'git',
+		description: 'Version control tool',
 		routers: {
 			Plugin: (router, context) => {
 				const { Validator } = context;

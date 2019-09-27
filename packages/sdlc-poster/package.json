@@ -19,7 +19,8 @@
     "url": "https://github.com/or-change/sdlc/issues"
   },
   "dependencies": {
-    "@or-change/sdlc": "^0.0.1"
+    "@or-change/sdlc": "^0.0.1",
+    "nodemailer": "^6.3.0"
   },
   "devDependencies": {
     "mocha": "^6.2.0"

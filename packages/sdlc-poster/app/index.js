@@ -1,20 +1,15 @@
 import SDLC from 'sdlc';
 import Poster from '../app/components/Poster';
 
+import zh from './i18n/zh.yaml';
+import en from './i18n/en.yaml';
+
 SDLC.install('com.orchange.sdlc.poster', extend => {
 	extend
-		.appendRoutes([
-			{
-				path:':accountId/email',
-				component: Poster
-			}
-		])
 		.addTopicItem({
 			id: 'Poster-topic',
 			component: Poster,
-			label: {
-				sub: 'poster'
-			},
-			path: 'poster-topic'
-		});
+			label: 'poster.title'
+		})
+		.appendI18n({ zh, en });
 });

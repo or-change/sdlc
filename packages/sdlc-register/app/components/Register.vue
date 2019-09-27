@@ -40,7 +40,7 @@
 					></b-form-input>
 				</b-col>
 			</b-row>
-			<b-row class="mt-">
+			<b-row>
 				<b-col cols="3" class="text-right">
 					<div id="create-state">
 						<p v-if="createState.success" class="pull-right text-success">创建成功!</p>
@@ -48,8 +48,15 @@
 					</div>
 				</b-col>
 				<b-col class="text-right" cols="6">
-					<b-btn variant="success" @click="reset">重置</b-btn>
-					<b-btn variant="primary" @click="create" :disabled="!nameState">创建</b-btn>
+					<b-btn 
+						variant="success" 
+						@click="reset"
+					>重置</b-btn>
+					<b-btn 
+						variant="primary" 
+						@click="create" 
+						:disabled="!nameState"
+					>创建</b-btn>
 				</b-col>
 			</b-row>
 		</b-card>
@@ -89,7 +96,6 @@ export default {
 			this.createState.failed = false;
 		},
 		async create() {
-
 			try {
 				const newAccount = await axios.post('/api/account/register', this.account);
 	

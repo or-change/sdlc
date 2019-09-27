@@ -2,11 +2,14 @@
 const SDLC = require('@or-change/sdlc');
 const Store = require('@or-change/sdlc-store-memory');
 const git = require('@or-change/sdlc-git');
-const register = require('@or-change/sdlc-register');const poster = require('@or-change/sdlc-poster');
+const register = require('@or-change/sdlc-register');
+const poster = require('@or-change/sdlc-poster');
 const path = require('path');
 
+const store = Store();
+
 module.exports = SDLC({
-	store: Store(),
+	store,
 	server: {
 		async authenticate(ctx, { Model }) {
 			const {
@@ -53,7 +56,7 @@ module.exports = SDLC({
 	plugins: [
 		git(),
 		register(),
-		poster
+		poster(store)
 	],
 	app: {
 		extend: path.resolve(__dirname, './app1/SDLCFactory.js')

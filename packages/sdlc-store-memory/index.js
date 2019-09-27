@@ -8,7 +8,10 @@ const store = {
 	flow: require('./store/flow.json'),
 	stage: require('./store/stage.json'),
 	trace: require('./store/trace.json'),
-	accountInfo: require('./store/accountInfo.json')
+	accountInfo: require('./store/accountInfo.json'),
+	adminConfig: require('./store/adminConfig.json'),
+	personalConfig: require('./store/personalConfig.json'),
+	projectOwnerConfig: require('./store/projectOwnerConfig.json')
 };
 
 function filterDate(arr) {
@@ -27,7 +30,10 @@ module.exports = function Store(data = {
 	flow: filterDate(store.flow),
 	stage: filterDate(store.stage),
 	trace: filterDate(store.trace),
-	accountInfo: filterDate(store.accountInfo)
+	accountInfo: filterDate(store.accountInfo),
+	adminConfig: filterDate(store.adminConfig),
+	personalConfig: filterDate(store.adminConfig),
+	projectOwnerConfig: filterDate(store.projectOwnerConfig)
 }) {
 	const store = {
 		createAccount({
@@ -309,6 +315,78 @@ module.exports = function Store(data = {
 			data.accountInfo.push(accountInfo);
 
 			return accountInfo;
+		},
+		updateAccountInfo(accountId, { email }) {
+			const accountInfo = data.accountInfo.find(accountInfo => accountInfo.id === accountId);
+
+			accountInfo.email = email;
+
+			return accountInfo;
+		},
+		getAccountInfo(accountId) {
+			return data.accountInfo.find(accountInfo => accountInfo.id === accountId) || null;
+		},
+		createAdminConfig({ admin, projectOwner, others }) {
+			const adminConfig = {
+				a,
+				projectPreferences,
+				informedMethods
+			};
+
+			data.adminConfig[0] = adminConfig;
+
+			return adminConfig;
+		},
+		getAdminConfig() {
+			const adminConfig = data.adminConfig[0];
+
+			return adminConfig === undefined ? null : adminConfig;
+		},
+		createPersonalConfig({ id, events, informedMethods }) {
+			const personalConfig = {
+				id,
+				events,
+				informedMethods
+			};
+
+			data.personalConfig.push(personalConfig);
+
+			return personalConfig;
+		},
+		getPersonalConfig(accountId) {
+			return data.personalConfig.find(personalConfig => personalConfig.id === accountId) || null;
+		},
+		updatePersonalConfig(accountId, { events, informedMethods }) {
+			const personalConfig = data.personalConfig.find(personalConfig => personalConfig.id === accountId);
+			
+			personalConfig.events = events;
+			personalConfig.informedMethods = informedMethods;
+
+			return personalConfig;
+		},
+		getProjectOwnerConfig(projectId) {
+			return data.projectOwnerConfig.find(projectOwnerConfig => projectOwnerConfig.id === projectId);
+		},
+		createProjectOwnerConfig({ id, events, projectPreferences, informedMethods }) {
+			const projectOwnerConfig = {
+				id, 
+				events,
+				projectPreferences,
+				informedMethods
+			};
+
+			data.projectOwnerConfig.push(projectOwnerConfig);
+
+			return projectOwnerConfig;
+		},
+		updateProjectOwnerConfig(projectId, { events, informedMethods, projectPreferences }) {
+			const projectOwnerConfig = data.projectOwnerConfig.find(projectOwnerConfig => projectOwnerConfig.id === projectId);
+
+			projectOwnerConfig.events = events;
+			projectOwnerConfig.informedMethods = informedMethods;
+			projectOwnerConfig.projectPreferences = projectPreferences;
+
+			return projectOwnerConfig;
 		}
 	};
 
