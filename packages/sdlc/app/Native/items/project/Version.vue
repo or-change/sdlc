@@ -72,9 +72,11 @@
 
 <script>
 export default {
+	props: {
+		versionList: Array
+	},
 	data() {
 		return {
-			versionList: [],
 			versionSelected: {
 				id: '',
 				semver: '',
@@ -89,19 +91,9 @@ export default {
 		},
 	},
 	mounted() {
-		this.queryVersionList();
+		// this.queryVersionList();
 	},
 	methods: {
-		async queryVersionList() {
-			const versionList = await this.$http.project.version(this.projectId).query();
-			
-			if (versionList.length !== 0) {
-				this.versionList = versionList.sort((versionA, versionB) => {
-					return versionA.semver.replace(/\./g, '') - versionB.semver.replace(/\./g, '');
-				});
-			}
-			// console.log(this.versionList);
-		},
 		async updateVersion() {
 			try {
 				await this.$http.project.version(this.projectId).update(this.versionSelected.id, {
@@ -120,7 +112,7 @@ export default {
 					abstract: this.versionSelected.abstract
 				});
 				this.showToast('success', '添加成功');
-				this.queryVersionList();
+				this.$emit('queryVersionList');
 			} catch (error) {
 				console.log(error);
 				this.showToast('danger', '添加失败');

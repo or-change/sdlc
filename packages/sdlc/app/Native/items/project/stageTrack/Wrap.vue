@@ -80,8 +80,8 @@
 							'wrap-table-body-cell-full': stageList.length < 4,
 						}">{{ stage.version }}</td>
 						<td
-							v-for="(trace, index) in stage.traceList" 
-							:key="index"
+							v-for="(trace, stageIndex) in stage.traceList" 
+							:key="trace.hash+stageIndex"
 							:class="{
 								'wrap-table-body-cell': true,
 								'wrap-cell-hover': true,
@@ -145,10 +145,8 @@ export default {
 		flowSelected: String,
 		versionSelector: Array,
 		trackStageList: Array,
-
 		traceData: Array,
 		stageList: Array,
-
 		versionList: Array,
 		active: Object,
 	},
@@ -304,11 +302,17 @@ export default {
 			this.$emit('queryTraceList');
 		},
 		showPopover(id) {
-			this.traceList.forEach(trace => {
-				this.$refs[`popover-${trace.id}`][0].doClose();
-			});
-			const ref = this.$refs[`popover-${id}`][0];
-			ref.localShow ? ref.doClose() : ref.doOpen();
+			if (id) {
+				this.wrapDataList.forEach(data => {
+					data.traceList.forEach(trace => {
+						if (trace.hash.length !== 0) {
+							this.$refs[`popover-${trace.hash}`][0].doClose();
+						}
+					});
+				});
+				const ref = this.$refs[`popover-${id}`][0];
+				ref.localShow ? ref.doClose() : ref.doOpen();
+			}
 		}
 	},
 };

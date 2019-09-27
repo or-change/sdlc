@@ -2,8 +2,10 @@
 	<div class="detail-member">
 		<b-row>
 			<b-col>
-				<h5 class="mb-3">已加入:</h5>
 				<b-row>
+					<b-col>
+						<h5 class="mb-3">已加入:</h5>
+					</b-col>
 					<b-col cols="5">
 						<b-form-group
 							label="搜索:"
@@ -48,8 +50,10 @@
 			</b-col>
 			<b-col>
 
-				<h5 class="mb-3">未加入:</h5>
 				<b-row>
+					<b-col>
+						<h5 class="mb-3">未加入:</h5>
+					</b-col>
 					<b-col cols="5">
 						<b-form-group
 							label="搜索:"

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h4 class="my-3">基本属性</h4>
+		<h4 class="mb-3">基本属性</h4>
 		<b-row>
 			<b-col cols="3">
 				<b-form-group label="项目名称:">
@@ -29,26 +29,21 @@
 					class="fas fa-check mr-2"
 				/>更新项目属性</b-button>
 			</b-col>
-			<!-- <b-col cols="2">
-				<b-button
-					class="w-100"
-					size="sm"
-					variant="danger"
-					@click="deleteProject"
-				><i
-					class="fas fa-times mr-2"
-				/>删除此项目</b-button>
-			</b-col> -->
 		</b-row>
 
-		<h4 class="my-3">项目成员</h4>
+		<h4 class="mt-4 mb-3">项目成员</h4>
 		<projectMember></projectMember>
 
-		<h4 class="my-3">版本信息</h4>
-		<projectVersion></projectVersion>
+		<h4 class="mt-4 mb-3">版本信息</h4>
+		<projectVersion 
+			:versionList="versionList"
+			@queryVersionList="queryVersionList"
+		></projectVersion>
 
-		<h4 class="my-3">阶段追踪</h4>
-		<stageTrack></stageTrack>
+		<h4 class="mt-4 mb-3">阶段追踪</h4>
+		<stageTrack
+			:versionList="versionList"
+		></stageTrack>
 
 	</div>
 </template>
@@ -69,6 +64,7 @@ export default {
 				createdAt: null
 			},
 			accountList: [],
+			versionList: []
 		};
 	},
 	components: {
@@ -90,6 +86,7 @@ export default {
 	mounted() {
 		this.getProjectById();
 		this.queryAccountList();
+		this.queryVersionList();
 	},
 	methods: {
 		async getProjectById() {
@@ -122,6 +119,15 @@ export default {
 		async queryAccountList() {
 			this.accountList = await this.$http.account.query();
 		},
+		async queryVersionList() {
+			const versionList = await this.$http.project.version(this.projectId).query();
+			
+			if (versionList.length !== 0) {
+				this.versionList = versionList.sort((versionA, versionB) => {
+					return versionA.semver.replace(/\./g, '') - versionB.semver.replace(/\./g, '');
+				});
+			}
+		}
 	}
 };
 </script>

@@ -79,6 +79,9 @@ import FlowCreate from './FlowCreate';
 import TraceInit from './TraceInit';
 
 export default {
+	props: {
+		versionList: Array
+	},
 	components: {
 		StageTrackWrap,
 		StageTrackTree,
@@ -89,7 +92,7 @@ export default {
 		return {
 			flowList: [],
 			traceList: [],
-			versionList: [],
+			// versionList: [],
 			trackStageList: [],
 			trackTraceList: [],
 
@@ -150,7 +153,7 @@ export default {
 	mounted() {
 		this.queryFlowList();
 		this.queryTraceList();
-		this.queryVersionList();
+		// this.queryVersionList();
 	},
 	methods: {
 		async queryFlowList() {
@@ -195,9 +198,9 @@ export default {
 			this.$refs['init-flow-modal'].hide();
 			// console.log(this.traceList);
 		},
-		async queryVersionList() {
-			this.versionList = await this.$http.project.version(this.projectId).query();
-		} ,
+		// async queryVersionList() {
+		// 	this.versionList = await this.$http.project.version(this.projectId).query();
+		// },
 		showModal(modalId) {
 			this.$refs[modalId].show();
 		}

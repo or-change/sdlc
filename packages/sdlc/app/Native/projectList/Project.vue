@@ -46,7 +46,6 @@
 			hover
 			:fields="[
 				{ key: 'name', label: '名称' },
-				{ key: 'language', label: '开发语言' },
 				{ key: 'owner', label: '负责人' },
 				{ key: 'createdAt', label: '创建时间' },
 				{ key: 'action', label: '操作' }
@@ -96,13 +95,6 @@
 						:state="nameState"
 					></b-form-input>
 				</b-form-group>
-				<b-form-group label="开发语言">
-					<b-form-input 
-						size="sm" 
-						v-model='newProject.language' 
-						:state="languageStage"
-					></b-form-input>
-				</b-form-group>
 				<b-form-group label="项目简介">
 					<b-form-textarea 
 						rows="3"
@@ -118,7 +110,7 @@
 				variant="primary" 
 				block 
 				@click="createProject" 
-				:disabled="!nameState || !languageStage || !abstractStage"
+				:disabled="!nameState || !abstractStage"
 			>确认创建项目</b-button>
 			<b-button 
 				class="mt-2" 
@@ -143,7 +135,6 @@ export default {
 			projectOwnerDisplay: ['owner', 'member'],
 			newProject: {
 				name: '',
-				language: '',
 				abstract: ''
 			}
 		};
@@ -154,9 +145,6 @@ export default {
 		},
 		nameState() {
 			return this.newProject.name.length > 0;
-		},
-		languageStage() {
-			return this.newProject.language.length > 0;
 		},
 		abstractStage() {
 			return this.newProject.abstract.length > 0;
@@ -229,8 +217,6 @@ export default {
 			this.$refs['create-project-modal'].hide();
 			this.newProject = {
 				name: '',
-				ownerId: '',
-				language: '',
 				abstract: ''
 			};
 		},
@@ -241,10 +227,10 @@ export default {
 <style lang="scss">
 .project-list {
 	th {
-		width: 20%;
+		width: 25%;
 	}
 	td {
-		width: 20%;
+		width: 25%;
 	}
 }
 </style>
