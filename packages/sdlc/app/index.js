@@ -29,17 +29,12 @@ async function bootstrap() {
 	Vue.prototype.state = options.state;
 
 	const router = new VueRouter({
-		routes: [
-			{
-				path: options.home,
-				redirect: '/workbench' // test
-			}
-		].concat(options.routes)
+		routes: options.routes
 	});
 	
 	router.beforeEach((to, from, next) => {
 		if (to.matched.length === 0) {
-			return next('/');
+			return next(options.home);
 		}
 	
 		store.dispatch('authenticate').finally(() => {

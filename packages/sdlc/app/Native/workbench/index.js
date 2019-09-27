@@ -15,16 +15,15 @@ const store = {
 		meta: {
 			authencated: true
 		},
-		children: []
+		children: [
+			{
+				path: '',
+				redirect: ''
+			}
+		]
 	},
-	nav: {
-		items: [],
-		order: []
-	},
-	dropdown: {
-		items: [],
-		order: []
-	}
+	nav: [],
+	dropdown: []
 };
 
 SDLC.install('oc.com.sdlc.core.workbench', {
@@ -35,8 +34,8 @@ SDLC.install('oc.com.sdlc.core.workbench', {
 			zh, en
 		});
 		
-		appendState('nav', store.nav.items);
-		appendState('dropdown', store.dropdown.items);
+		appendState('nav', store.nav);
+		appendState('dropdown', store.dropdown);
 	},
 	extender() {
 		return {
@@ -49,16 +48,20 @@ SDLC.install('oc.com.sdlc.core.workbench', {
 			addNavItem(options) {
 				const { id, path, label } = itemNormalize(options);
 
-				store.nav.items.push({
+				store.nav.push({
 					id, path, label
 				});
+
+				if (!store.router.children[0].redirect) {
+					store.router.children[0].redirect = path;
+				}
 
 				return this;
 			},
 			addDropdownItem(options) {
 				const { id, path, label } = itemNormalize(options);
 
-				store.dropdown.items.push({
+				store.dropdown.push({
 					id, path, label
 				});
 
@@ -68,14 +71,12 @@ SDLC.install('oc.com.sdlc.core.workbench', {
 	},
 	decorator: {
 		setNavOrder(options) {
-			store.nav.order = orderNormalize(options);
+			store.nav = sort(store.nav, orderNormalize(options));
 
-			store.nav.items = sort(store.nav.items, store.nav.order);
+			store.router.children[0].redirect = store.nav[0].path;
 		},
 		setDropdownOrder(options) {
-			store.dropdown.order = orderNormalize(options);
-
-			store.dropdown.items = sort(store.nav.items, store.nav.order);
+			store.dropdown = sort(store.nav, orderNormalize(options));
 		}
 	}
 });
