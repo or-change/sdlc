@@ -1,7 +1,7 @@
 <template>
 	<b-container fluid>
+		<h5>消息通知</h5>
 		<b-row>
-			<h5>消息通知设置</h5>
 			<b-col>
 				<b-form-group
 					label="管理员"
@@ -33,8 +33,8 @@
 					label="其他"
 				>
 					<b-form-checkbox-group
-						v-model="config.others"
-						:options="options.others"
+						v-model="config.other"
+						:options="options.other"
 						size="sm"
 					></b-form-checkbox-group>
 				</b-form-group>
@@ -81,9 +81,9 @@ function defaultOptions() {
 
 function defaultConfig() {
 	return {
-		admin: ['account-created'],
-		projectOwner: ['account-created'],
-		others: ['account-created']
+		admin: defaultOptions().map(options => options.value),
+		projectOwner: [],
+		other: []
 	};
 }
 
@@ -96,7 +96,7 @@ export default {
 			options: {
 				admin: defaultOptions(),
 				projectOwner: defaultOptions(),
-				others: defaultOptions()
+				other: defaultOptions()
 			},
 			saveState: {
 				succeed: false,
@@ -117,7 +117,7 @@ export default {
 			this.saveState.failed = false;
 		},
 		async getConfig() {
-			const adminConfig = await axios.get(`/api/principal/${this.accountId}/config/admin`);
+			const adminConfig = await axios.get('/api/principal/config/admin');
 			
 			if (adminConfig.data) {
 				this.config = adminConfig.data;

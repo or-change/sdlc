@@ -13,7 +13,7 @@ module.exports = function AdminConfig(store) {
 					type: 'array',
 					items: { type: 'string' }
 				},
-				others: {
+				other: {
 					type: 'array',
 					items: { type: 'string' }
 				}

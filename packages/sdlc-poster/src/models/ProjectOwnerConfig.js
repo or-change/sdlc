@@ -15,10 +15,6 @@ module.exports = function ProjectOwnerConfig(store) {
 				projectPreferences: {
 					type: 'array',
 					items: { type: 'string' }
-				},
-				informedMethods: {
-					type: 'array',
-					items: { type: 'string' }
 				}
 			}
 		},

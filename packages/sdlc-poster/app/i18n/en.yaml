@@ -1,2 +1,7 @@
 poster: 
-  title: 'poster'
+  account: 
+    title: 'poster'
+  admin: 
+    title: 'poster'
+  project: 
+    title: 'poster'

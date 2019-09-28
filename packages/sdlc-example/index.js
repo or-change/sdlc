@@ -5,6 +5,7 @@ const git = require('@or-change/sdlc-git');
 const register = require('@or-change/sdlc-register');
 const poster = require('@or-change/sdlc-poster');
 const path = require('path');
+const config = require('./config.json');
 
 const store = Store();
 
@@ -56,7 +57,7 @@ module.exports = SDLC({
 	plugins: [
 		git(),
 		register(),
-		poster(store)
+		poster(store, config.posterOptions)
 	],
 	app: {
 		extend: path.resolve(__dirname, './app1/SDLCFactory.js')

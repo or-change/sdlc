@@ -1,2 +1,7 @@
 poster: 
-  title: 'poster'
+  account: 
+    title: '消息通知'
+  admin: 
+    title: '消息通知'
+  project: 
+    title: '消息通知'

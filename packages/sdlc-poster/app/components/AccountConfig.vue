@@ -15,11 +15,13 @@
 					label="可选事件"
 				>
           <b-form-checkbox-group
+						v-if="configState"
             size="sm"
             id="events"
             v-model="accountInfo.events"
             :options="eventOptions"
           ></b-form-checkbox-group>
+					<p v-else>暂无，等待管理员及项目负责人设置</p>
         </b-form-group>
       </b-col>
     </b-row>
@@ -65,6 +67,19 @@
 <script>
 import axios from 'axios';
 
+const eventsMap = {
+	'account-created': '账号创建',
+	'account-updated': '账号更新',
+	'account-deleted': '账号删除',
+	'project-created': '项目创建',
+	'project-updated': '项目更新',
+	'project-deleted': '项目删除',
+	'member-created': '成员添加',
+	'member-deleted': '成员删除',
+	'authentication-failed': '认证失败',
+	'authentication-succeed': '认证成功'
+};
+
 export default {
 	data() {
 		return {
@@ -74,9 +89,7 @@ export default {
 				informMethods: ['email'],
 				events: []
 			},
-			eventOptions: [
-				{ text: 'a', value: 'a'}
-			],
+			eventOptions: [],
 			createState: {
 				success: false,
 				failed: false
@@ -90,16 +103,18 @@ export default {
 		};
 	},
 	mounted() {
+		this.getEvents();
 		this.getAccountInfo();
-		this.$http.project.get(this.$route.params.projectId).then(data => {
-			this.ownerId = data.ownerId;
-		});
+
 	},
 	computed: {
 		emailState() {
 			const emailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
 
 			return emailReg.test(this.accountInfo.email);
+		},
+		configState() {
+			return this.eventOptions.length === 0 ? false : true;
 		}
 	},
 	methods: {
@@ -116,7 +131,7 @@ export default {
 		async create() {
 			try {
 				const accountInfo = await axios.post(
-					`/api/principal/${this.accountInfo.id}/email`,
+					`/api/principal/${this.accountInfo.id}/config`,
 					this.accountInfo
 				);
 
@@ -137,8 +152,8 @@ export default {
 		async update() {
 			try {
 				const accountInfo = await axios.put(
-					`/api/principal/${this.accountInfo.id}/email`,
-					{ email: this.accountInfo.email }
+					`/api/principal/${this.accountInfo.id}/config`,
+					this.accountInfo
 				);
 
 				if (accountInfo) {
@@ -156,14 +171,51 @@ export default {
 		},
 		async getAccountInfo() {
 			const accountInfo = await axios.get(
-				`/api/principal/${this.$store.state.principal.id}/email`
+				`/api/principal/${this.$store.state.principal.id}/config`
 			);
 
 			if (accountInfo.data) {
 				this.hasCreated = true;
+				this.accountInfo.email = accountInfo.data.email;
+				this.accountInfo.events = accountInfo.data.events;
+				this.accountInfo.informMethods = accountInfo.data.informMethods;
 			}
 
-			this.accountInfo.email = accountInfo.data.email;
+		},
+		async getEvents() {
+			const adminEvents = await axios.get('/api/principal/config/admin'); 
+			const ownerEvents = await axios.get('/api/principal/config/owner', {
+				params: {
+					projectId: '76a1d62d'
+				}
+			}); 
+			const events = adminEvents.data.other;
+
+			if (this.$store.state.principal.administrator) {
+				adminEvents.data.admin.forEach(key => {
+					if (events.indexOf(key) < 0) {
+						events.push(key);
+					}
+				});
+			}
+
+			if (ownerEvents.data) {
+				ownerEvents.data.events.forEach(key => {
+					if (events.indexOf(key) < 0 
+						&& ownerEvents.data.projectPreferences.indexOf('informMember') >= 0) {
+						events.push(key);
+					}
+				});
+			}
+
+			events.forEach((key, index) => {
+				events[index] = {
+					text: eventsMap[key],
+					value: key
+				};
+			});
+
+			this.eventOptions = events;
 		}
 	}
 };

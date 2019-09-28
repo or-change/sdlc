@@ -1,34 +1,42 @@
 <template>
 	<div>
-		<h5>项目负责人设置</h5>
 		<b-row>
-			<b-form-group
-				label="可通知事件"
-			>
-				<b-form-checkbox-group
-					v-model="config.events"
-					:options="options.events"
-					size="sm"
-				></b-form-checkbox-group>
-			</b-form-group>
+			<b-col>
+				<h5>项目负责人设置</h5>
+				<b-form-group
+					label="可通知事件"
+				>
+					<b-form-checkbox-group
+						v-if="configState"
+						v-model="config.events"
+						:options="options.events"
+						size="sm"
+					></b-form-checkbox-group>
+					<p v-else>暂无，等待管理员设置</p>
+				</b-form-group>
+			</b-col>
 		</b-row>
 		<b-row>
-			<b-form-group
-				label="项目首选项"
-			>
-				<b-form-checkbox-group
-					v-model="config.projectPreferences"
-					:options="options.project"
-					stacked
-					size="sm"
-				></b-form-checkbox-group>
-			</b-form-group>
+			<b-col>
+				<b-form-group
+					label="项目首选项"
+				>
+					<b-form-checkbox-group
+						v-model="config.projectPreferences"
+						:options="options.project"
+						stacked
+						size="sm"
+					></b-form-checkbox-group>
+				</b-form-group>
+			</b-col>
 		</b-row>
 		<b-row>
-			<div id="save-state">
-				<p v-if="saveState.succeed" class="text-success">保存成功!</p>
-				<p v-if="saveState.failed" class="text-danger">保存失败!</p>
-			</div>
+			<b-col>
+				<div id="save-state">
+					<p v-if="saveState.succeed" class="text-success">保存成功!</p>
+					<p v-if="saveState.failed" class="text-danger">保存失败!</p>
+				</div>
+			</b-col>
 			<b-col class="ml-auto" cols="auto">
 				<b-btn
 					size="sm"
@@ -53,43 +61,24 @@
 </template>
 
 <script>
-import DefaultConfig from '../utils/Config';
 import axios from 'axios';
 
 function defaultConfig() {
 	return {
-		events: [
-			'project-created', 
-			'project-updated', 
-			'project-deleted', 
-			'member-created', 
-			'member-deleted', 
-		],
+		events: [],
 		projectPreferences: ['informMember'],
-		informedMethods: ['email'],
 	};
 }
 
 function defaultOptions() {
 	return {
-		events: [
-			{ text: '项目创建', value: 'project-created' },
-			{ text: '项目更新', value: 'project-updated' },
-			{ text: '项目删除', value: 'project-deleted' },
-			{ text: '成员添加', value: 'member-created' },
-			{ text: '成员删除', value: 'member-deleted' }
-		],
+		events: [],
 		project: [{ text: '允许项目所有人通知项目成员', value: 'informMember' }],
-		methods: [
-			{ text: '邮箱', value: 'email'},
-			{ text: '其他', value: 'other'}
-		]
 	};
 }
 
 export default {
 	name: 'project-config',
-	components: { DefaultConfig },
 	data() {
 		return {
 			accountId: this.$store.state.principal.id,
@@ -103,7 +92,13 @@ export default {
 			hasCreated: false
 		};
 	},
+	computed: {
+		configState() {
+			return this.options.events.length === 0 ? false : true;
+		}
+	},
 	mounted() {
+		this.getEvents();
 		this.getConfig();
 	},
 	methods: {
@@ -116,7 +111,7 @@ export default {
 			this.saveState.failed = false;
 		},
 		async getConfig() {
-			const projectOwnerConfig = await axios.get(`/api/principal/${this.accountId}/config/owner`, {
+			const projectOwnerConfig = await axios.get('/api/principal/config/owner', {
 				params: {
 					projectId: this.projectId
 				}
@@ -135,7 +130,7 @@ export default {
 				projectPreferences: this.config.projectPreferences
 			});
 
-			if (projectOwnerConfig.data) {
+			if (projectOwnerConfig) {
 				this.saveState.succeed = true;
 				this.hasCreated = true;
 			}
@@ -152,13 +147,38 @@ export default {
 				projectPreferences: this.config.projectPreferences
 			});
 
-			if (projectOwnerConfig.data) {
+			if (projectOwnerConfig) {
 				this.saveState.succeed = true;
 			}
 
 			setTimeout(() => {
 				this.reset();
 			}, 3000);
+		},
+		async getEvents() {
+			const eventsMap = {
+				'account-created': '账号创建',
+				'account-updated': '账号更新',
+				'account-deleted': '账号删除',
+				'project-created': '项目创建',
+				'project-updated': '项目更新',
+				'project-deleted': '项目删除',
+				'member-created': '成员添加',
+				'member-deleted': '成员删除',
+				'authentication-failed': '认证失败',
+				'authentication-succeed': '认证成功'
+			};
+			const adminConfig = await axios.get('/api/principal/config/admin');
+			const events = [];
+
+			adminConfig.data.projectOwner.forEach(key => {
+				events.push({
+					text: eventsMap[key],
+					value: key
+				});
+			});
+
+			this.options.events = events;
 		}
 	}
 };
