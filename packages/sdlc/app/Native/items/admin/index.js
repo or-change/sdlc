@@ -25,6 +25,7 @@ SDLC.install('oc.com.sdlc.core.workbench.admin.item', {
 				appendTopics({
 					id: 'admin.plugins',
 					label: 'product.label',
+					icon: 'fab fa-product-hunt',
 					path: 'plugins'
 				});
 			}

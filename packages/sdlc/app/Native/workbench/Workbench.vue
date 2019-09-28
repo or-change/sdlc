@@ -19,7 +19,10 @@
 						v-for="(nav, index) in extension.nav"
 						:key="index"
 						:href="`#/workbench/${nav.path}`" 
-					>{{ $t(nav.label) }}</b-nav-item>
+					><i 
+						v-if="nav.icon" 
+						:class="['mr-2', nav.icon]"
+					></i>{{ $t(nav.label) }}</b-nav-item>
 				</b-navbar-nav>
 
 				<!-- Right aligned nav items -->

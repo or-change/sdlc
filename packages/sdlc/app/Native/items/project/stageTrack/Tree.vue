@@ -6,12 +6,12 @@
 		<table class="tree-table">
 			<thead class="tree-table-header">
 				<tr class="tree-table-header-row">
-					<th class="tree-table-header-cell">树状图</th>
-					<th class="tree-table-header-cell">流程</th>
-					<th class="tree-table-header-cell">阶段</th>
-					<th class="tree-table-header-cell">版本</th>
+					<th class="tree-table-header-cell">{{ $t('track.tree.main') }}</th>
+					<th class="tree-table-header-cell">{{ $t('track.tree.flow') }}</th>
+					<th class="tree-table-header-cell">{{ $t('track.tree.stage') }}</th>
+					<th class="tree-table-header-cell">{{ $t('track.tree.version') }}</th>
 					<!-- <th class="tree-table-header-cell">信息</th> -->
-					<th class="tree-table-header-cell">开始日期</th>
+					<th class="tree-table-header-cell">{{ $t('track.tree.createdAt') }}</th>
 				</tr>
 			</thead>
 			<tbody class="tree-table-body">

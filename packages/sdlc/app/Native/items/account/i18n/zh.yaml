@@ -1,2 +1,11 @@
 accountItem:
   profile: '用户信息'
+
+profile:
+  breadAccount: '用户'
+  breadProfile: '基本信息'
+  username: '用户名'
+  administrator: '管理员'
+  update: '更新'
+  adminYes: '是'
+  adminNo: '否'

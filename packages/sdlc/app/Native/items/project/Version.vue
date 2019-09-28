@@ -4,7 +4,7 @@
 			<b-col>
 				<b-row>
 					<b-col cols="6">
-						<b-form-group label="版本号: (格式: 1.0.0):">
+						<b-form-group :label="$t('version.semver')">
 							<b-form-input 
 								v-model="versionSelected.semver" 
 								size="sm" 
@@ -15,7 +15,7 @@
 				</b-row>
 				<b-row>
 					<b-col>
-						<b-form-group label="版本简介:">
+						<b-form-group :label="$t('version.abstract')">
 							<b-form-textarea 
 								rows="3"
 								no-resize
@@ -32,7 +32,7 @@
 							@click="createVersion()"
 						><i
 							class="fas fa-plus mr-2"
-						/>添加新版本</b-button>
+						/>{{ $t('version.create') }}</b-button>
 					</b-col>
 					<b-col v-if="versionSelected.id !== ''" cols="4">
 						<b-button
@@ -40,7 +40,7 @@
 							@click="updateVersion()"
 						><i
 							class="fas fa-check mr-2"
-						/>更新版本信息</b-button>
+						/>{{ $t('version.update') }}</b-button>
 					</b-col>
 				</b-row>
 			</b-col>
@@ -54,8 +54,8 @@
 					selected-variant="active"
 					@row-selected="onRowSelected"
 					:fields="[
-						{ key: 'semver', label: '版本号' },
-						{ key: 'createdAt', label: '创建时间' }
+						{ key: 'semver', label: $t('version.semverTable') },
+						{ key: 'createdAt', label: $t('version.createdAt') }
 					]"
 					:items="versionList"
 					class="version-list text-center"
@@ -99,10 +99,10 @@ export default {
 				await this.$http.project.version(this.projectId).update(this.versionSelected.id, {
 					abstract: this.versionSelected.abstract
 				});
-				this.showToast('success', '更新成功');
+				this.showToast('success', this.$t('version.updateSuccess'));
 			} catch (error) {
 				console.log(error);
-				this.showToast('danger', '更新失败');
+				this.showToast('danger', this.$t('version.updateFailed'));
 			}
 		},
 		async createVersion() {
@@ -111,11 +111,11 @@ export default {
 					semver: this.versionSelected.semver,
 					abstract: this.versionSelected.abstract
 				});
-				this.showToast('success', '添加成功');
+				this.showToast('success', this.$t('version.createSuccess'));
 				this.$emit('queryVersionList');
 			} catch (error) {
 				console.log(error);
-				this.showToast('danger', '添加失败');
+				this.showToast('danger', this.$t('version.createFailed'));
 			}
 		},
 		onRowSelected(items) {

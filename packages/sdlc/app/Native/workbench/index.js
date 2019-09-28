@@ -46,10 +46,10 @@ SDLC.install('oc.com.sdlc.core.workbench', {
 				return this;
 			},
 			addNavItem(options) {
-				const { id, path, label } = itemNormalize(options);
+				const { id, path, label, icon } = itemNormalize(options);
 
 				store.nav.push({
-					id, path, label
+					id, path, label, icon
 				});
 
 				if (!store.router.children[0].redirect) {

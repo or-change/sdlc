@@ -1,2 +1,11 @@
 accountItem:
   profile: 'Profile'
+
+profile:
+  breadAccount: 'Account'
+  breadProfile: 'Profile'
+  username: 'Username'
+  administrator: 'Administrator'
+  update: 'Update'
+  adminYes: 'Yes'
+  adminNo: 'No'

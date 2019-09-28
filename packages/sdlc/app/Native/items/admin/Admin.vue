@@ -10,7 +10,7 @@
 
 		<b-row>
 			<b-col cols="3">
-				<b-form-group label="名称:">
+				<b-form-group :label="$t('product.name')">
 					<b-input
 						readonly
 						size="sm"
@@ -19,7 +19,7 @@
 				</b-form-group>
 			</b-col>
 			<b-col cols="3">
-				<b-form-group label="版本:">
+				<b-form-group :label="$t('product.version')">
 					<b-input
 						readonly
 						size="sm"
@@ -28,7 +28,7 @@
 				</b-form-group>
 			</b-col>
 			<b-col>
-				<b-form-group label="简述:">
+				<b-form-group :label="$t('product.description')">
 					<b-input
 						readonly
 						size="sm"
@@ -38,13 +38,13 @@
 			</b-col>
 		</b-row>
 
-		<h4 class="my-3">插件</h4>
+		<h4 class="my-3">{{ $t('product.plugin') }}</h4>
 		<b-table
 			small
 			striped
 			:fields="[
-				{ key: 'name', label: '名称' },
-				{ key: 'action', label: '操作' }
+				{ key: 'name', label: $t('product.name') },
+				{ key: 'action', label: $t('product.action') }
 			]"
 			:items="product.plugins"
 			class="text-center plugins-list"

@@ -25,6 +25,7 @@ SDLC.install('oc.com.sdlc.core.workbench.project', {
 				addNavItem({
 					id: 'project',
 					path: 'project',
+					icon: 'fas fa-align-justify',
 					label: 'projectAll.label'
 				});
 			}

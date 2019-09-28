@@ -25,6 +25,7 @@ SDLC.install('oc.com.sdlc.core.workbench.account.item', {
 				appendTopics({
 					id: 'account.profile',
 					label: 'accountItem.profile',
+					icon: 'fas fa-user-cog',
 					path: 'profile'
 				});
 			}

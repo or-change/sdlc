@@ -1,14 +1,89 @@
-profile:
-  breadAccount: 'Account'
-  breadProfile: 'Profile'
-  username: 'Username'
-  administrator: 'Administrator'
-  update: 'Update'
-  adminYes: 'Yes'
-  adminNo: 'No'
-
 project:
   property: 'Property'
   member: 'Member'
   version: 'Version'
   track: 'Track'
+
+property:
+  title: 'Property'
+  name: 'Project Name:'
+  abstract: 'Abstract:'
+  update: 'Update'
+
+member:
+  title: 'Member'
+  search: 'Search:'
+  joined:
+    title: 'Joined:'
+    name: 'Name'
+    inviter: 'Inviter'
+    joinedAt: 'JoinedAt'
+    action: 'Action'
+    remove: 'Remove'
+    success: 'Remove Success'
+    failed: 'Remove Failed'
+  notToJoin:
+    title: 'Not To Join:'
+    name: 'Name'
+    action: 'Action'
+    add: 'Add'
+    success: 'Add Success'
+    failed: 'Add Failed'
+
+version:
+  title: 'Version'
+  semver: 'Semver (format: 1.0.0):'
+  semverTable: 'Semver'
+  abstract: 'Abstract:'
+  createdAt: 'CreatedAt'
+  create: 'Create New Version'
+  update: 'update'
+  createSuccess: 'Create Success'
+  createFailed: 'Create Failed'
+  updateSuccess: 'Update Success'
+  updateFailed: 'Update Failed'
+
+track:
+  title: 'Stage Track'
+  flow:
+    title: 'Create New Flow'
+    name: 'Flow Name:'
+    parentFlow: 'Parent Flow:'
+    create: 'Create Flow'
+    success: 'Create Success'
+    failed: 'Create Failed'
+    stage:
+      title: 'Stage'
+      name: 'Stage Name:'
+      config: 'Config:'
+      promoted: 'Promoted'
+      initializable: 'Initializable'
+      remove: 'Remove This Stage'
+      add: 'Add Stage'
+      evolution: 'Evolution Table'
+      message: 'Please Add Stage'
+  init:
+    title: 'Init'
+    stage: 'Stage:'
+    version: 'Version:'
+    abstract: 'Abstract:'
+    create: 'Init'
+    success: 'Init Success'
+    failed: 'Init Failed'
+  wrap:
+    detail: 'Detail'
+    evolution:
+      title: 'Evolution'
+      stage: 'Stage:'
+      version: 'Version:'
+      abstract: 'Abstract:'
+      message: 'This stage can not promoted'
+      create: 'Evolut'
+      success: 'Evolut Success'
+      failed: 'Evolut Failed'
+  tree:
+    main: 'Tree'
+    flow: 'Flow'
+    stage: 'Stage'
+    version: 'Version'
+    createdAt: 'CreatedAt'

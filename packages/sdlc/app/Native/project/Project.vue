@@ -12,7 +12,10 @@
 						exact-active-class="active"
 						:to="`/workbench/project/${projectId}/${nav.path}`"
 						:title="$t(nav.label)"
-					>{{ $t(nav.label) }}</b-nav-item>
+					><i 
+						v-if="nav.icon" 
+						:class="['mr-2', nav.icon]"
+					></i>{{ $t(nav.label) }}</b-nav-item>
 				</b-nav>
 			</b-container>
 		</div>

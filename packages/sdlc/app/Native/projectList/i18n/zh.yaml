@@ -6,7 +6,16 @@ projectAll:
   newProject:
     title: '创建新项目'
     name: '项目名称'
-    language: '开发语言'
     abstract: '项目描述'
     submit: '确认'
     close: '关闭'
+    success: '创建成功'
+    failed: '创建失败'
+  projectList:
+    name: '名称'
+    owner: '负责人'
+    createAt: '创建时间'
+    action: '操作'
+    delete: '删除'
+    success: '删除成功'
+    failed: '删除失败'

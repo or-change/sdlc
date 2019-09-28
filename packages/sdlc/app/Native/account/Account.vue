@@ -10,7 +10,10 @@
 							:to="`/workbench/account/${nav.path}`"
 							exact
 							exact-active-class="active"
-						>{{ $t(nav.label) }}</b-nav-item>
+						><i 
+							v-if="nav.icon" 
+							:class="['mr-2', nav.icon]"
+						></i>{{ $t(nav.label) }}</b-nav-item>
 					</b-nav>
 				</b-card>
 			</b-col>

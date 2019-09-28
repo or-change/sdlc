@@ -2,3 +2,8 @@ product:
   label: '产品'
   breadAccount: '管理员'
   breadProduct: '产品'
+  name: '名称'
+  version: '版本'
+  description: '简述'
+  plugin: '插件'
+  action: '操作'

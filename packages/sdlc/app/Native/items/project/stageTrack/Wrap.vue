@@ -96,7 +96,7 @@
 							<b-popover
 								v-if="trace.hash !== ''"
 								:ref="`popover-${trace.hash}`" :target="`wrap-body-cell-${trace.hash}`" 
-								title="详情:" disabled
+								:title="$t('track.wrap.detail')" disabled
 							>
 								<b-form-textarea
 									rows="5" no-resize size="sm"
@@ -110,14 +110,14 @@
 									@click="showEvolutionModal(trace.hash)"
 								><i
 									class="fas fa-plus mr-2"
-								/>演进</b-button>
+								/>{{ $t('track.wrap.evolution.title') }}</b-button>
 							</b-popover>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		<b-modal ref="evolution-modal" hide-footer scrollable title="演进">
+		<b-modal ref="evolution-modal" hide-footer scrollable :title="$t('track.wrap.evolution.title')">
 			<TraceEvolution
 				:traceList="traceList"
 				:traceActive="traceActive"

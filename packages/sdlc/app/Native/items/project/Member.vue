@@ -4,11 +4,11 @@
 			<b-col>
 				<b-row>
 					<b-col>
-						<h5 class="mb-3">已加入:</h5>
+						<h5 class="mb-3">{{ $t('member.joined.title') }}</h5>
 					</b-col>
 					<b-col cols="5">
 						<b-form-group
-							label="搜索:"
+							:label="$t('member.search')"
 							label-cols-sm="3"
 							label-size="sm"
 						>
@@ -27,10 +27,10 @@
 					hover
 					sticky-header
 					:fields="[
-						{ key: 'name', label: '姓名' },
-						{ key: 'inviter', label: '邀请者' },
-						{ key: 'joinedAt', label: '加入时间' },
-						{ key: 'action', label: '操作' }
+						{ key: 'name', label: $t('member.joined.name') },
+						{ key: 'inviter', label: $t('member.joined.inviter') },
+						{ key: 'joinedAt', label: $t('member.joined.joinedAt') },
+						{ key: 'action', label: $t('member.joined.action') }
 					]"
 					:items="memberRenderList"
 					:filter="memberFilter"
@@ -44,7 +44,7 @@
 							size="sm"
 							variant="link"
 							@click="deleteMember(data.item.id)"
-						>移除</b-button>
+						>{{ $t('member.joined.remove') }}</b-button>
 					</template>
 				</b-table>
 			</b-col>
@@ -52,11 +52,11 @@
 
 				<b-row>
 					<b-col>
-						<h5 class="mb-3">未加入:</h5>
+						<h5 class="mb-3">{{ $t('member.notToJoin.title') }}</h5>
 					</b-col>
 					<b-col cols="5">
 						<b-form-group
-							label="搜索:"
+							:label="$t('member.search')"
 							label-cols-sm="3"
 							label-size="sm"
 						>
@@ -74,8 +74,8 @@
 					hover
 					sticky-header
 					:fields="[
-						{ key: 'name', label: '姓名' },
-						{ key: 'action', label: '操作' }
+						{ key: 'name', label: $t('member.notToJoin.name') },
+						{ key: 'action', label: $t('member.notToJoin.action') }
 					]"
 					:items="accountNotMember"
 					:filter="accountFilter"
@@ -86,7 +86,7 @@
 							size="sm"
 							variant="link"
 							@click="createMember(data.item.id)"
-						>添加</b-button>
+						>{{ $t('member.notToJoin.add') }}</b-button>
 					</template>
 				</b-table>
 			</b-col>
@@ -156,20 +156,20 @@ export default {
 					inviter: this.principalId
 				});
 				this.queryMemberList();
-				this.showToast('success', '添加成功');
+				this.showToast('success', this.$t('member.notToJoin.success'));
 			} catch (error) {
 				console.log(error);
-				this.showToast('danger', '添加失败');
+				this.showToast('danger', this.$t('member.notToJoin.failed'));
 			}
 		},
 		async deleteMember(id) {
 			try {
 				await this.$http.project.member(this.projectId).delete(id);
 				this.queryMemberList();
-				this.showToast('success', '移除成功');
+				this.showToast('success', this.$t('member.joined.success'));
 			} catch (error) {
 				console.log(error);
-				this.showToast('danger', '移除失败');
+				this.showToast('danger', this.$t('member.join.failed'));
 			}
 		}
 	}

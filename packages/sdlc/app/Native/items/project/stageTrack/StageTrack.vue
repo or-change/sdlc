@@ -14,7 +14,7 @@
 					@click="showModal('create-flow-modal')"
 				><i
 					class="fas fa-plus mr-2"
-				/>添加新流程</b-button>
+				/>{{ $t('track.flow.title') }}</b-button>
 			</b-col>
 			<b-col cols="2">
 				<b-button
@@ -22,7 +22,7 @@
 					@click="showModal('init-flow-modal')"
 				><i
 					class="fas fa-plus mr-2"
-				/>初始化</b-button>
+				/>{{ $t('track.init.title') }}</b-button>
 			</b-col>
 		</b-row>
 		<b-row v-if="flowList.length !== 0">
@@ -50,14 +50,14 @@
 			</b-col>
 		</b-row>
 
-		<b-modal ref="create-flow-modal" hide-footer scrollable title="创建新流程">
+		<b-modal ref="create-flow-modal" hide-footer scrollable :title="$t('track.flow.title')">
 			<FlowCreate
 				:flowSelector="flowSelector"
 				@queryFlowList="queryFlowList"
 			></FlowCreate>
 		</b-modal>
 
-		<b-modal ref="init-flow-modal" hide-footer scrollable title="初始化">
+		<b-modal ref="init-flow-modal" hide-footer scrollable :title="$t('track.init.title')">
 			<TraceInit
 				:flowSelected="flowSelected"
 				:versionSelector="versionSelector"

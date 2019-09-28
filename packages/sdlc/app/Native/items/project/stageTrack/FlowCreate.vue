@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<b-form-group label="流程名称:">
+		<b-form-group :label="$t('track.flow.name')">
 			<b-form-input size="sm" v-model="newFlow.name"></b-form-input>
 		</b-form-group>
-		<b-form-group label="父级流程:">
+		<b-form-group :label="$t('track.flow.parentFlow')">
 			<b-form-select
 				v-if="flowSelector.length !== 0"
 				v-model="newFlow.parentId"
@@ -12,20 +12,20 @@
 			></b-form-select>
 			<div v-if="flowSelector.length === 0">无</div>
 		</b-form-group>
-		<b-form-group label="阶段:">
+		<b-form-group :label="$t('track.flow.stage.title')">
 			<div v-if="newFlow.stageList.length !== 0">
 				<b-card
 					v-for="(stage, index) in newFlow.stageList"
 					:key="index"
 					class="mb-3"
 				>
-					<b-form-group label-size="sm" :label="`${index + 1} 阶段名称:`">
+					<b-form-group label-size="sm" :label="`${index + 1}.${$t('track.flow.stage.name')}`">
 						<b-form-input size="sm" v-model="stage.name"></b-form-input>
 					</b-form-group>
 
-					<b-form-group label-size="sm" label="配置:">
-						<b-form-checkbox switch v-model="stage.promoted">版本是否可提升</b-form-checkbox>
-						<b-form-checkbox switch v-model="stage.initializable">是否可初始化</b-form-checkbox>
+					<b-form-group label-size="sm" :label="$t('track.flow.stage.config')">
+						<b-form-checkbox switch v-model="stage.promoted">{{ $t('track.flow.stage.promoted') }}</b-form-checkbox>
+						<b-form-checkbox switch v-model="stage.initializable">{{ $t('track.flow.stage.initializable') }}</b-form-checkbox>
 					</b-form-group>
 
 					<!-- <b-form-group label-size="sm" label="可用工具:">
@@ -43,10 +43,10 @@
 						@click="removeStage(index)"
 					><i
 						class="fas fa-times mr-2"
-					/>删除此阶段</b-button>
+					/>{{ $t('track.flow.stage.remove') }}</b-button>
 				</b-card>
 			</div>
-			<div v-if="newFlow.stageList.length === 0">请添加阶段</div>
+			<div v-if="newFlow.stageList.length === 0" class="mb-3">{{ $t('track.flow.stage.message') }}</div>
 			<b-button
 				class="w-100"
 				size="sm"
@@ -54,10 +54,10 @@
 				@click="addStage()"
 			><i
 				class="fas fa-plus mr-2"
-			/>添加阶段</b-button>
+			/>{{ $t('track.flow.stage.add') }}</b-button>
 		</b-form-group>
 
-		<b-form-group label="阶段可演进关系:">
+		<b-form-group :label="$t('track.flow.stage.evolution')">
 			<b-table
 				v-if="newFlow.stageList.length !== 0"
 				small
@@ -78,9 +78,9 @@
 					</b-form-checkbox>
 				</template>
 			</b-table>
-			<div v-if="newFlow.stageList.length === 0">请添加阶段</div>
+			<div v-if="newFlow.stageList.length === 0">{{ $t('track.flow.stage.message') }}</div>
 		</b-form-group>
-		<b-button class="mt-3" variant="success" block @click="createFlow()">确认创建此流程</b-button>
+		<b-button class="mt-3" variant="success" block @click="createFlow()">{{ $t('track.flow.create') }}</b-button>
 		<!-- .<b-button class="mt-2" variant="warning" block @click="hideCreateFlowModal()">关闭并清除填入信息</b-button> -->
 	</div>
 </template>
@@ -159,11 +159,11 @@ export default {
 						};
 					})
 				});
-				this.showToast('success', '添加成功');
+				this.showToast('success', this.$t('track.flow.success'));
 				this.$emit('queryFlowList');
 			} catch (error) {
 				console.log(error);
-				this.showToast('danger', '添加失败');
+				this.showToast('danger', this.$t('track.flow.failed'));
 			}
 		},
 	}

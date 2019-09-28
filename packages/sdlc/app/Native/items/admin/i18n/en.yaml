@@ -2,3 +2,8 @@ product:
   label: 'Product'
   breadAccount: 'Admin'
   breadProduct: 'Product'
+  name: 'Name'
+  version: 'Version'
+  description: 'Description'
+  plugin: 'Plugins'
+  action: 'Action'

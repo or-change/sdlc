@@ -1,14 +1,14 @@
 <template>
 	<div>
-		<h4 class="mb-3">基本属性</h4>
+		<h4 class="mb-3">{{ $t('property.title') }}</h4>
 		<b-row>
 			<b-col cols="3">
-				<b-form-group label="项目名称:">
+				<b-form-group :label="$t('property.name')">
 					<b-form-input trim size="sm" v-model="project.name"></b-form-input>
 				</b-form-group>
 			</b-col>
 			<b-col>
-				<b-form-group label="项目简介:">
+				<b-form-group :label="$t('property.abstract')">
 					<b-form-input
 						size="sm"
 						v-model="project.abstract"
@@ -27,20 +27,20 @@
 					:disabled="!projectNameState || !projectAbstractState"
 				><i
 					class="fas fa-check mr-2"
-				/>更新项目属性</b-button>
+				/>{{ $t('property.update') }}</b-button>
 			</b-col>
 		</b-row>
 
-		<h4 class="mt-4 mb-3">项目成员</h4>
+		<h4 class="mt-4 mb-3">{{ $t('member.title') }}</h4>
 		<projectMember></projectMember>
 
-		<h4 class="mt-4 mb-3">版本信息</h4>
+		<h4 class="mt-4 mb-3">{{ $t('version.title') }}</h4>
 		<projectVersion 
 			:versionList="versionList"
 			@queryVersionList="queryVersionList"
 		></projectVersion>
 
-		<h4 class="mt-4 mb-3">阶段追踪</h4>
+		<h4 class="mt-4 mb-3">{{ $t('track.title') }}</h4>
 		<stageTrack
 			:versionList="versionList"
 		></stageTrack>
@@ -111,6 +111,7 @@ export default {
 				console.log(error);
 				this.showToast('danger', '更新失败');
 			}
+			this.$router.go(0);
 		},
 		async deleteProject() {
 			await this.$http.project.delete(this.projectId);

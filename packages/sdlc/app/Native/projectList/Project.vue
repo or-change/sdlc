@@ -27,7 +27,7 @@
 				@click="showCreateProjectModal()"
 			><i
 				class="fas fa-plus mr-2"
-			/>创建新项目</b-button>
+			/>{{ $t('projectAll.newProject.title') }}</b-button>
 
 			<b-pagination
 				size="sm" 
@@ -45,10 +45,10 @@
 			striped 
 			hover
 			:fields="[
-				{ key: 'name', label: '名称' },
-				{ key: 'owner', label: '负责人' },
-				{ key: 'createdAt', label: '创建时间' },
-				{ key: 'action', label: '操作' }
+				{ key: 'name', label: $t('projectAll.projectList.name') },
+				{ key: 'owner', label: $t('projectAll.projectList.owner') },
+				{ key: 'createdAt', label: $t('projectAll.projectList.createAt') },
+				{ key: 'action', label: $t('projectAll.projectList.action') }
 			]"
 			id="project-all"
 			:items="projectRenderList"
@@ -74,7 +74,7 @@
 					size="sm"
 					variant="link"
 					@click="deleteProject(data.item.id)"
-				>移除</b-button>
+				>{{ $t('projectAll.projectList.delete') }}</b-button>
 			</template>
 
 			<template v-slot:table-busy>
@@ -85,17 +85,16 @@
 			</template>
 		</b-table>
 
-		<!-- 创建新项目 -->
-		<b-modal ref="create-project-modal" hide-footer title="创建新项目">
+		<b-modal ref="create-project-modal" hide-footer :title="$t('projectAll.newProject.title')">
 			<div>
-				<b-form-group label="项目名称">
+				<b-form-group :label="$t('projectAll.newProject.name')">
 					<b-form-input 
 						size="sm" 
 						v-model="newProject.name" 
 						:state="nameState"
 					></b-form-input>
 				</b-form-group>
-				<b-form-group label="项目简介">
+				<b-form-group :label="$t('projectAll.newProject.abstract')">
 					<b-form-textarea 
 						rows="3"
 						no-resize
@@ -111,13 +110,13 @@
 				block 
 				@click="createProject" 
 				:disabled="!nameState || !abstractStage"
-			>确认创建项目</b-button>
+			>{{ $t('projectAll.newProject.submit') }}</b-button>
 			<b-button 
 				class="mt-2" 
 				variant="warning" 
 				block 
 				@click="hideCreateProjectModal()"
-			>关闭并清除填入信息</b-button>
+			>{{ $t('projectAll.newProject.close') }}</b-button>
 		</b-modal>
 	</b-container>
 </template>
@@ -192,22 +191,22 @@ export default {
 		async createProject() {
 			try {
 				await this.$http.project.create(this.newProject);
-				this.showToast('success', '创建成功');
+				this.showToast('success', this.$t('projectAll.newProject.success'));
 				this.hideCreateProjectModal();
 				this.queryProjectList();
 			} catch (error) {
 				console.log(error);
-				this.showToast('danger', '创建失败');
+				this.showToast('danger', this.$t('projectAll.newProject.failed'));
 			}
 		},
 		async deleteProject(projectId) {
 			try {
 				await this.$http.project.delete(projectId);
-				this.showToast('success', '删除成功');
+				this.showToast('success', this.$t('projectAll.projectList.success'));
 				this.queryProjectList();
 			} catch (error) {
 				console.log(error);
-				this.showToast('danger', '删除失败');
+				this.showToast('danger', this.$t('projectAll.projectList.failed'));
 			}
 		},
 		showCreateProjectModal() {

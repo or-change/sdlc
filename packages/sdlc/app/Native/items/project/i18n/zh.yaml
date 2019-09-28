@@ -1,15 +1,89 @@
-profile:
-  breadAccount: '用户'
-  breadProfile: '基本信息'
-  username: '用户名'
-  administrator: '管理员'
-  update: '更新'
-  adminYes: '是'
-  adminNo: '否'
-
 project:
-  breadcrumb: '我的项目'
   property: '项目属性'
   member: '项目成员'
   version: '版本信息'
   track: '阶段追踪'
+
+property:
+  title: '属性'
+  name: '项目名称:'
+  abstract: '简介:'
+  update: '更新项目信息'
+
+member:
+  title: '项目成员'
+  search: '搜索:'
+  joined:
+    title: '已加入:'
+    name: '姓名'
+    inviter: '邀请者'
+    joinedAt: '加入时间'
+    action: '操作'
+    remove: '移除'
+    success: '移除成功'
+    failed: '移除失败'
+  notToJoin:
+    title: '未加入:'
+    name: '姓名'
+    action: '操作'
+    add: '添加'
+    success: '添加成功'
+    failed: '添加失败'
+
+version:
+  title: '版本信息'
+  semver: '版本号 (格式: 1.0.0):'
+  semverTable: '版本号'
+  abstract: '简介:'
+  createdAt: '创建时间'
+  create: '创建新版本'
+  update: '更新信息'
+  createSuccess: '创建成功'
+  createFailed: '创建失败'
+  updateSuccess: '更新成功'
+  updateFailed: '更新失败'
+
+track:
+  title: '阶段追踪'
+  flow:
+    title: '创建新流程'
+    name: '流程名称:'
+    parentFlow: '父级流程:'
+    create: '确认创建流程'
+    success: '创建成功'
+    failed: '创建失败'
+    stage:
+      title: '阶段'
+      name: '阶段名称:'
+      config: '配置:'
+      promoted: '是否可提升版本'
+      initializable: '是否可初始化'
+      remove: '移除此阶段'
+      add: '添加阶段'
+      evolution: '阶段可演进表'
+      message: '请添加阶段'
+  init:
+    title: '初始化'
+    stage: '阶段:'
+    version: '版本:'
+    abstract: '简述:'
+    create: '确认初始化'
+    success: '初始化成功'
+    failed: '初始换失败'
+  wrap:
+    detail: '详情'
+    evolution:
+      title: '演进'
+      stage: '演进至:'
+      version: '版本:'
+      abstract: '简介:'
+      message: '此阶段不可提升版本'
+      create: '确认演进'
+      success: '演进成功'
+      failed: '演进失败'
+  tree:
+    main: '树状图'
+    flow: '流程'
+    stage: '阶段'
+    version: '版本'
+    createdAt: '创建时间'
