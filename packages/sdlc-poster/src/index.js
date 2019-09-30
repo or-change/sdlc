@@ -178,7 +178,7 @@ const eventTypes = {
 };
 
 module.exports = function (options, { Model, injection }) {
-	const { channel } = injection;
+	const { channelCenter } = injection;
 	const sender = {
 		email: function send(transportOptions, mailOptions) {
 			const transporter = nodemailer.createTransport(transportOptions);
@@ -192,9 +192,11 @@ module.exports = function (options, { Model, injection }) {
 			});
 		}
 	};
+
+	const { channels, subscribe} = channelCenter();
 	
-	Object.keys(channel.list).forEach(channelName => {
-		channel.on(channelName, async function (arg) {
+	channels.forEach(channelName => {
+		subscribe(channelName, async function (arg) {
 			const type = ['account', 'project', 'member', 'authentication'].find(type => type === channelName.substring(0, channelName.indexOf('-')));
 			const { emailTemplate, recipientList } = await eventTypes[type](channelName, arg, Model, injection);
 

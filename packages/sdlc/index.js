@@ -24,35 +24,13 @@ const meta = require('./package.json');
 const normalize = require('./src/normalize');
 
 const APP_ID = 'com.orchange.sdlc';
-const EVENTS = {
-	'account-created': [],
-	'account-updated': [],
-	'account-deleted': [],
-	'project-created': [],
-	'project-updated': [],
-	'project-deleted': [],
-	'member-created': [],
-	'member-deleted': [],
-	'authentication-failed': [],
-	'authentication-succeed': []
-};
+const CHANNEL_NAMES = require('./src/NativeChannelNames.json');
 
 module.exports = function SDLC(options) {
 	const sdlc = {};
 	const finalOptions = normalize(options);
 
-	Object.keys(finalOptions.server.events).forEach(eventName => {
-		if (EVENTS[eventName]) {
-			throw new Error(`Event ${eventName} has been registered.`);
-		}
-
-		if (Array.isArray(EVENTS[eventName])) {
-			throw new Error(`The value of event ${eventName} should be an Array.`);
-		}
-
-		EVENTS[eventName] = options.server.events[eventName];
-	});
-
+	const channelCenter = Channel(CHANNEL_NAMES.concat(finalOptions.server.events));
 	const pluginAccessor = PluginRegister(finalOptions.plugins);
 	const SDLCApplicationBackend = DuckWebKoa((app, { AppRouter, Session }) => {
 		app.use(koaBody({ multipart: true }));
@@ -79,7 +57,8 @@ module.exports = function SDLC(options) {
 		injection: {
 			authenticate: finalOptions.server.authenticate,
 			Plugin: pluginAccessor,
-			channel: Channel(EVENTS),
+			channelCenter,
+			channel: channelCenter(),
 			options: {
 				get namesapce() {
 					return finalOptions.namesapce;
@@ -113,9 +92,9 @@ module.exports = function SDLC(options) {
 		}
 	}, ({ Web, Webpack, Log }) => {
 		const application = Web.Application('Default');
-		const adapter = DuckLog.Adapter.HttpServer(application, abstract => Log.access(abstract));
+		const listener = DuckLog.Adapter.HttpServer(application, abstract => Log.access(abstract));
 
-		sdlc.server = Web.Http.createServer(adapter);
+		sdlc.server = Web.Http.createServer(listener);
 		sdlc.webpack = Webpack('sdlc', { app: finalOptions.app });
 	});
 

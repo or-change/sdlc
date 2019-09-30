@@ -17,7 +17,7 @@ module.exports = {
 				async create(payload) {
 					const project = await store.createProject(payload);
 
-					channel.emit('project-created', project);
+					channel.publish('project-created', project);
 					Log.model({ type: 'create project', info: project.id});
 
 					return project;
@@ -25,7 +25,7 @@ module.exports = {
 				async update(payload) {
 					const project = await store.updateProject(this.id, payload);
 
-					channel.emit('project-updated', project);
+					channel.publish('project-updated', project);
 					Log.model({ type: 'update project', info: project.id});
 
 					return project;
@@ -36,7 +36,7 @@ module.exports = {
 				async delete() {
 					const project = await store.deleteProject(this.id);
 
-					channel.emit('project-deleted', project);
+					channel.publish('project-deleted', project);
 					Log.model({ type: 'delete project', info: project.id});
 
 					return project;
@@ -81,7 +81,7 @@ module.exports = {
 				async create(payload) {
 					const member = await store.createMember(payload);
 
-					channel.emit('member-created', member);
+					channel.publish('member-created', member);
 					Log.model({ type: 'create member', info: member});
 
 					return member;
@@ -89,7 +89,7 @@ module.exports = {
 				async update(payload) {
 					const member = await store.updateMember(this.id, payload);
 
-					channel.emit('member-deleted', member);
+					channel.publish('member-deleted', member);
 					Log.model({ type: 'delete member', info: member});
 
 					return member;

@@ -1,0 +1,12 @@
+[
+	"account-created",
+	"account-updated",
+	"account-deleted",
+	"project-created",
+	"project-updated",
+	"project-deleted",
+	"member-created",
+	"member-deleted",
+	"authentication-failed",
+	"authentication-succeed"
+]

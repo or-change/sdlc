@@ -18,6 +18,8 @@ const store = window.store = {
 	}
 };
 
+// Footer
+
 const DEFAULT_PLUGINID = [
 	'oc.com.sdlc.core.workbench',
 	'oc.com.sdlc.core.signin',
