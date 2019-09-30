@@ -13,6 +13,12 @@
 						><i 
 							v-if="nav.icon" 
 							:class="['mr-2', nav.icon]"
+							style="width:35px;text-align:center;"
+						></i>
+						<i
+							v-if="!nav.icon"
+							class="mr-2"
+							style="display:inline-block;width:40px;"
 						></i>{{ $t(nav.label) }}</b-nav-item>
 					</b-nav>
 				</b-card>

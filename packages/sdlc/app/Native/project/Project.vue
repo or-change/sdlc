@@ -2,7 +2,11 @@
 	<div>
 		<div class="detail-header">
 			<b-container class="pt-3">
-				<h4 class="mb-5">{{ projectName }}</h4>
+				<h4 v-if="projectName.length !== 0" class="mb-5">{{ projectName }}</h4>
+				<div v-if="projectName.length === 0">
+					<h4 class="mb-5 mr-2" style="display:inline-block;">Loading</h4>
+					<b-spinner variant="primary" small label="Busy"></b-spinner>
+				</div>
 
 				<b-nav tabs class="detail-nav">
 					<b-nav-item
@@ -56,6 +60,9 @@ export default {
 <style lang="scss">
 .detail-header {
 	background-color:#FAFBFC;
+	background-image: url('../../assets/bg-project.png');
+	background-position: 0 -20px;
+	background-size: cover;
 	border-bottom: 1px solid #e1e4e8;
 
 	.detail-nav {
