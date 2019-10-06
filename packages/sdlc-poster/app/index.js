@@ -26,7 +26,8 @@ SDLC.install('com.orchange.sdlc.poster', {
 				appendTopics({
 					id: 'Poster',
 					label: 'poster.account.title',
-					path: 'poster'
+					path: 'poster',
+					icon: 'fas fa-bell'
 				});
 			}
 		},
@@ -43,7 +44,9 @@ SDLC.install('com.orchange.sdlc.poster', {
 				appendTopics({
 					id: 'Poster',
 					label: 'poster.project.title',
-					path: 'poster'
+					path: 'poster',
+					icon: 'fas fa-bell',
+					ownerOnly: false
 				});
 			}
 		},
@@ -60,7 +63,8 @@ SDLC.install('com.orchange.sdlc.poster', {
 				appendTopics({
 					id: 'Poster',
 					label: 'poster.admin.title',
-					path: 'poster'
+					path: 'poster',
+					icon: 'fas fa-bell'
 				});
 			}
 		}

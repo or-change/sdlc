@@ -1,5 +1,5 @@
 function normalize(options) {
-	const { id, label, icon, badge } = options;
+	const { id, label, icon, badge, ownerOnly } = options;
 
 	if (!id) {
 		throw new Error('options.id is need.');
@@ -16,10 +16,14 @@ function normalize(options) {
 	if (badge && typeof badge !== 'string') {
 		throw new Error('options.badge is Expected be a string.');
 	}
+
+	if (ownerOnly && typeof ownerOnly !== 'boolean') {
+		throw new Error('options.badge is Expected be a string.');
+	}
 }
 
 export function itemNormalize(options) {
-	const { id, path, label, icon, badge, items } = options;
+	const { id, path, label, icon, badge, items, ownerOnly } = options;
 
 	normalize(options);
 
@@ -37,7 +41,7 @@ export function itemNormalize(options) {
 		});
 
 		return {
-			id, label, icon, badge, items
+			id, label, icon, badge, items, ownerOnly
 		};
 	}
 	
@@ -46,7 +50,7 @@ export function itemNormalize(options) {
 	}
 
 	return {
-		id, path, label, icon, badge
+		id, path, label, icon, badge, ownerOnly
 	};
 }
 

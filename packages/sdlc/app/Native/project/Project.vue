@@ -12,6 +12,7 @@
 					<b-nav-item
 						v-for="(nav, index) in navExtend"
 						:key="index"
+						v-if="nav.ownerOnly === undefined || !(nav.ownerOnly && !principalIsOwner)"
 						exact
 						exact-active-class="active"
 						:to="`/workbench/project/${projectId}/${nav.path}`"
@@ -35,6 +36,7 @@ export default {
 	data() {
 		return {
 			projectName: '',
+			principalIsOwner: null
 		};
 	},
 	computed: {
@@ -51,6 +53,7 @@ export default {
 	methods: {
 		async getProjectById() {
 			const project = await this.$http.project.get(this.projectId);
+			this.principalIsOwner = project.ownerId === this.$store.state.principal.id;
 			this.projectName = project.name;
 		},
 	}

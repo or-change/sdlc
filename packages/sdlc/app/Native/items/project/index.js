@@ -27,7 +27,8 @@ SDLC.install('oc.com.sdlc.core.workbench.project.retrive.item', {
 						id: 'project.property',
 						label: 'project.property',
 						icon: 'fas fa-grip-vertical',
-						path: 'property'
+						path: 'property',
+						ownerOnly: false
 					}
 				].forEach(topics => appendTopics(topics));
 			}

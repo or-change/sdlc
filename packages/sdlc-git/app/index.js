@@ -24,7 +24,9 @@ SDLC.install('com.orchage.sdlc.git', {
 				appendTopics({
 					id: 'Git-topic',
 					label: 'git.title',
-					path: 'git'
+					path: 'git',
+					icon: 'fab fa-git-alt',
+					ownerOnly: true
 				});
 			}
 		}
