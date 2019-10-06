@@ -17,7 +17,7 @@ const router = require('./src/router');
 const Webpack = require('./src/webpack');
 const models = require('./src/models');
 const PluginRegister = require('./src/PluginRegister');
-const Channel = require('./src/Channel');
+const Channel = require('./src/ChannelCenter');
 const Logger = require('./src/Logger');
 
 const meta = require('./package.json');
@@ -30,7 +30,9 @@ module.exports = function SDLC(options) {
 	const sdlc = {};
 	const finalOptions = normalize(options);
 
-	const channelCenter = Channel(CHANNEL_NAMES.concat(finalOptions.server.events));
+	const channelCenter = Channel(
+		finalOptions.server.events ? CHANNEL_NAMES.concat(finalOptions.server.events) : CHANNEL_NAMES
+	);
 	const pluginAccessor = PluginRegister(finalOptions.plugins);
 	const SDLCApplicationBackend = DuckWebKoa((app, { AppRouter, Session }) => {
 		app.use(koaBody({ multipart: true }));
@@ -43,8 +45,8 @@ module.exports = function SDLC(options) {
 			DuckWebKoaSession(finalOptions.server.session),
 			DuckWebKoaValidator()
 		],
-		installed(context, { Plugin, injection }) {
-			context.mountRouter = Plugin.RouterMounter(context, injection);
+		installed({ Plugin, injection }) {
+			injection.mountRouter = Plugin.RouterMounter(injection);
 		}
 	});
 
@@ -62,9 +64,6 @@ module.exports = function SDLC(options) {
 			options: {
 				get namesapce() {
 					return finalOptions.namesapce;
-				},
-				get store() {
-					return Object.assign({}, finalOptions.store);
 				}
 			}
 		},
@@ -86,9 +85,11 @@ module.exports = function SDLC(options) {
 		],
 		installed({ Datahub, injection }) {
 			injection.Model = Datahub(APP_ID, finalOptions.store).model;
-			injection.Plugin.inject(injection);
 
-			finalOptions.server.installed(injection);
+			const totalInjection = injection.$create();
+
+			injection.Plugin.inject(totalInjection);
+			finalOptions.server.installed(totalInjection);
 		}
 	}, ({ Web, Webpack, Log }) => {
 		const application = Web.Application('Default');

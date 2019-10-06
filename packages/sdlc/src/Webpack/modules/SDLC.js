@@ -15,10 +15,9 @@ const store = window.store = {
 	i18n: {
 		zh: [],
 		en: []
-	}
+	},
+	Footer: null
 };
-
-// Footer
 
 const DEFAULT_PLUGINID = [
 	'oc.com.sdlc.core.workbench',
@@ -86,6 +85,15 @@ function Decorator() {
 
 			store.home = routerPath;
 		
+			return this;
+		},
+		setFooter(componentOptions) {
+			if (typeof componentOptions !== 'object') {
+				throw new Error('Object is Expected.');
+			}
+
+			store.Footer = componentOptions;
+
 			return this;
 		},
 		pluginExtender: PluginExtender()
@@ -192,7 +200,8 @@ export default {
 			home: store.home,
 			authentication: store.authentication,
 			routes: store.routes,
-			i18n: store.i18n
+			i18n: store.i18n,
+			Footer: store.Footer
 		};
 	}
 };

@@ -1,0 +1,22 @@
+{
+	"type": "object",
+	"properties": {
+		"parentId": {
+			"type": ["string", "null"]
+		},
+		"stageId": {
+			"type": "number"
+		},
+		"versionId": {
+			"type": "string"
+		},
+		"flowId": {
+			"type": "string"
+		},
+		"abstract": {
+			"type": "string"
+		}
+	},
+	"required": ["stageId", "versionId", "flowId", "abstract"],
+	"additionalProperties": false
+}

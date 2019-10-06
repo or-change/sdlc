@@ -7,9 +7,9 @@ module.exports = function registerPlugin() {
 		name: 'register',
 		description: 'plugin register',
 		routers: {
-			Account: (router, context, injection) => {
+			Account: (router, injection) => {
 				const { Account } = injection.Model;
-				const { Validator } = context;
+				const { Validator } = injection;
 
 				router.post('/register', async ctx => {
 					// const validate = Validator({

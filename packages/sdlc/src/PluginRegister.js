@@ -100,14 +100,14 @@ module.exports = function (plugins) {
 	});
 
 	return {
-		RouterMounter(context, injection) {
-			const { KoaRouter } = context;
+		RouterMounter(injection) {
+			const { KoaRouter } = injection;
 
 			return function mountRouter(mountName, router, path) {
 				store.routers[mountName].forEach(Router => {
 					const childRouter = new KoaRouter();
 
-					Router(childRouter, context, injection);
+					Router(childRouter, injection);
 					router.use(path ? path : '', childRouter.routes());
 				});
 			};

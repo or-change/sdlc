@@ -1,7 +1,8 @@
 'use strict';
 
-module.exports = function BaseRouter(router, { AccessControl }, {
+module.exports = function BaseRouter(router, {
 	product,
+	AccessControl,
 	Model,
 	Plugin,
 	authenticate,
@@ -35,7 +36,9 @@ module.exports = function BaseRouter(router, { AccessControl }, {
 			const account = await Model.Account.query(accountId);
 			const principal = { authedAt, credential, account };
 
-			channel.publish('authentication-succeed', principal);
+			channel.publish('authentication-succeed', {
+				credentia: principal.credential, accountId: principal.account.id
+			});
 			Log.authenticate.info(`Authentication succeed. credentia: ${principal.credential}, accountId: ${principal.account.id}`);
 			ctx.state.session.principal = principal;
 			ctx.body = principal;

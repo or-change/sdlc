@@ -28,16 +28,18 @@ module.exports = function ChannelCenter(channelList) {
 				}
 	
 				if (subscribes[channelName]) {
-					subscribes[channelName].forEach(callback => callback[arg]);
+					subscribes[channelName].forEach(callback => callback(arg));
 				}
 			},
 			subscribe(channelName, callback) {
 				if (!channels[channelName]) {
 					throw new Error(`Channel ${channelName} is not registered.`);
 				}
-	
-				subscribes[channelName] = subscribes[channelName] ?
-					subscribes[channelName].concat[callback] : [callback];
+
+				if (callback) {
+					subscribes[channelName] = subscribes[channelName] ?
+						subscribes[channelName].concat([callback]) : [callback];
+				}
 			}
 		};
 	};

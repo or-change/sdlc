@@ -1,6 +1,10 @@
 'use strict';
 
-module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
+module.exports = function (router, {
+	AccessControl,
+	mountRouter,
+	Model
+}) {
 	router
 		.post('/', AccessControl('member.create'), async ctx => {
 			const account = await Model.Account.query(ctx.request.body.accountId);

@@ -1,6 +1,10 @@
 'use strict';
 
-module.exports = function (router, { AccessControl, mountRouter }, { Model }) {
+module.exports = function (router, {
+	AccessControl,
+	mountRouter,
+	Model
+}) {
 	router
 		.use(AccessControl('admin.system'))
 		.post('/account',async ctx => {

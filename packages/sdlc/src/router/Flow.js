@@ -1,45 +1,13 @@
 'use strict';
 
-const schema = {
-	type: 'object',
-	properties: {
-		name: { type: 'string' },
-		parentId: { type: ['string', 'null'] },
-		stageList: {
-			type: 'array',
-			items: {
-				type: 'object',
-				properties: {
-					name: { type: 'string' },
-					plugins: { type: 'array' }
-				},
-				required: ['name', 'plugins']
-			}
-		},
-		evolution: {
-			type: 'array',
-			items: {
-				type: 'array'
-			}
-		},
-		promoted: {
-			type: 'array',
-			items: {
-				type: 'boolean'
-			}
-		},
-		initializable: {
-			type: 'array',
-			items: {
-				type: 'boolean'
-			}
-		}
-	},
-	required: ['name', 'parentId', 'stageList', 'evolution', 'promoted', 'initializable'],
-	additionalProperties: false
-};
+const schema = require('./schema/FlowBodySchema.json');
 
-module.exports = function (router, { AccessControl, mountRouter, Validator  }, { Model }) {
+module.exports = function (router, {
+	AccessControl,
+	mountRouter,
+	Validator,
+	Model
+}) {
 	const validate = Validator.Body(schema);
 
 	router

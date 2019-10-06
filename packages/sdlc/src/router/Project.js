@@ -1,16 +1,13 @@
 'use strict';
 
-const schema = {
-	type: 'object',
-	properties: {
-		name: { type: 'string' },
-		abstract: { type: 'string' }
-	},
-	required: ['name', 'abstract'],
-	additionalProperties: false
-};
+const schema = require('./schema/ProjectBodySchema.json');
 
-module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model }) {
+module.exports = function (router, {
+	AccessControl,
+	mountRouter,
+	Validator,
+	Model
+}) {
 	const validate = Validator.Body(schema);
 
 	router

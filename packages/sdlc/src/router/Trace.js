@@ -1,22 +1,15 @@
 'use strict';
 
-const schema = {
-	type: 'object',
-	properties: {
-		parentId: { type: ['string', 'null'] },
-		stageId: { type: 'number' },
-		versionId: { type: 'string' },
-		flowId: { type: 'string' },
-		abstract: { type: 'string' }
-	},
-	required: ['stageId', 'versionId', 'flowId', 'abstract'],
-	additionalProperties: false
-};
+const schema = require('./schema/TraceBodySchema.json');
 
-module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model }) {
-
+module.exports = function (router, {
+	AccessControl,
+	mountRouter,
+	Validator,
+	Model
+}) {
 	router
-		.post('/',Validator.Body(schema), AccessControl('trace.create'), async ctx => {
+		.post('/', Validator.Body(schema), AccessControl('trace.create'), async ctx => {
 			const { parentId, stageId, versionId, flowId, abstract } = ctx.request.body;
 			const projectId = ctx.state.project.id;
 

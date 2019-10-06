@@ -50,8 +50,10 @@ module.exports = SDLC({
 		// 	},
 		// 	key: ''
 		// },
-		installed({ product }) {
-			product.on('account-created', (account) => { console.log(account); });
+		installed({ channelCenter }) {
+			channelCenter().subscribe('account-created', (account) => {
+				console.log(account);
+			});
 		}
 	},
 	plugins: [

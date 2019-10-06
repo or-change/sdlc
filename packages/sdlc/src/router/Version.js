@@ -2,25 +2,15 @@
 
 const semverValidate = require('semver');
 
-const createSchema = {
-	type: 'object',
-	properties: {
-		semver: { type: 'string' },
-		abstract: { type: 'string' }
-	},
-	required: ['semver', 'abstract'],
-	additionalProperties: false
-};
-const updateSchema = {
-	type: 'object',
-	properties: {
-		abstract: { type: 'string' }
-	},
-	required: ['abstract'],
-	additionalProperties: false
-};
+const createSchema = require('./schema/VersionPostBodySchema.json');
+const updateSchema = require('./schema/VersionUpdateBodySchema.json');
 
-module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model }) {
+module.exports = function (router, {
+	AccessControl,
+	mountRouter,
+	Validator,
+	Model
+}) {
 	router
 		.post('/', Validator.Body(createSchema), AccessControl('version.create'), async ctx => {
 			const { semver, abstract } = ctx.request.body;

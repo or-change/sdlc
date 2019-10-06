@@ -1,16 +1,18 @@
 'use strict'; 
 
-module.exports = function (router, { AccessControl, mountRouter, Validator }, { Model }) {
+const schema = require('./schema/PrincipleBodySchema.json');
+
+module.exports = function (router, {
+	AccessControl,
+	mountRouter,
+	Validator,
+	Model
+}) {
 	router
 		.get('/', AccessControl('principal.get'), async ctx => {
 			ctx.body = ctx.state.session.principal;
 		})
-		.put('/', Validator.Body({
-			type: 'object',
-			properties: {
-				name: { type: 'string' }
-			}
-		}), AccessControl('principal.update'), async ctx => {
+		.put('/', Validator.Body(schema), AccessControl('principal.update'), async ctx => {
 			const { name } = ctx.request.body;
 			// file => hash(avatarHash)
 			const account = await Model.Account.query(ctx.state.session.principal.account.id);

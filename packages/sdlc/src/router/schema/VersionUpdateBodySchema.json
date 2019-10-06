@@ -1,0 +1,10 @@
+{
+	"type": "object",
+	"properties": {
+		"abstract": {
+			"type": "string"
+		}
+	},
+	"required": ["abstract"],
+	"additionalProperties": false
+}
