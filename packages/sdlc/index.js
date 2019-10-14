@@ -85,13 +85,11 @@ module.exports = function SDLC(options) {
 		],
 		installed({ Datahub, injection }) {
 			injection.Model = Datahub(APP_ID, finalOptions.store).model;
-
-			const totalInjection = injection.$create();
-
-			injection.Plugin.inject(totalInjection);
-			finalOptions.server.installed(totalInjection);
 		}
-	}, ({ Web, Webpack, Log }) => {
+	}, ({ Web, Webpack, Log, injection }) => {
+		finalOptions.server.installed(injection);
+		injection.Plugin.inject(injection);
+
 		const application = Web.Application('Default');
 		const listener = DuckLog.Adapter.HttpServer(application, abstract => Log.access(abstract));
 

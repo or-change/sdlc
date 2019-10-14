@@ -1,0 +1,22 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"query": {
+			"instanceOf": "Function"
+		},
+		"update": {
+			"instanceOf": "Function"
+		},
+		"validate": {
+			"instanceOf": "Function"
+		},
+		"transform": {
+			"instanceOf": "Function"
+		}
+	},
+	"required": [
+		"query",
+		"update"
+	]
+}

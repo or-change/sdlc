@@ -1,10 +1,13 @@
 'use strict';
+const path = require('path');
+
 const SDLC = require('@or-change/sdlc');
 const Store = require('@or-change/sdlc-store-memory');
 const git = require('@or-change/sdlc-git');
 const register = require('@or-change/sdlc-register');
 const poster = require('@or-change/sdlc-poster');
-const path = require('path');
+const BasicCredential = require('@or-change/sdlc-basic-credentical');
+
 const config = require('./config.json');
 
 const store = Store();
@@ -12,44 +15,34 @@ const store = Store();
 module.exports = SDLC({
 	store,
 	server: {
-		async authenticate(ctx, { Model }) {
+		async authenticate(ctx, { Model, BasicCredential }) {
 			const {
-				name
+				name,
+				password
 			} = ctx.request.body;
-	
+
 			const accountList = await Model.AccountList.query({
 				selector: 'name',
 				args: {
 					name,
 				}
 			});
-	
+
 			if (!accountList.length) {
 				ctx.throw(401);
-	
+
 				return null;
 			}
-	
-			return {
-				credential: 'simple',
-				accountId: accountList[0].id
-			};
+
+			const success = BasicCredential.validate(accountList[0].id, password);
+
+			if (success) {
+				return {
+					credential: 'basic',
+					accountId: accountList[0].id
+				};
+			}
 		},
-		// session: {
-		// 	get() {
-
-		// 	},
-		// 	set() {
-
-		// 	},
-		// 	destroy() {
-
-		// 	},
-		// 	install() {
-
-		// 	},
-		// 	key: ''
-		// },
 		installed({ channelCenter }) {
 			channelCenter().subscribe('account-created', (account) => {
 				console.log(account);
@@ -57,11 +50,19 @@ module.exports = SDLC({
 		}
 	},
 	plugins: [
-		git(),
-		register(),
-		poster(store, config.posterOptions)
+		BasicCredential({
+			query() {
+				return;
+			},
+			update() {
+				return;
+			},
+			validate() {
+				return true;
+			}
+		})
 	],
 	app: {
-		extend: path.resolve(__dirname, './app1/SDLCFactory.js')
+		extend: path.resolve(__dirname, './app/SDLCFactory.js')
 	}
 });

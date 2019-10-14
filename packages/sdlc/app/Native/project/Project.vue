@@ -17,8 +17,8 @@
 						exact-active-class="active"
 						:to="`/workbench/project/${projectId}/${nav.path}`"
 						:title="$t(nav.label)"
-					><i 
-						v-if="nav.icon" 
+					><i
+						v-if="nav.icon"
 						:class="['mr-2', nav.icon]"
 					></i>{{ $t(nav.label) }}</b-nav-item>
 				</b-nav>
@@ -64,8 +64,7 @@ export default {
 .detail-header {
 	background-color:#FAFBFC;
 	background-image: url('../../assets/bg-project.png');
-	background-position: 0 -20px;
-	background-size: cover;
+	background-repeat: no-repeat;
 	border-bottom: 1px solid #e1e4e8;
 
 	.detail-nav {

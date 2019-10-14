@@ -1,5 +1,5 @@
 {
-  "name": "@or-change/sdlc-basic-credentical",
+  "name": "@or-change/sdlc-basic-credentials",
   "version": "1.0.1",
   "private": true,
   "description": "> TODO: description",
@@ -19,6 +19,7 @@
     "url": "https://github.com/or-change/sdlc/issues"
   },
   "dependencies": {
+    "@or-change/duck": "^0.5.0",
     "@or-change/sdlc": "^0.0.1"
   },
   "devDependencies": {
