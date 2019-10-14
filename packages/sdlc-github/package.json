@@ -24,6 +24,6 @@
     "@or-change/sdlc": "^0.0.1"
   },
   "devDependencies": {
-    "mocha": "^6.2.0"
+    "mocha": "^6.2.1"
   }
 }

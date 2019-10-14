@@ -23,6 +23,6 @@
     "nodemailer": "^6.3.0"
   },
   "devDependencies": {
-    "mocha": "^6.2.0"
+    "mocha": "^6.2.1"
   }
 }
