@@ -77,7 +77,7 @@ module.exports = function SDLC(options) {
 			DuckDatahub([
 				{
 					id: APP_ID,
-					models: models.concat(pluginAccessor.models).reduce((all, group) => Object.assign(all, group), {})
+					models: models.reduce((all, group) => Object.assign(all, group), {})
 				}
 			]),
 			DuckWebpack({ sdlc: Webpack }),

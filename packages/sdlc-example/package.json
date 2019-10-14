@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "@or-change/sdlc": "^0.0.1",
-    "@or-change/sdlc-basic-credentical": "^1.0.1",
+    "@or-change/sdlc-basic-credential": "^1.0.1",
+    "@or-change/sdlc-cve": "^0.0.1",
     "@or-change/sdlc-git": "^0.0.1",
     "@or-change/sdlc-poster": "^0.0.1",
     "@or-change/sdlc-register": "^1.0.1"

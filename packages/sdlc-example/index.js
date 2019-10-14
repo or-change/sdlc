@@ -6,7 +6,8 @@ const Store = require('@or-change/sdlc-store-memory');
 const git = require('@or-change/sdlc-git');
 const register = require('@or-change/sdlc-register');
 const poster = require('@or-change/sdlc-poster');
-const BasicCredential = require('@or-change/sdlc-basic-credentical');
+const BasicCredential = require('@or-change/sdlc-basic-credential');
+const CVE = require('@or-change/sdlc-cve');
 
 const config = require('./config.json');
 
@@ -60,7 +61,8 @@ module.exports = SDLC({
 			validate() {
 				return true;
 			}
-		})
+		}),
+		CVE()
 	],
 	app: {
 		extend: path.resolve(__dirname, './app/SDLCFactory.js')

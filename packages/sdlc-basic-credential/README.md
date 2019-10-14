@@ -1,11 +1,11 @@
-# `@or-change/sdlc-basic-credentical`
+# `@or-change/sdlc-basic-credential`
 
 > TODO: description
 
 ## Usage
 
 ```
-const sdlcBasicauth = require('@or-change/sdlc-basic-credentical');
+const sdlcBasicCredential = require('@or-change/sdlc-basic-credential');
 
 // TODO: DEMONSTRATE API
 ```
